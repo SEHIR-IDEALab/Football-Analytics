@@ -1,0 +1,492 @@
+# coding=utf-8
+from Tkconstants import W, S, E, N, CENTER
+
+import Tkinter as Tk
+import csv
+import time as tm
+import math
+from tkFileDialog import askopenfilename
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+from matplotlib.patches import BoxStyle
+import matplotlib.pyplot as plt
+import numpy
+from src.sentio.CircleStyle import CircleStyle
+from src.sentio.DraggablePass import DraggablePass
+from src.sentio.DraggableText import DraggableText
+from src.sentio.Time import Time
+
+__author__ = 'emrullah'
+
+
+class Visualization(object):
+    def __init__(self, coordinateData_byTme, eventData_byTime, teamNames, minMaxOfHalf, id_explanation):
+
+        self.coordinatesData_byTime = coordinateData_byTme
+        self.eventData_byTime = eventData_byTime
+        self.teamNames = teamNames
+        self.minMaxOfHalf = minMaxOfHalf
+        self.event_id_explanation = id_explanation
+
+        self.master = Tk.Tk()
+        self.master.wm_title("Game Data Visualization")
+        self.master.geometry("1200x750")
+
+        menubar = Tk.Menu(self.master)
+
+        filemenu = Tk.Menu(menubar, tearoff=0)
+        filemenu.add_command(label="Save", command=self.saveSnapShot)
+        filemenu.add_command(label="Load", command=self.loadSnapShot)
+        filemenu.add_separator()
+        filemenu.add_command(label="Exit", command=self.quit)
+        menubar.add_cascade(label="File", menu=filemenu)
+
+        # Create a container
+        self.frame = Tk.Frame(self.master)
+
+        self.scaleVariable = Tk.DoubleVar()
+        scale = Tk.Scale(self.frame,orient=Tk.HORIZONTAL,length=700, width=20, sliderlength=10, showvalue=0,
+                 from_=0, to=90, resolution=(1.0/300.0), variable=self.scaleVariable, tickinterval=15).pack(side="bottom")
+
+        rb_var = Tk.IntVar()
+        rb_pass = Tk.Radiobutton(self.master, text="Define Pass", variable=rb_var, value=1,
+                                 command=self.rb_define_pass).pack(side='top')
+        rb_drag = Tk.Radiobutton(self.master, text= "Draggable Objects", variable=rb_var,value=2,
+                                 command=self.rb_drag_objects).pack(side='top')
+
+        button_scaleDraw = Tk.Button(master=self.frame, text='Draw', command=self.scaleDraw).pack(side="left")
+        button_play = Tk.Button(master=self.frame, text='Play', command=self.play).pack(side="left")
+
+        self.pauseButtonClicked = False
+        self.directionSpeed_ofObjects = list()
+        self.currentTime_whenPause = [min(self.minMaxOfHalf.keys())] + self.minMaxOfHalf[min(self.minMaxOfHalf.keys())][0] # 1,0,0,0
+
+        button_pause = Tk.Button(master=self.frame, text='Pause', command=self.pause).pack(side="left")
+
+        self.playVariable = Tk.StringVar()
+        self.playVariable.set("normal")
+        self.play_options = Tk.OptionMenu(self.frame, self.playVariable, "slow", "normal", "fast").pack(side="left")
+
+        self.skipPlayVariable = Tk.StringVar()
+        self.skipPlayVariable.set("0")
+        self.skipPlay_options = Tk.OptionMenu(self.frame, self.skipPlayVariable, "0", "1", "2", "3", "4").pack(side="left")
+
+        self.button_quit = Tk.Button(self.frame, text="Quit", command=self.quit).pack(side="right")
+
+        self.currentTimeVariable = Tk.StringVar()
+        self.currentTimeVariable.set("Time = 0.0.0")
+        self.label = Tk.Label(master=self.frame, textvariable = self.currentTimeVariable).pack(side="right")
+
+        #*********************************************************
+
+        fig = plt.figure(figsize=(5,4))
+
+        self.canvas = FigureCanvasTkAgg(fig,master=self.master)
+        self.canvas.show()
+        self.canvas.get_tk_widget().pack(side='top', fill='both', expand=1)
+
+        self.toolbar = NavigationToolbar2TkAgg(self.canvas, self.master)
+        self.toolbar.update()
+        self.canvas._tkcanvas.pack(side='top', fill='both', expand=1)
+
+        self.ax = fig.add_subplot(111)
+        im = plt.imread('source/background.png')
+        self.ax.imshow(im, zorder=0, extent=[-6.5, 111.5, -1.2, 67.0], aspect="auto")
+        self.ax.grid()
+        self.ax.axes.invert_yaxis()
+        self.ax.set_xticks(numpy.arange(-5, 120, 5))
+        self.ax.set_yticks(numpy.arange(-5, 75, 5))
+
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
+            self.getObjectsCoords_forGivenTime(1, 0, 0, 0)
+
+        self.trailAnnotation, self.eventAnnotation, self.passAnnotation, self.ballAnnotation = None, None, None, None
+
+        self.texts = list()
+        self.definePasses = None
+        self.setJerseyNumbers_forGivenObjects(homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+
+        a,b,c,d, = plt.plot([],[],"bo",[],[],"ro",[],[],"yo",[],[],"ko", markersize=15)
+        self.ax.legend([a,b,c,d], [self.teamNames[0].decode("utf-8"), self.teamNames[1].decode("utf-8"), 'Referees', 'Unknown Objects'],
+                       numpoints=1, fontsize=12, bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=4, mode="expand", borderaxespad=0.5)
+
+        self.frame.pack()
+        self.master.config(menu=menubar)
+        self.master.mainloop()
+
+    def saveSnapShot(self):
+        a = list()
+        a.extend(["team_id", "team_name", "jersey_no", "x1", "y1", "x2", "y2", "speed"])
+        homeTeam, awayTeam = self.teamNames[0], self.teamNames[1]
+        current_half, current_minute, current_second, current_milisecond = self.currentTime_whenPause
+        name_of_file = "%s_%s.csv" %(homeTeam, awayTeam)
+        out = csv.writer(open(name_of_file,"a"), delimiter=',', quoting=csv.QUOTE_NONE)
+        out.writerow(a)
+        del a[:]
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = self.getDirectionOfObjects_forGivenTime(
+            current_half, current_minute, current_second, current_milisecond)
+        teams = self.getSpeedOfObjects_forGivenTime(current_half, current_minute, current_second, current_milisecond)
+        for index, team in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
+            for player in team:
+                teamID = (index if index != 3 else -1)
+                teamName = (homeTeam if index == 0 else (awayTeam if index == 1 else ("referee" if index == 2 else "unknownObject")))
+                jersey_number = player
+                currentX, nextX = team[player][0]
+                currentY, nextY = team[player][1]
+                speed = teams[index][player]
+                a.extend([teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed])
+                out = csv.writer(open(name_of_file,"a"), delimiter=',', quoting=csv.QUOTE_NONE)
+                out.writerow(a)
+                del a[:]
+
+    def loadSnapShot(self):
+        filename = askopenfilename()
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = dict(),dict(),dict(),dict()
+        if filename:
+            if self.directionSpeed_ofObjects: self.remove_directionSpeedOfObjects() # remove previous annotations
+            with open(filename) as fname:
+                snapshot_data= csv.reader(fname, delimiter=",")
+                for line in snapshot_data:
+                    teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed = line
+                    try:
+                        teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed = \
+                            int(teamID), teamName, int(jersey_number), float(currentX), float(currentY), \
+                            float(nextX), float(nextY), float(speed)
+
+                        lengthX = (nextX - currentX) * speed
+                        nextX = lengthX + currentX
+
+                        lengthY = (nextY - currentY) * speed
+                        nextY = lengthY + currentY
+
+                        default_arrow_size = 2
+                        if lengthX >= 0: nextX += default_arrow_size
+                        else: nextX -= default_arrow_size
+                        if lengthY >= 0: nextY += default_arrow_size
+                        else: nextY -= default_arrow_size
+
+                        passAnnotation = self.ax.annotate('', xy=(nextX,nextY), xycoords='data', xytext=(currentX,currentY),
+                                                    textcoords='data',size=20, va="center", ha="center",zorder=2, arrowprops=dict(
+                                                    arrowstyle="simple", connectionstyle="arc3",fc="cyan", ec="b", lw=2))
+                        self.directionSpeed_ofObjects.append(passAnnotation)
+
+                        if teamID in [0]:
+                            homeTeamPlayers[jersey_number] = [currentX, currentY]
+                        elif teamID in [1]:
+                            awayTeamPlayers[jersey_number] = [currentX, currentY]
+                        elif teamID in [2]:
+                            referees[jersey_number] = [currentX, currentY]
+                        else:
+                            unknownObjects[jersey_number] = [currentX, currentY]
+                    except:
+                        pass
+            if self.eventAnnotation != None: self.eventAnnotation.remove(); del self.eventAnnotation; self.eventAnnotation = None
+            if self.passAnnotation != None: self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
+            if self.trailAnnotation!=None: self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
+            if self.ballAnnotation!=None: self.ballAnnotation.remove(); del self.ballAnnotation; self.ballAnnotation = None
+
+            self.remove_previousJerseyNumbers()
+            self.setJerseyNumbers_forGivenObjects(homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+
+            self.currentTimeVariable.set("Time = %s.%s.%s" %("-", "-", "-"))
+
+            self.canvas.draw()
+            #self.master.update()
+            self.frame.update()
+
+    def rb_define_pass(self):
+        if self.directionSpeed_ofObjects:
+            self.remove_directionSpeedOfObjects()  # remove previous annotations
+        for player_js in self.texts:
+            player_js.disconnect()
+        self.definePasses.connect()
+
+    def rb_drag_objects(self):
+        if self.directionSpeed_ofObjects:
+            self.remove_directionSpeedOfObjects()  # remove previous annotations
+        self.definePasses.disconnect()
+        for player_js in self.texts:
+            player_js.connect()
+
+    def scaleDraw(self):
+        scale_value = self.scaleVariable.get()
+        minute, sec_milisec = str(scale_value).split(".")
+        sec_milisec_real = self.scale_timeInterval(int(sec_milisec), src=(0.0, 300.0), dst=(0.0, 18.0))
+        sec, milisec = str(sec_milisec_real).split(".")
+        minute_final, sec_final, milisec_final = self.time_adjust(minute, sec, milisec)
+
+        self.currentTimeVariable.set("Time = %s.%s.%s" %(minute_final, sec_final, milisec_final))
+        minute_final, sec_final, milisec_final = int(minute_final), int(sec_final), int(milisec_final)
+
+        if self.trailAnnotation != None:
+            self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
+        try:
+            self.visualizeCurrentPosition(1, minute_final, sec_final, milisec_final, None)
+            self.currentTime_whenPause = (1, minute_final, sec_final, milisec_final)
+        except KeyError:
+            self.visualizeCurrentPosition(2, minute_final, sec_final, milisec_final, None)
+            self.currentTime_whenPause = (2, minute_final, sec_final, milisec_final)
+
+    def play(self):
+        if self.directionSpeed_ofObjects:
+            self.remove_directionSpeedOfObjects()
+
+        self.pauseButtonClicked = False
+        current_half, current_minute, current_second, current_milisecond = self.currentTime_whenPause
+        time = Time(current_half, current_minute, current_second, current_milisecond)
+        time.set_minMaxOfHalf(self.minMaxOfHalf)
+        while not self.pauseButtonClicked:
+            next_half, next_minute, next_second, next_milisecond = current_half, current_minute, current_second, current_milisecond
+            chosenSkip = int(self.skipPlayVariable.get())
+            for skipTimes in range(chosenSkip+1):
+                next_time = time.next()
+                next_half, next_minute, next_second, next_milisecond = next_time.half, next_time.minute, \
+                                                                        next_time.second, next_time.mili_second
+                if next_half not in self.minMaxOfHalf:
+                    break
+            #print next_half, next_minute, next_second, next_milisecond
+            self.visualizeCurrentPosition(next_half, next_minute, next_second, next_milisecond, chosenSkip)
+            self.currentTime_whenPause = (next_half, next_minute, next_second, next_milisecond)
+            self.currentTimeVariable.set("Time = %s.%s.%s" %(next_minute, next_second, next_milisecond))
+            chosenMotion = self.playVariable.get()
+            if chosenMotion == "normal":
+                tm.sleep(0.1)
+            elif chosenMotion == "slow":
+                tm.sleep(0.2)
+
+    def pause(self):
+        self.pauseButtonClicked = True
+        current_half, current_minute, current_second, current_milisecond = self.currentTime_whenPause
+        self.annotateDirectionSpeedOfObjects_forGivenTime(current_half, current_minute, current_second, current_milisecond)
+
+    def remove_directionSpeedOfObjects(self):
+        for i in self.directionSpeed_ofObjects:
+            i.remove()
+        del self.directionSpeed_ofObjects[:]
+        self.canvas.draw()
+
+    def annotateDirectionSpeedOfObjects_forGivenTime(self, half, minute, second, milisecond):
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = self.getDirectionOfObjects_forGivenTime(
+            half, minute, second, milisecond)
+        teams = self.getSpeedOfObjects_forGivenTime(half, minute, second, milisecond)
+        for index, team in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
+            for player in team:
+                currentX, nextX = team[player][0]
+                currentY, nextY = team[player][1]
+                speed = teams[index][player]
+
+                lengthX = (nextX - currentX) * speed
+                nextX = lengthX + currentX
+
+                lengthY = (nextY - currentY) * speed
+                nextY = lengthY + currentY
+
+                default_arrow_size = 2
+                if lengthX >= 0: nextX += default_arrow_size
+                else: nextX -= default_arrow_size
+                if lengthY >= 0: nextY += default_arrow_size
+                else: nextY -= default_arrow_size
+
+                passAnnotation = self.ax.annotate('', xy=(nextX,nextY), xycoords='data', xytext=(currentX,currentY),
+                                                  textcoords='data',size=20, va="center", ha="center", arrowprops=dict(
+                        arrowstyle="simple", connectionstyle="arc3",
+                        fc="cyan", ec="b", lw=2))
+                self.directionSpeed_ofObjects.append(passAnnotation)
+        self.canvas.draw()
+
+    def getDirectionOfObjects_forGivenTime(self, half, minute, sec, milisec):
+        time = Time(half, minute, sec, milisec)
+        time.set_minMaxOfHalf(self.minMaxOfHalf)
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
+                self.getObjectsCoords_forGivenTime(half, minute, sec, milisec)
+        teams = [homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]
+        for team in teams:
+            for player in team:
+                coordX, coordY = team[player]
+                team[player] = ([coordX],[coordY])
+        next_time = time.next()
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
+                self.getObjectsCoords_forGivenTime(next_time.half, next_time.minute,
+                                                   next_time.second, next_time.mili_second)
+        for index, team in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
+                for player in team:
+                    try:
+                        coordX, coordY= team[player]
+                        x, y = teams[index][player][0], teams[index][player][1]
+                        x.append(coordX), y.append(coordY)
+                    except:
+                        pass
+        return (team for team in teams)
+
+    def getSpeedOfObjects_forGivenTime(self, half, minute, sec, milisec):
+        time = Time(half, minute, sec, milisec)
+        time.set_minMaxOfHalf(self.minMaxOfHalf)
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
+                self.getObjectsCoords_forGivenTime(half, minute, sec, milisec)
+        teams = [homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]
+        for team in teams:
+            for player in team:
+                coordX, coordY = team[player]
+                team[player] = ([coordX],[coordY])
+        for i in range(5):
+            pre_time = time.back()
+            homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
+                self.getObjectsCoords_forGivenTime(pre_time.half, pre_time.minute, pre_time.second, pre_time.mili_second)
+            for index, team in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
+                for player in team:
+                    coordX, coordY= team[player]
+                    x, y = teams[index][player][0], teams[index][player][1]
+                    x.append(coordX), y.append(coordY)
+        for team in teams:
+            for player in team:
+                coordsX, coordsY = team[player]
+                total = 0.0
+                for i in range(5):
+                    try:
+                        x_current, y_current = coordsX[i], coordsY[i]
+                        x_previous, y_previous = coordsX[i+1], coordsY[i+1]
+                        total += math.sqrt(pow(x_current-x_previous,2) + pow(y_current-y_previous,2))
+                    except:
+                        pass
+                team[player] = total
+        return teams
+
+    def getObjectsCoords_forGivenTime(self, half, minute, sec, milisec):
+        coordinatesData_current = self.coordinatesData_byTime[half][minute][sec][milisec]
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = dict(), dict(), dict(), dict()
+        for object_info in coordinatesData_current:
+            q = object_info
+            object_type, jersey_number, positionX, positionY = int(q[0]), int(q[2]), float(q[3]), float(q[4])
+            if object_type in [0,3]:
+                homeTeamPlayers[jersey_number] = [positionX, positionY]
+            elif object_type in [1,4]:
+                awayTeamPlayers[jersey_number] = [positionX, positionY]
+            elif object_type in [2,6,7,8,9]:
+                referees[jersey_number] = [positionX, positionY]
+            else:
+                unknownObjects[jersey_number] = [positionX, positionY]
+        return (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+
+    def setJerseyNumbers_forGivenObjects(self, homeTeamPlayers, awayTeamPlayers, referees, unknownObjects):
+        BoxStyle._style_list["circle"] = CircleStyle
+        colors = ["blue", "red", "yellow", "black"]
+        for index, players in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
+            for player in players:
+                coordX, coordY, js = players[player][0], players[player][1], player
+                player_js = self.ax.text((coordX-0.3 if len(str(player))==1 else coordX-0.7), coordY+0.5, js, color="w", fontsize=(11 if len(str(player))==1 else 10),
+                                         picker=True,zorder=1, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index],
+                                                                ec=colors[index], alpha=0.5))
+                dr = DraggableText(player_js)
+                self.texts.append(dr)
+        self.definePasses = DraggablePass(self.ax)
+        self.definePasses.setCoordinateDataOfObjects(self.texts)
+
+    def remove_previousJerseyNumbers(self):
+        for player_js in self.texts:
+            player_js.point.remove()
+        del self.texts[:]
+
+        if self.definePasses != None:
+            for i in self.definePasses.definedPasses:
+                i.remove(); del i
+
+    def visualizeCurrentPosition(self, half, minute, sec, milisec, skip_times):
+        self.remove_previousJerseyNumbers()
+
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
+            self.getObjectsCoords_forGivenTime(half, minute, sec, milisec)
+
+        self.annotate_currentEvent(half, minute, sec, milisec, homeTeamPlayers, awayTeamPlayers, skip_times)
+
+        self.setJerseyNumbers_forGivenObjects(homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+
+        self.canvas.draw()
+        #self.master.update()
+        self.frame.update()
+
+    def annotate_currentEvent(self, half, minute, second, milisec, homeTeamPlayers, awayTeamPlayers, skip_times): # not completed
+        eventData_current = self.get_currentEventData(half, minute, second, milisec)
+        current_teamName, current_js, current_eventID = eventData_current[0]
+        homeTeamName, awayTeamName = self.teamNames
+        xBall, yBall = None, None
+        try:
+            if current_teamName == homeTeamName:
+                xBall, yBall = homeTeamPlayers[current_js]
+            elif current_teamName == awayTeamName:
+                xBall, yBall = awayTeamPlayers[current_js]
+        except KeyError:
+            print "missing data"
+
+        if self.eventAnnotation != None: self.eventAnnotation.remove(); del self.eventAnnotation; self.eventAnnotation = None
+        if self.passAnnotation != None: self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
+
+        if current_eventID != 1:
+            if self.trailAnnotation!=None: self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
+            if self.ballAnnotation!=None: self.ballAnnotation.remove(); del self.ballAnnotation; self.ballAnnotation = None
+            self.eventAnnotation = self.ax.annotate(self.event_id_explanation[current_eventID], xy=(52.5,32.5),  xycoords='data',
+                                                    va="center", ha="center", xytext=(0, 0), textcoords='offset points', size=20,
+                                                    bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7), ec=(1., .5, .5)))
+        else:
+            eventData_previous = self.get_previousEventData(half, minute, second, milisec, skip_times)
+            previous_teamName, previous_js, previous_eventID = eventData_previous[0]
+            if previous_teamName != current_teamName or previous_js != current_js:
+                if self.trailAnnotation!=None: self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
+                if self.ballAnnotation!=None: self.ballAnnotation.remove(); del self.ballAnnotation; self.ballAnnotation = None
+                previous_xBall, previous_yBall = None, None
+                try:
+                    if previous_teamName == homeTeamName:
+                        previous_xBall, previous_yBall = homeTeamPlayers[previous_js]
+                    elif previous_teamName == awayTeamName:
+                        previous_xBall, previous_yBall = awayTeamPlayers[previous_js]
+                except KeyError:
+                    print "missing data 2"
+                if (previous_eventID not in [4, 12]) and previous_xBall != None and xBall != None:
+                    self.passAnnotation = self.ax.annotate('', xy=(xBall, yBall), xycoords='data', xytext=(previous_xBall,previous_yBall),
+                        textcoords='data', size=20, arrowprops=dict(arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
+            else:
+                if self.trailAnnotation == None:
+                    self.entire_trailX, self.entire_trailY = [],[]
+                    self.entire_trailX.append(xBall), self.entire_trailY.append(yBall)
+                    self.trailAnnotation, = self.ax.plot(self.entire_trailX, self.entire_trailY, "--", color="yellow")
+                    self.ballAnnotation, = self.ax.plot(xBall, yBall, "o", markersize=26,mfc="none",markeredgewidth=3.0,markeredgecolor="yellow")
+                else:
+                    self.entire_trailX.append(xBall), self.entire_trailY.append(yBall)
+                    self.trailAnnotation.set_data(self.entire_trailX, self.entire_trailY)
+                    self.ballAnnotation.set_data(xBall, yBall)
+
+    def get_currentEventData(self, half, minute, second, milisec):
+        try:
+            eventData_current = self.eventData_byTime[half][minute][second]
+            return eventData_current
+        except KeyError:
+            time = Time(half, minute, second, milisec)
+            back_time = time.back()
+            #print back_time.half, back_time.minute, back_time.second, back_time.mili_second
+            return self.get_currentEventData(back_time.half, back_time.minute, back_time.second, back_time.mili_second)
+
+    def get_previousEventData(self, half, minute ,second, milisec, chosenSkip):
+        if chosenSkip == None: chosenSkip = 0
+        time = Time(half, minute, second, milisec)
+        back_half, back_minute, back_second, back_milisec = time.half, time.minute, time.second, time.mili_second
+        for skipTimes in range(chosenSkip+1):
+            back_time = time.back()
+            back_half, back_minute, back_second, back_milisec = back_time.half, back_time.minute, back_time.second, back_time.mili_second
+        eventData_previous = self.get_currentEventData(back_half, back_minute, back_second, back_milisec)
+        return eventData_previous
+
+    def time_adjust(self, minute, sec, milisec):
+        if len(milisec) == 1:
+            return (minute), (sec), (milisec)
+        elif milisec[0] =="9":
+            return (minute), str(int(sec)+1), str(0)
+        else:
+            return (minute), (sec), (str(round(int(milisec),-1))[0])
+
+    def scale_timeInterval(self, val, src, dst):
+        return ((val - src[0]) / (src[1]-src[0])) * (dst[1]-dst[0]) + dst[0]
+
+    def quit(self):
+        self.master.quit()     # stops mainloop
+        self.master.destroy()
+
+    def __str__(self):
+        pass
