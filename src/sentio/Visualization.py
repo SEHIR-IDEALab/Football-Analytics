@@ -1,11 +1,12 @@
 # coding=utf-8
-from Tkconstants import W, S, E, N, CENTER
+from Tkconstants import VERTICAL, RIGHT, Y, LEFT
 
 import Tkinter as Tk
 import csv
 import time as tm
 import math
 from tkFileDialog import askopenfilename
+import tkFont
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.patches import BoxStyle
 import matplotlib.pyplot as plt
@@ -52,6 +53,12 @@ class Visualization(object):
                                  command=self.rb_define_pass).pack(side='top')
         rb_drag = Tk.Radiobutton(self.master, text= "Draggable Objects", variable=rb_var,value=2,
                                  command=self.rb_drag_objects).pack(side='top')
+
+        self.text_toDisplayPasses = Tk.Text(self.master, width=30, height=45)
+        self.text_toDisplayPasses.pack(side="left")
+        yscrollbar = Tk.Scrollbar(self.master, orient=VERTICAL, command=self.text_toDisplayPasses.yview)
+        yscrollbar.pack(side=LEFT, fill=Y)
+        self.text_toDisplayPasses["yscrollcommand"]=yscrollbar.set
 
         button_scaleDraw = Tk.Button(master=self.frame, text='Draw', command=self.scaleDraw).pack(side="left")
         button_play = Tk.Button(master=self.frame, text='Play', command=self.play).pack(side="left")
@@ -377,8 +384,9 @@ class Visualization(object):
                                                                 ec=colors[index], alpha=0.5))
                 dr = DraggableText(player_js)
                 self.texts.append(dr)
-        self.definePasses = DraggablePass(self.ax)
-        self.definePasses.setCoordinateDataOfObjects(self.texts)
+        self.definePasses = DraggablePass(self.ax, self.texts)
+        self.definePasses.set_passDisplayer(self.text_toDisplayPasses)
+        #self.definePasses.setCoordinateDataOfObjects(self.texts)
 
     def remove_previousJerseyNumbers(self):
         for player_js in self.texts:

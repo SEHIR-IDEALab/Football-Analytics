@@ -7,7 +7,6 @@ __author__ = 'emrullah'
 
 def main():
     start = time.time()
-    print "sasd"
 
 
     sentio = Sentio()
