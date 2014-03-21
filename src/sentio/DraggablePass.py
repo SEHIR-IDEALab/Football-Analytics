@@ -61,7 +61,7 @@ class DraggablePass(Pass):
                 pass
 
     def displayDefinedPasses(self):
-        #print self.definedPasses
+        print self.definedPasses
         self.passDisplayer.delete("1.0", END)
         for i in self.definedPasses:
             p1 = i.textcoords
@@ -70,8 +70,9 @@ class DraggablePass(Pass):
             self.passDisplayer.insert(INSERT, "\n%s --> %s" %(p1.get_text(), p2.get_text()))
             self.passDisplayer.insert(END, "\noverall_risk = %s" %self.overallRisk(p1, p2))
             self.passDisplayer.insert(END, "\ngain = %s" %self.gain(p1, p2))
-            self.passDisplayer.insert(END, "\npass_advantage = %s" %self.passAdvantage(p1))
-            self.passDisplayer.insert(END, "\neffectiveness = %s\n" %self.effectiveness(p1, p2))
+            self.passDisplayer.insert(END, "\npass_advantage = %s (%s)" %self.passAdvantage(p2))
+            self.passDisplayer.insert(END, "\neffectiveness = %s" %self.effectiveness(p1, p2))
+            self.passDisplayer.insert(END, "\ngoal_chance = %s\n" %self.goalChance(p2))
 
     def on_release_event(self, event):
         if self.passAnnotation != None: self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None

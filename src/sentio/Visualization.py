@@ -54,7 +54,7 @@ class Visualization(object):
         rb_drag = Tk.Radiobutton(self.master, text= "Draggable Objects", variable=rb_var,value=2,
                                  command=self.rb_drag_objects).pack(side='top')
 
-        self.text_toDisplayPasses = Tk.Text(self.master, width=30, height=45)
+        self.text_toDisplayPasses = Tk.Text(self.master, width=35, height=45)
         self.text_toDisplayPasses.pack(side="left")
         yscrollbar = Tk.Scrollbar(self.master, orient=VERTICAL, command=self.text_toDisplayPasses.yview)
         yscrollbar.pack(side=LEFT, fill=Y)

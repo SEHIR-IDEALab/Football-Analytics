@@ -14,9 +14,13 @@ class Pass:
         team1 = self.teams[p1.get_bbox_patch().get_facecolor()]
         js1 = p1.get_text()
 
-        x2, y2 = p2.get_position()
-        team2 = self.teams[p2.get_bbox_patch().get_facecolor()]
-        js2 = p2.get_text()
+        x2, y2 = None, None
+        try:
+            x2, y2 = p2.get_position()
+            team2 = self.teams[p2.get_bbox_patch().get_facecolor()]
+            js2 = p2.get_text()
+        except AttributeError:
+            x2, y2 = p2
 
         x3, y3 = p3.get_position()
         js3 = p3.get_text()
@@ -87,7 +91,7 @@ class Pass:
         team1 = self.teams[p1.get_bbox_patch().get_facecolor()]
         js1 = p1.get_text()
 
-        passAdvantages = []
+        passAdvantages = {}
         for dragged in self.coordinateDataOfObjects:
             p2 = dragged.point
 
@@ -97,15 +101,33 @@ class Pass:
 
             if team2 == team1 and js2 != js1:
                 try:
+                    print js2, self.gain(p1, p2), self.overallRisk(p1, p2)
                     pa = ( 10 + self.gain(p1, p2) ) / self.overallRisk(p1, p2)
-                    passAdvantages.append(pa)
+                    passAdvantages[pa] = js2
                 except ZeroDivisionError:
-                    passAdvantages.append(( 10 + self.gain(p1, p2) ))
-        return max(passAdvantages)
+                    pa = ( 10 + self.gain(p1, p2) )
+                    passAdvantages[pa] = js2
+        max_pass = max(passAdvantages.keys())
+        return max_pass, passAdvantages[max_pass]
+
+    def goalChance(self, p1):
+        x1, y1 = p1.get_position()
+        team1 = self.teams[p1.get_bbox_patch().get_facecolor()]
+        js1 = p1.get_text()
+
+        goalKeeperX, goalKeeperY = 0.0, 32.75
+        d1 = math.sqrt(math.pow(goalKeeperX-x1,2) + math.pow(goalKeeperY-y1,2))
+        d2 = 8.5
+        angle = math.atan2(math.fabs(y1-goalKeeperY), math.fabs(x1-goalKeeperX)) * 180 / math.pi
+        angle = math.fabs(90 - angle)
+        q = self.overallRisk(p1, [goalKeeperX, goalKeeperY])
+        q = (1 if q == 0 else q)
+
+        return (d2/d1) * (min(angle, (180-angle)) / 90) / q * 100
 
     def effectiveness(self, p1, p2):
-        w1, w2, w3 = 1, 1, 1
-        return w1*self.gain(p1, p2) + w3*self.passAdvantage(p2)
+        w1, w2, w3, w4 = 1, 1, 1, 1
+        return w1*self.gain(p1, p2) + w3*self.passAdvantage(p2)[0] + w4*self.goalChance(p2)
 
     def __str__(self):
         pass
