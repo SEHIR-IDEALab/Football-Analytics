@@ -1,12 +1,11 @@
 # coding=utf-8
-from Tkconstants import VERTICAL, RIGHT, Y, LEFT, INSERT, END
+from Tkconstants import VERTICAL, Y, LEFT, END
 
 import Tkinter as Tk
 import csv
 import time as tm
 import math
 from tkFileDialog import askopenfilename
-import tkFont
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.patches import BoxStyle
 import matplotlib.pyplot as plt
@@ -111,6 +110,7 @@ class Visualization(object):
 
         self.texts = list()
         self.definePasses = None
+        self.definedPasses_forSnapShot = list()
         self.setJerseyNumbers_forGivenObjects(homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
 
         a,b,c,d, = plt.plot([],[],"bo",[],[],"ro",[],[],"yo",[],[],"ko", markersize=15)
@@ -123,11 +123,11 @@ class Visualization(object):
 
     def saveSnapShot(self):
         a = list()
-        a.extend(["team_id", "team_name", "jersey_no", "x1", "y1", "x2", "y2", "speed"])
+        a.extend(["team_id", "team_name", "jersey_no", "x1", "y1", "x2", "y2", "speed", "passTo"])
         homeTeam, awayTeam = self.teamNames[0], self.teamNames[1]
         current_half, current_minute, current_second, current_milisecond = self.currentTime_whenPause
         name_of_file = "%s_%s.csv" %(homeTeam, awayTeam)
-        out = csv.writer(open(name_of_file,"a"), delimiter=',', quoting=csv.QUOTE_NONE)
+        out = csv.writer(open(name_of_file,"a"), delimiter='\t', quoting=csv.QUOTE_NONE)
         out.writerow(a)
         del a[:]
         homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = self.getDirectionOfObjects_forGivenTime(
@@ -141,8 +141,16 @@ class Visualization(object):
                 currentX, nextX = team[player][0]
                 currentY, nextY = team[player][1]
                 speed = teams[index][player]
-                a.extend([teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed])
-                out = csv.writer(open(name_of_file,"a"), delimiter=',', quoting=csv.QUOTE_NONE)
+                js2 = ""
+                for i in self.definePasses.definedPasses:
+                    p1 = i.textcoords
+                    x1, y1 = p1.get_position()
+                    js1 = p1.get_text()
+                    if currentX==x1 and currentY==y1 and jersey_number==int(js1):
+                        p2 = i.xycoords
+                        js2 += p2.get_text() + "@"
+                passTo = ("None" if js2=="" else js2[:-1])
+                a.extend([teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed, passTo])
                 out.writerow(a)
                 del a[:]
 
@@ -152,54 +160,87 @@ class Visualization(object):
         if filename:
             if self.directionSpeed_ofObjects: self.remove_directionSpeedOfObjects() # remove previous annotations
             with open(filename) as fname:
-                snapshot_data= csv.reader(fname, delimiter=",")
+                fname.readline()
+                snapshot_data= csv.reader(fname, delimiter="\t")
                 for line in snapshot_data:
-                    teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed = line
-                    try:
-                        teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed = \
-                            int(teamID), teamName, int(jersey_number), float(currentX), float(currentY), \
-                            float(nextX), float(nextY), float(speed)
+                    teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed, passTo = line
+                    teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed, passTo = \
+                        int(teamID), teamName, int(jersey_number), float(currentX), float(currentY), \
+                        float(nextX), float(nextY), float(speed), passTo
 
-                        lengthX = (nextX - currentX) * speed
-                        nextX = lengthX + currentX
+                    lengthX = (nextX - currentX) * speed
+                    nextX = lengthX + currentX
 
-                        lengthY = (nextY - currentY) * speed
-                        nextY = lengthY + currentY
+                    lengthY = (nextY - currentY) * speed
+                    nextY = lengthY + currentY
 
-                        default_arrow_size = 2
-                        if lengthX >= 0: nextX += default_arrow_size
-                        else: nextX -= default_arrow_size
-                        if lengthY >= 0: nextY += default_arrow_size
-                        else: nextY -= default_arrow_size
+                    default_arrow_size = 2
+                    if lengthX >= 0: nextX += default_arrow_size
+                    else: nextX -= default_arrow_size
+                    if lengthY >= 0: nextY += default_arrow_size
+                    else: nextY -= default_arrow_size
 
-                        passAnnotation = self.ax.annotate('', xy=(nextX,nextY), xycoords='data', xytext=(currentX,currentY),
-                                                    textcoords='data',size=20, va="center", ha="center",zorder=2, arrowprops=dict(
-                                                    arrowstyle="simple", connectionstyle="arc3",fc="cyan", ec="b", lw=2))
-                        self.directionSpeed_ofObjects.append(passAnnotation)
+                    passAnnotation = self.ax.annotate('', xy=(nextX,nextY), xycoords='data', xytext=(currentX,currentY),
+                                                textcoords='data',size=20, va="center", ha="center",zorder=2, arrowprops=dict(
+                                                arrowstyle="simple", connectionstyle="arc3",fc="cyan", ec="b", lw=2))
+                    self.directionSpeed_ofObjects.append(passAnnotation)
 
-                        if teamID in [0]:
-                            homeTeamPlayers[jersey_number] = [currentX, currentY]
-                        elif teamID in [1]:
-                            awayTeamPlayers[jersey_number] = [currentX, currentY]
-                        elif teamID in [2]:
-                            referees[jersey_number] = [currentX, currentY]
-                        else:
-                            unknownObjects[jersey_number] = [currentX, currentY]
-                    except:
-                        pass
+                    if teamID in [0]:
+                        homeTeamPlayers[jersey_number] = [currentX, currentY]
+                    elif teamID in [1]:
+                        awayTeamPlayers[jersey_number] = [currentX, currentY]
+                    elif teamID in [2]:
+                        referees[jersey_number] = [currentX, currentY]
+                    else:
+                        unknownObjects[jersey_number] = [currentX, currentY]
+
             if self.eventAnnotation != None: self.eventAnnotation.remove(); del self.eventAnnotation; self.eventAnnotation = None
             if self.passAnnotation != None: self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
             if self.trailAnnotation!=None: self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
             if self.ballAnnotation!=None: self.ballAnnotation.remove(); del self.ballAnnotation; self.ballAnnotation = None
 
             self.remove_previousJerseyNumbers()
+            self.text_toDisplayPasses.delete("1.0", END)
             self.setJerseyNumbers_forGivenObjects(homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+
+            with open(filename) as fname:
+                fname.readline()
+                snapshot_data= csv.reader(fname, delimiter="\t")
+                for line in snapshot_data:
+                    teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed, passTo = line
+                    teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed, passTo = \
+                        teamID, teamName, jersey_number, float(currentX), float(currentY), \
+                        float(nextX), float(nextY), float(speed), passTo
+                    self.displayPasses_forSnapShot(passTo, currentX, currentY, jersey_number, teamID)
 
             self.currentTimeVariable.set("Time = %s.%s.%s" %("-", "-", "-"))
 
             self.canvas.draw()
             #self.master.update()
             self.frame.update()
+
+    def displayPasses_forSnapShot(self, passTo, currentX, currentY, jersey_number, teamID):
+        if passTo != "None":
+            teams = {(0.0, 0.0, 1.0, 0.5):"0", (1.0, 0.0, 0.0, 0.5):"1",
+                            (1.0, 1.0, 0.0, 0.5):"2", (0.0, 0.0, 0.0, 0.5):"-1"}
+            p1, p2_s = None, []
+            passTo = [pto for pto in passTo.split("@")]
+            for jsTo in passTo:
+                for i in self.texts:
+                    x, y = i.point.get_position()
+                    js = i.point.get_text()
+                    team_id = teams[i.point.get_bbox_patch().get_facecolor()]
+                    if p1 == None:
+                        if currentX==x and currentY==y and js==jersey_number:
+                            p1 = i.point
+                    if team_id==teamID and js==jsTo:
+                        p2_s.append(i.point)
+            for p2 in p2_s:
+                passAnnotation = self.ax.annotate('', xy=(.5, .5), xycoords=(p2), ha="center", va="center",
+                    xytext=(.5, .5), textcoords=(p1), size=20, arrowprops=dict(patchA=p1.get_bbox_patch(),
+                    patchB=p2.get_bbox_patch(), arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
+                self.definedPasses_forSnapShot.append(passAnnotation)
+                self.displayDefinedPass(passAnnotation)
 
     def rb_define_pass(self):
         if self.directionSpeed_ofObjects:
