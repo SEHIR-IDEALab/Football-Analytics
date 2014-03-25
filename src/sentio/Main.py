@@ -27,6 +27,7 @@ def main():
             #print back_time.half, back_time.minute, back_time.second, back_time.mili_second
             return get_currentEventData(back_time.half, back_time.minute, back_time.second, back_time.mili_second)
 
+
     def getBallOwner_byTime(half, minute, second, mili_second):
         q = sentio.getCoordinateData_byTime()
         current_coord_info = q[half][minute][second][mili_second]
@@ -40,6 +41,9 @@ def main():
         next_coord_info = q[next_time.half][next_time.minute][next_time.second][next_time.mili_second]
         print next_time.half, next_time.minute, next_time.second, next_time.mili_second
         print next_coord_info
+
+#    getBallOwner_byTime(1,0,0,0)
+
 
 
     # match.identifyObjects()

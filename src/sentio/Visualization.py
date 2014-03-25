@@ -1,5 +1,5 @@
 # coding=utf-8
-from Tkconstants import VERTICAL, RIGHT, Y, LEFT
+from Tkconstants import VERTICAL, RIGHT, Y, LEFT, INSERT, END
 
 import Tkinter as Tk
 import csv
@@ -14,6 +14,7 @@ import numpy
 from src.sentio.CircleStyle import CircleStyle
 from src.sentio.DraggablePass import DraggablePass
 from src.sentio.DraggableText import DraggableText
+from src.sentio.Pass import Pass
 from src.sentio.Time import Time
 
 __author__ = 'emrullah'
@@ -379,7 +380,7 @@ class Visualization(object):
         for index, players in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
             for player in players:
                 coordX, coordY, js = players[player][0], players[player][1], player
-                player_js = self.ax.text((coordX-0.3 if len(str(player))==1 else coordX-0.7), coordY+0.5, js, color="w", fontsize=(11 if len(str(player))==1 else 10),
+                player_js = self.ax.text(coordX, coordY, js, color="w", fontsize=(11 if len(str(player))==1 else 10),
                                          picker=True,zorder=1, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index],
                                                                 ec=colors[index], alpha=0.5))
                 dr = DraggableText(player_js)
@@ -403,24 +404,34 @@ class Visualization(object):
         homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
             self.getObjectsCoords_forGivenTime(half, minute, sec, milisec)
 
-        self.annotate_currentEvent(half, minute, sec, milisec, homeTeamPlayers, awayTeamPlayers, skip_times)
-
         self.setJerseyNumbers_forGivenObjects(homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+
+        self.annotate_currentEvent(half, minute, sec, milisec, homeTeamPlayers, awayTeamPlayers, skip_times)
 
         self.canvas.draw()
         #self.master.update()
         self.frame.update()
 
+    def detectParticularPlayer(self, js, x, y):
+        for plyr in self.texts:
+            x1, y1 = plyr.point.get_position()
+            js1 = plyr.point.get_text()
+            if x1==x and y1==y and int(js1)==js:
+                return plyr.point
+
     def annotate_currentEvent(self, half, minute, second, milisec, homeTeamPlayers, awayTeamPlayers, skip_times): # not completed
         eventData_current = self.get_currentEventData(half, minute, second, milisec)
         current_teamName, current_js, current_eventID = eventData_current[0]
         homeTeamName, awayTeamName = self.teamNames
+        player_current = None
         xBall, yBall = None, None
         try:
             if current_teamName == homeTeamName:
                 xBall, yBall = homeTeamPlayers[current_js]
+                player_current = self.detectParticularPlayer(current_js, xBall, yBall)
             elif current_teamName == awayTeamName:
                 xBall, yBall = awayTeamPlayers[current_js]
+                player_current = self.detectParticularPlayer(current_js, xBall, yBall)
         except KeyError:
             print "missing data"
 
@@ -439,17 +450,21 @@ class Visualization(object):
             if previous_teamName != current_teamName or previous_js != current_js:
                 if self.trailAnnotation!=None: self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
                 if self.ballAnnotation!=None: self.ballAnnotation.remove(); del self.ballAnnotation; self.ballAnnotation = None
+                player_previous = None
                 previous_xBall, previous_yBall = None, None
                 try:
                     if previous_teamName == homeTeamName:
                         previous_xBall, previous_yBall = homeTeamPlayers[previous_js]
+                        player_previous = self.detectParticularPlayer(previous_js, previous_xBall, previous_yBall)
                     elif previous_teamName == awayTeamName:
                         previous_xBall, previous_yBall = awayTeamPlayers[previous_js]
+                        player_previous  = self.detectParticularPlayer(previous_js, previous_xBall, previous_yBall)
                 except KeyError:
                     print "missing data 2"
                 if (previous_eventID not in [4, 12]) and previous_xBall != None and xBall != None:
-                    self.passAnnotation = self.ax.annotate('', xy=(xBall, yBall), xycoords='data', xytext=(previous_xBall,previous_yBall),
-                        textcoords='data', size=20, arrowprops=dict(arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
+                    self.passAnnotation = self.ax.annotate('', xy=(.5, .5), xycoords=(player_current), xytext=(.5, .5),
+                        textcoords=(player_previous), size=20, arrowprops=dict(arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
+                    self.displayDefinedPass(self.passAnnotation)
             else:
                 if self.trailAnnotation == None:
                     self.entire_trailX, self.entire_trailY = [],[]
@@ -460,6 +475,18 @@ class Visualization(object):
                     self.entire_trailX.append(xBall), self.entire_trailY.append(yBall)
                     self.trailAnnotation.set_data(self.entire_trailX, self.entire_trailY)
                     self.ballAnnotation.set_data(xBall, yBall)
+
+    def displayDefinedPass(self, definedPass):
+            p1 = definedPass.textcoords
+            p2 = definedPass.xycoords
+
+            q = Pass(self.texts)
+            self.text_toDisplayPasses.insert("1.0", "goal_chance = %s\n" %q.goalChance(p2))
+            self.text_toDisplayPasses.insert("1.0", "effectiveness = %s\n" %q.effectiveness(p1, p2))
+            self.text_toDisplayPasses.insert("1.0", "pass_advantage = %s (%s)\n" %q.passAdvantage(p2))
+            self.text_toDisplayPasses.insert("1.0", "gain = %s\n" %q.gain(p1, p2))
+            self.text_toDisplayPasses.insert("1.0", "overall_risk = %s\n" %q.overallRisk(p1, p2))
+            self.text_toDisplayPasses.insert("1.0", "\n%s --> %s\n" %(p1.get_text(), p2.get_text()))
 
     def get_currentEventData(self, half, minute, second, milisec):
         try:
