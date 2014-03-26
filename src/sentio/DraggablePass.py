@@ -4,7 +4,7 @@ from src.sentio.Pass import Pass
 __author__ = 'doktoray'
 
 from matplotlib import pylab as p
-from matplotlib.text import Text
+from matplotlib.text import Text, Annotation
 
 class DraggablePass(Pass):
 
@@ -21,47 +21,46 @@ class DraggablePass(Pass):
     def connect(self):
         self.cidpick = self.figure.canvas.mpl_connect("pick_event", self.on_pick_event)
         self.cidmotion = self.figure.canvas.mpl_connect("motion_notify_event", self.on_motion_event)
-        self.cidrelease = self.figure.canvas.mpl_connect('button_release_event', self.on_release_event)
 
     def set_passDisplayer(self, passDisplayer):
         self.passDisplayer = passDisplayer
 
     def on_pick_event(self, event):
-        " Store which text object was picked and were the pick event occurs."
         if isinstance(event.artist, Text):
             if self.dragged != None:
                 self.dragged2 = event.artist
-                #xBall, yBall = self.dragged2.get_position()
-                #previous_xBall, previous_yBall = self.dragged.get_position()
-                passAnnotation = self.ax.annotate('', xy=(.5, .5), xycoords=(self.dragged2), ha="center", va="center",
-                    xytext=(.5, .5), textcoords=(self.dragged), size=20, arrowprops=dict(patchA=self.dragged.get_bbox_patch(),
-                    patchB=self.dragged2.get_bbox_patch(), arrowstyle="fancy", fc="0.6", ec="none",
-                    connectionstyle="arc3"))
-                self.definedPasses.append(passAnnotation)
+
+                self.passAnnotation.xy = (.5,.5)
+                self.passAnnotation.xycoords = self.dragged2
+                self.passAnnotation.arrowprops["patchB"] = self.dragged2.get_bbox_patch()
+
+                self.figure.canvas.draw()
+                self.definedPasses.append(self.passAnnotation)
+                self.displayDefinedPasses()
+
+                self.dragged, self.dragged2, self.passAnnotation = None, None, None
             else:
                 self.dragged = event.artist
-        else:
-            self.dragged = None
-            self.dragged2 = None
-            if self.passAnnotation != None:
-                self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
-            self.figure.canvas.draw()
+                xBall, yBall = (event.mouseevent.xdata, event.mouseevent.ydata)
+
+                self.passAnnotation = self.ax.annotate('', xy=(xBall, yBall), xycoords='data', xytext=(.5,.5), va="center",
+                    ha="center", textcoords=(self.dragged), size=20, arrowprops=dict(patchA = self.dragged.get_bbox_patch(),
+                        arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
+
+                self.figure.canvas.draw()
+        if isinstance(event.artist, Annotation):
+            print "adasdasd"
 
     def on_motion_event(self, event):
         if self.dragged != None:
-            previous_xBall, previous_yBall = self.dragged.get_position()
             xBall, yBall = (event.xdata, event.ydata)
-            if self.passAnnotation != None: self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
             try:
-                self.passAnnotation = self.ax.annotate('', xy=(xBall, yBall), xycoords='data', xytext=(previous_xBall, previous_yBall),
-                    textcoords='data', size=20, arrowprops=dict(arrowstyle="fancy", fc="0.6", ec="none",
-                                                                connectionstyle="arc3"))
+                self.passAnnotation.xy = (xBall, yBall)
                 self.figure.canvas.draw()
             except TypeError:
                 pass
 
     def displayDefinedPasses(self):
-        print self.definedPasses
         self.passDisplayer.delete("1.0", END)
         for i in self.definedPasses:
             p1 = i.textcoords
@@ -74,28 +73,10 @@ class DraggablePass(Pass):
             self.passDisplayer.insert(END, "\neffectiveness = %s" %self.effectiveness(p1, p2))
             self.passDisplayer.insert(END, "\ngoal_chance = %s\n" %self.goalChance(p2))
 
-    def on_release_event(self, event):
-        if self.passAnnotation != None: self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
-        if self.dragged2 != None:
-            passAnnotation = self.ax.annotate('', xy=(.5, .5), xycoords=(self.dragged2), ha="center", va="center",
-                        xytext=(.5, .5), textcoords=(self.dragged), size=20, arrowprops=dict(patchA=self.dragged.get_bbox_patch(),
-                        patchB=self.dragged2.get_bbox_patch(), arrowstyle="fancy", fc="0.6", ec="none",
-                        connectionstyle="arc3"))
-            self.definedPasses[-1].remove(); del self.definedPasses[-1]
-            self.definedPasses.append(passAnnotation)
-
-            self.displayDefinedPasses()
-
-            self.dragged = None
-            self.dragged2 = None
-
-        self.figure.canvas.draw()
-
     def disconnect(self):
         try:
             self.figure.canvas.mpl_disconnect(self.cidpick)
             #self.figure.canvas.mpl_disconnect(self.cidmotion)
-            self.figure.canvas.mpl_disconnect(self.cidrelease)
         except AttributeError:
             pass
 

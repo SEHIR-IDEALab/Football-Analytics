@@ -101,7 +101,6 @@ class Pass:
 
             if team2 == team1 and js2 != js1:
                 try:
-                    print js2, self.gain(p1, p2), self.overallRisk(p1, p2)
                     pa = ( 10 + self.gain(p1, p2) ) / self.overallRisk(p1, p2)
                     passAdvantages[pa] = js2
                 except ZeroDivisionError:
