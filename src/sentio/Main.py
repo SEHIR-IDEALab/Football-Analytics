@@ -14,24 +14,21 @@ def main():
     sentio.parseSentioData()
 
     match = Match(sentio)
-    match.visualizeMatch()
+    #match.visualizeMatch()
+
+    print match.getMatchScore_byGivenTime(1, 22, 56, 0)
 
 #    getBallOwner_byTime(1,0,0,0)
 
-
-
+    #
+    #
     # match.identifyObjects()
-    # # match.compute_someEvents()
+    # match.compute_someEvents()
     # q = match.getHomeTeam().getTeamPlayers()
     # for i in q:
     #     player = q[i]
-    #     print player.getSpeedOfPlayer_atAllPoints()
-    #     break
-
-
-    # player.getTeamName(), player.get_minMaxOfHalf_forPlayer(), player.getSpeedOfPlayer_atAllPoints()
-
-    #
+    #     print player.compute_runningDistance_withGameStopAndSpeedFilter()
+    # #
     #
     # match.identifyObjects()
     # q = match.getHomeTeam().getTeamPlayers()

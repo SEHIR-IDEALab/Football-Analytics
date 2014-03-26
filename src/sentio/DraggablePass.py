@@ -50,6 +50,10 @@ class DraggablePass(Pass):
                 self.figure.canvas.draw()
         if isinstance(event.artist, Annotation):
             print "adasdasd"
+        if self.definedPasses != []:
+            for i in self.definedPasses:
+                print i.get_clip_path()
+
 
     def on_motion_event(self, event):
         if self.dragged != None:
@@ -66,12 +70,12 @@ class DraggablePass(Pass):
             p1 = i.textcoords
             p2 = i.xycoords
 
-            self.passDisplayer.insert(INSERT, "\n%s --> %s" %(p1.get_text(), p2.get_text()))
-            self.passDisplayer.insert(END, "\noverall_risk = %s" %self.overallRisk(p1, p2))
-            self.passDisplayer.insert(END, "\ngain = %s" %self.gain(p1, p2))
-            self.passDisplayer.insert(END, "\npass_advantage = %s (%s)" %self.passAdvantage(p2))
-            self.passDisplayer.insert(END, "\neffectiveness = %s" %self.effectiveness(p1, p2))
-            self.passDisplayer.insert(END, "\ngoal_chance = %s\n" %self.goalChance(p2))
+            self.passDisplayer.insert("1.0", "goal_chance = %s\n" %self.goalChance(p2))
+            self.passDisplayer.insert("1.0", "effectiveness = %s\n" %self.effectiveness(p1, p2))
+            self.passDisplayer.insert("1.0", "pass_advantage = %s (%s)\n" %self.passAdvantage(p2))
+            self.passDisplayer.insert("1.0", "gain = %s\n" %self.gain(p1, p2))
+            self.passDisplayer.insert("1.0", "overall_risk = %s\n" %self.overallRisk(p1, p2))
+            self.passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.get_text(), p2.get_text()))
 
     def disconnect(self):
         try:

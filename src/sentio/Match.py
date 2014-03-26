@@ -21,6 +21,37 @@ class Match(object):
     def getMatchID(self):
         return self.sentio.getCoordinateData()[0][1]
 
+    def getValidEventDataTime_forGivenTime(self, half, minute, second, milisec):
+        try:
+            eventData_current = self.sentio.getEventData_byTime()[half][minute][second]
+            return half, minute, second
+        except KeyError:
+            time = Time(half, minute, second, milisec)
+            time.set_minMaxOfHalf(self.get_minMaxOfHalf())   ####### may be removed!
+            back_time = time.back()
+            #print back_time.half, back_time.minute, back_time.second, back_time.mili_second
+            return self.getValidEventDataTime_forGivenTime(back_time.half, back_time.minute, back_time.second, back_time.mili_second)
+
+    def getMatchScore_forGivenTime(self, half_, minute_, second_, milisec_):
+        d = dict()
+        e = self.sentio.getEventData_byTime()
+        done = False
+        for half in sorted(e.keys()):
+            for minute in sorted(e[half].keys()):
+                for second in sorted(e[half][minute].keys()):
+                    events = e[half][minute][second]
+                    for event in events:
+                        teamName_current, js_current, eventID_current = event
+                        if teamName_current != "": d.setdefault(teamName_current, 0)
+                        if eventID_current in range(112, 218): d[teamName_current] += 1
+                    half_, minute_, second_ = self.getValidEventDataTime_forGivenTime(half_, minute_, second_, milisec_)
+                    if half==half_ and minute==minute_ and second==second_:
+                        done = True; break
+                if done: break
+            if done: break
+        return d
+
+
     def getTeamNames(self):
         eventData_raw = self.sentio.getEventData()
         homeTeam, awayTeam = None, None
@@ -167,21 +198,13 @@ class Match(object):
                 pass
         return game_stop_time_intervals
 
+
     def append_newEventTimeIntervals(self, myDict, new_time_info):
-        half, minute, second, milisecond = new_time_info.half, new_time_info.minute, new_time_info.second, new_time_info.mili_second
-        try:
-            myDict[half][minute][second][milisecond] = None
-        except KeyError:
-            try:
-                myDict[half][minute][second] = {milisecond: None}
-            except KeyError:
-                try:
-                    myDict[half][minute] = {second: {milisecond: None}}
-                except KeyError:
-                    try:
-                        myDict[half] = {minute: {second: {milisecond: None}}}
-                    except KeyError:
-                        print "!!!!!!!!!"
+        half, minute, second, mili_second = new_time_info.half, new_time_info.minute, new_time_info.second, new_time_info.mili_second
+        myDict.setdefault(half, {})
+        myDict[half].setdefault(minute, {})
+        myDict[half][minute].setdefault(second, {})
+        myDict[half][minute][second][mili_second] = None
         return myDict
 
     def identifyObjects(self):

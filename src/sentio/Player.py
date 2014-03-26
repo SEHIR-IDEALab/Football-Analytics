@@ -36,23 +36,16 @@ class Player(object):
     def add_ballOwnershipTime(self, bown_time):
         self.ball_ownership_time += bown_time
 
+
     def appendNewCoordInfo(self, new_timeInfo, new_player_coord_info):
         current_player_coord_info = new_player_coord_info
         x_current, y_current = float(current_player_coord_info[3]), float(current_player_coord_info[4])
-        half, minute, second, milisecond = new_timeInfo.half, new_timeInfo.minute, new_timeInfo.second, new_timeInfo.mili_second
-        try:
-            self.player_coord_info[half][minute][second][milisecond] = (x_current, y_current)
-        except KeyError:
-            try:
-                self.player_coord_info[half][minute][second] = {milisecond: (x_current, y_current)}
-            except KeyError:
-                try:
-                    self.player_coord_info[half][minute] = {second: {milisecond: (x_current, y_current)}}
-                except KeyError:
-                    try:
-                        self.player_coord_info[half] = {minute: {second: {milisecond: (x_current, y_current)}}}
-                    except KeyError:
-                        print "!!!!!!!!!"
+        half, minute, second, mili_second = new_timeInfo.half, new_timeInfo.minute, new_timeInfo.second, new_timeInfo.mili_second
+        self.player_coord_info.setdefault(half, {})
+        self.player_coord_info[half].setdefault(minute, {})
+        self.player_coord_info[half][minute].setdefault(second, {})
+        self.player_coord_info[half][minute][second][mili_second] = (x_current, y_current)
+
 
     def get_playerCoordInfo(self):
         return self.player_coord_info
