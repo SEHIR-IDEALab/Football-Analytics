@@ -14,9 +14,12 @@ def main():
     sentio.parseSentioData()
 
     match = Match(sentio)
-    #match.visualizeMatch()
+    match.visualizeMatch()
 
-    print match.getMatchScore_byGivenTime(1, 22, 56, 0)
+
+
+
+    #print match.getMatchScore_forGivenTime(2, 75, 56, 0)
 
 #    getBallOwner_byTime(1,0,0,0)
 

@@ -1,4 +1,7 @@
 from Tkconstants import INSERT, END
+from matplotlib.image import AxesImage
+from matplotlib.lines import Line2D
+from matplotlib.patches import Rectangle
 from src.sentio.Pass import Pass
 
 __author__ = 'doktoray'
@@ -44,15 +47,15 @@ class DraggablePass(Pass):
                 xBall, yBall = (event.mouseevent.xdata, event.mouseevent.ydata)
 
                 self.passAnnotation = self.ax.annotate('', xy=(xBall, yBall), xycoords='data', xytext=(.5,.5), va="center",
-                    ha="center", textcoords=(self.dragged), size=20, arrowprops=dict(patchA = self.dragged.get_bbox_patch(),
-                        arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
+                    ha="center", picker=True, textcoords=(self.dragged), size=20, arrowprops=dict(
+                        patchA=self.dragged.get_bbox_patch(), arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
+                #self.passAnnotation.draggable(state=True)
 
                 self.figure.canvas.draw()
+
+        print event.artist
         if isinstance(event.artist, Annotation):
             print "adasdasd"
-        if self.definedPasses != []:
-            for i in self.definedPasses:
-                print i.get_clip_path()
 
 
     def on_motion_event(self, event):

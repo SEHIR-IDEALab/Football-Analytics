@@ -33,7 +33,7 @@ class Match(object):
             return self.getValidEventDataTime_forGivenTime(back_time.half, back_time.minute, back_time.second, back_time.mili_second)
 
     def getMatchScore_forGivenTime(self, half_, minute_, second_, milisec_):
-        d = dict()
+        d = {team_name:0 for team_name in self.teamNames}
         e = self.sentio.getEventData_byTime()
         done = False
         for half in sorted(e.keys()):
@@ -42,7 +42,6 @@ class Match(object):
                     events = e[half][minute][second]
                     for event in events:
                         teamName_current, js_current, eventID_current = event
-                        if teamName_current != "": d.setdefault(teamName_current, 0)
                         if eventID_current in range(112, 218): d[teamName_current] += 1
                     half_, minute_, second_ = self.getValidEventDataTime_forGivenTime(half_, minute_, second_, milisec_)
                     if half==half_ and minute==minute_ and second==second_:

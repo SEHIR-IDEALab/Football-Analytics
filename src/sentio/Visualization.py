@@ -5,7 +5,7 @@ import Tkinter as Tk
 import csv
 import time as tm
 import math
-from tkFileDialog import askopenfilename
+import tkFileDialog
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.patches import BoxStyle
 import matplotlib.pyplot as plt
@@ -122,43 +122,45 @@ class Visualization(object):
         self.master.mainloop()
 
     def saveSnapShot(self):
-        a = list()
-        a.extend(["team_id", "team_name", "jersey_no", "x1", "y1", "x2", "y2", "speed", "passTo"])
-        homeTeam, awayTeam = self.teamNames[0], self.teamNames[1]
-        current_half, current_minute, current_second, current_milisecond = self.currentTime_whenPause
-        name_of_file = "%s_%s.csv" %(homeTeam, awayTeam)
-        out = csv.writer(open(name_of_file,"a"), delimiter='\t', quoting=csv.QUOTE_NONE)
-        out.writerow(a)
-        del a[:]
-        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = self.getDirectionOfObjects_forGivenTime(
-            current_half, current_minute, current_second, current_milisecond)
-        teams = self.getSpeedOfObjects_forGivenTime(current_half, current_minute, current_second, current_milisecond)
-        for index, team in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
-            for player in team:
-                teamID = (index if index != 3 else -1)
-                teamName = (homeTeam if index == 0 else (awayTeam if index == 1 else ("referee" if index == 2 else "unknownObject")))
-                jersey_number = player
-                currentX, nextX = team[player][0]
-                currentY, nextY = team[player][1]
-                speed = teams[index][player]
-                js2 = ""
-                for i in self.definePasses.definedPasses:
-                    p1 = i.textcoords
-                    x1, y1 = p1.get_position()
-                    js1 = p1.get_text()
-                    if currentX==x1 and currentY==y1 and jersey_number==int(js1):
-                        p2 = i.xycoords
-                        js2 += p2.get_text() + "@"
-                passTo = ("None" if js2=="" else js2[:-1])
-                a.extend([teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed, passTo])
-                out.writerow(a)
-                del a[:]
+        fileName = tkFileDialog.asksaveasfilename(initialfile=("%s_%s"%self.teamNames), initialdir="../../SampleScenarios")
+        if fileName:
+            a = list()
+            a.extend(["team_id", "team_name", "jersey_no", "x1", "y1", "x2", "y2", "speed", "passTo"])
+            homeTeam, awayTeam = self.teamNames
+            current_half, current_minute, current_second, current_milisecond = self.currentTime_whenPause
+            name_of_file = "%s.csv" %(fileName)
+            out = csv.writer(open(name_of_file,"a"), delimiter='\t', quoting=csv.QUOTE_NONE)
+            out.writerow(a)
+            del a[:]
+            homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = self.getDirectionOfObjects_forGivenTime(
+                current_half, current_minute, current_second, current_milisecond)
+            teams = self.getSpeedOfObjects_forGivenTime(current_half, current_minute, current_second, current_milisecond)
+            for index, team in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
+                for player in team:
+                    teamID = (index if index != 3 else -1)
+                    teamName = (homeTeam if index == 0 else (awayTeam if index == 1 else ("referee" if index == 2 else "unknownObject")))
+                    jersey_number = player
+                    currentX, nextX = team[player][0]
+                    currentY, nextY = team[player][1]
+                    speed = teams[index][player]
+                    js2 = ""
+                    for i in self.definePasses.definedPasses:
+                        p1 = i.textcoords
+                        x1, y1 = p1.get_position()
+                        js1 = p1.get_text()
+                        if currentX==x1 and currentY==y1 and jersey_number==int(js1):
+                            p2 = i.xycoords
+                            js2 += p2.get_text() + "@"
+                    passTo = ("None" if js2=="" else js2[:-1])
+                    a.extend([teamID, teamName, jersey_number, currentX, currentY, nextX, nextY, speed, passTo])
+                    out.writerow(a)
+                    del a[:]
 
     def loadSnapShot(self):
-        filename = askopenfilename()
-        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = dict(),dict(),dict(),dict()
+        filename = tkFileDialog.askopenfilename(initialdir="../../SampleScenarios")
         if filename:
             if self.directionSpeed_ofObjects: self.remove_directionSpeedOfObjects() # remove previous annotations
+            homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = dict(),dict(),dict(),dict()
             with open(filename) as fname:
                 fname.readline()
                 snapshot_data= csv.reader(fname, delimiter="\t")
@@ -276,10 +278,10 @@ class Visualization(object):
             self.currentTime_whenPause = (2, minute_final, sec_final, milisec_final)
 
     def play(self):
-        if self.directionSpeed_ofObjects:
-            self.remove_directionSpeedOfObjects()
-
+        if self.directionSpeed_ofObjects: self.remove_directionSpeedOfObjects()
+        self.text_toDisplayPasses.delete("1.0", END)
         self.pauseButtonClicked = False
+
         current_half, current_minute, current_second, current_milisecond = self.currentTime_whenPause
         time = Time(current_half, current_minute, current_second, current_milisecond)
         time.set_minMaxOfHalf(self.minMaxOfHalf)
@@ -518,16 +520,16 @@ class Visualization(object):
                     self.ballAnnotation.set_data(xBall, yBall)
 
     def displayDefinedPass(self, definedPass):
-            p1 = definedPass.textcoords
-            p2 = definedPass.xycoords
+        p1 = definedPass.textcoords
+        p2 = definedPass.xycoords
 
-            q = Pass(self.texts)
-            self.text_toDisplayPasses.insert("1.0", "goal_chance = %s\n" %q.goalChance(p2))
-            self.text_toDisplayPasses.insert("1.0", "effectiveness = %s\n" %q.effectiveness(p1, p2))
-            self.text_toDisplayPasses.insert("1.0", "pass_advantage = %s (%s)\n" %q.passAdvantage(p2))
-            self.text_toDisplayPasses.insert("1.0", "gain = %s\n" %q.gain(p1, p2))
-            self.text_toDisplayPasses.insert("1.0", "overall_risk = %s\n" %q.overallRisk(p1, p2))
-            self.text_toDisplayPasses.insert("1.0", "\n%s --> %s\n" %(p1.get_text(), p2.get_text()))
+        q = Pass(self.texts)
+        self.text_toDisplayPasses.insert("1.0", "goal_chance = %s\n" %q.goalChance(p2))
+        self.text_toDisplayPasses.insert("1.0", "effectiveness = %s\n" %q.effectiveness(p1, p2))
+        self.text_toDisplayPasses.insert("1.0", "pass_advantage = %s (%s)\n" %q.passAdvantage(p2))
+        self.text_toDisplayPasses.insert("1.0", "gain = %s\n" %q.gain(p1, p2))
+        self.text_toDisplayPasses.insert("1.0", "overall_risk = %s\n" %q.overallRisk(p1, p2))
+        self.text_toDisplayPasses.insert("1.0", "\n%s --> %s\n" %(p1.get_text(), p2.get_text()))
 
     def get_currentEventData(self, half, minute, second, milisec):
         try:
