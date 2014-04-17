@@ -1,13 +1,10 @@
-from Tkconstants import INSERT, END
-from matplotlib.image import AxesImage
-from matplotlib.lines import Line2D
-from matplotlib.patches import Rectangle
+from Tkconstants import END
 from src.sentio.Pass import Pass
+from matplotlib import pylab as p
+from matplotlib.text import Text
 
 __author__ = 'doktoray'
 
-from matplotlib import pylab as p
-from matplotlib.text import Text, Annotation
 
 class DraggablePass(Pass):
 
@@ -49,13 +46,8 @@ class DraggablePass(Pass):
                 self.passAnnotation = self.ax.annotate('', xy=(xBall, yBall), xycoords='data', xytext=(.5,.5), va="center",
                     ha="center", picker=True, textcoords=(self.dragged), size=20, arrowprops=dict(
                         patchA=self.dragged.get_bbox_patch(), arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
-                #self.passAnnotation.draggable(state=True)
 
                 self.figure.canvas.draw()
-
-        print event.artist
-        if isinstance(event.artist, Annotation):
-            print "adasdasd"
 
 
     def on_motion_event(self, event):
@@ -73,11 +65,12 @@ class DraggablePass(Pass):
             p1 = i.textcoords
             p2 = i.xycoords
 
-            self.passDisplayer.insert("1.0", "goal_chance = %s\n" %self.goalChance(p2))
-            self.passDisplayer.insert("1.0", "effectiveness = %s\n" %self.effectiveness(p1, p2))
-            self.passDisplayer.insert("1.0", "pass_advantage = %s (%s)\n" %self.passAdvantage(p2))
-            self.passDisplayer.insert("1.0", "gain = %s\n" %self.gain(p1, p2))
-            self.passDisplayer.insert("1.0", "overall_risk = %s\n" %self.overallRisk(p1, p2))
+            self.passDisplayer.insert("1.0", "goal_chance = %.2f\n" %self.goalChance(p2))
+            self.passDisplayer.insert("1.0", "effectiveness = %.2f\n" %self.effectiveness(p1, p2))
+            self.passDisplayer.insert("1.0", "pass_advantage = %.2f (%s)\n" %self.passAdvantage(p2))
+            self.passDisplayer.insert("1.0", "gain = %.2f\n" %self.gain(p1, p2))
+            self.passDisplayer.insert("1.0", "overall_risk(%s->g_Kpr) = %.2f\n" %(p2.get_text(), self.overallRisk(p2, [0.0, 32.75])))
+            self.passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.get_text(), p2.get_text(), self.overallRisk(p1, p2)))
             self.passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.get_text(), p2.get_text()))
 
     def disconnect(self):

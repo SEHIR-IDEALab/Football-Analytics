@@ -80,15 +80,11 @@ class Pass:
         min_ultimate = min([min(opponentTeam), min(sameTeam)])
         max_ultimate = max([max(opponentTeam), max(sameTeam)])
         if (min_ultimate in sameTeam) and max_ultimate in opponentTeam:
-            if x1 < x2:
-                return gain
-            else:
-                return -gain
+            if x1 < x2: return gain
+            else: return -gain
         else:
-            if x1 < x2:
-                return -gain
-            else:
-                return gain
+            if x1 < x2: return -gain
+            else: return gain
 
     def passAdvantage(self, p1):
         x1, y1 = p1.get_position()
@@ -121,6 +117,7 @@ class Pass:
         angle = math.fabs(90 - angle)
         q = self.overallRisk(p1, [goalKeeperX, goalKeeperY])
         q = (1 if q == 0 else q)
+        print "%s, angle: %s, risk: %s, distance: %s" % (js1, angle, q, d1)
 
         return (d2 / d1) * (min(angle, (180 - angle)) / 90) / q * 1000
 

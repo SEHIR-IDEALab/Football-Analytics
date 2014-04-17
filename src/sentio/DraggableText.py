@@ -1,3 +1,6 @@
+from Tkconstants import END
+from src.sentio.Pass import Pass
+
 
 class DraggableText:
     lock = None #only one can be animated at a time
@@ -69,6 +72,32 @@ class DraggableText:
 
         # redraw the full figure
         self.point.figure.canvas.draw()
+
+        self.displayDefinedPasses()
+
+    def set_passDisplayer(self, passDisplayer):
+        self.passDisplayer = passDisplayer
+
+    def set_definedPasses(self, definedPasses):
+        self.definedPasses = definedPasses
+
+    def set_coordinatesOfObjects(self, coord):
+        self.coordinatesOfObjects = coord
+
+    def displayDefinedPasses(self):
+        self.passDisplayer.delete("1.0", END)
+        passes = Pass(self.coordinatesOfObjects)
+        for i in self.definedPasses:
+            p1 = i.textcoords
+            p2 = i.xycoords
+
+            self.passDisplayer.insert("1.0", "goal_chance = %.2f\n" %passes.goalChance(p2))
+            self.passDisplayer.insert("1.0", "effectiveness = %.2f\n" %passes.effectiveness(p1, p2))
+            self.passDisplayer.insert("1.0", "pass_advantage = %.2f (%s)\n" %passes.passAdvantage(p2))
+            self.passDisplayer.insert("1.0", "gain = %.2f\n" %passes.gain(p1, p2))
+            self.passDisplayer.insert("1.0", "overall_risk(%s->g_Kpr) = %.2f\n" %(p2.get_text(), passes.overallRisk(p2, [0.0, 32.75])))
+            self.passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.get_text(), p2.get_text(), passes.overallRisk(p1, p2)))
+            self.passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.get_text(), p2.get_text()))
 
     def disconnect(self):
         'disconnect all the stored connection ids'

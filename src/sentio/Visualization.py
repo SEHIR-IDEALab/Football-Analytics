@@ -106,7 +106,8 @@ class Visualization(object):
         homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
             self.getObjectsCoords_forGivenTime(1, 0, 0, 0)
 
-        self.trailAnnotation, self.eventAnnotation, self.passAnnotation, self.ballAnnotation = None, None, None, None
+        self.trailAnnotation, self.eventAnnotation, self.passAnnotation, self.passEffectivenessAnnotation, self.ballAnnotation = None, None, None, None, None
+        self.count_forEventAndPassEffect = 0
 
         self.texts = list()
         self.definePasses = None
@@ -132,16 +133,18 @@ class Visualization(object):
             out = csv.writer(open(name_of_file,"a"), delimiter='\t', quoting=csv.QUOTE_NONE)
             out.writerow(a)
             del a[:]
-            homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = self.getDirectionOfObjects_forGivenTime(
-                current_half, current_minute, current_second, current_milisecond)
+            homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = self.getObjectsCoords_forSnapShot()
+            hm, wy, rfr, nkw = self.getDirectionOfObjects_forGivenTime(
+            current_half, current_minute, current_second, current_milisecond)
+            teams_next = [hm, wy, rfr, nkw]
             teams = self.getSpeedOfObjects_forGivenTime(current_half, current_minute, current_second, current_milisecond)
             for index, team in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
                 for player in team:
                     teamID = (index if index != 3 else -1)
                     teamName = (homeTeam if index == 0 else (awayTeam if index == 1 else ("referee" if index == 2 else "unknownObject")))
                     jersey_number = player
-                    currentX, nextX = team[player][0]
-                    currentY, nextY = team[player][1]
+                    currentX, currentY = team[player]
+                    nextX, nextY = teams_next[index][player][0][1], teams_next[index][player][1][1]
                     speed = teams[index][player]
                     js2 = ""
                     for i in self.definePasses.definedPasses:
@@ -159,7 +162,8 @@ class Visualization(object):
     def loadSnapShot(self):
         filename = tkFileDialog.askopenfilename(initialdir="../../SampleScenarios")
         if filename:
-            if self.directionSpeed_ofObjects: self.remove_directionSpeedOfObjects() # remove previous annotations
+            self.remove_directionSpeedOfObjects() # remove previous annotations
+            self.remove_allDefinedPassesForSnapShot()
             homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = dict(),dict(),dict(),dict()
             with open(filename) as fname:
                 fname.readline()
@@ -310,10 +314,18 @@ class Visualization(object):
         self.annotateDirectionSpeedOfObjects_forGivenTime(current_half, current_minute, current_second, current_milisecond)
 
     def remove_directionSpeedOfObjects(self):
-        for i in self.directionSpeed_ofObjects:
-            i.remove()
-        del self.directionSpeed_ofObjects[:]
-        self.canvas.draw()
+        if self.directionSpeed_ofObjects:
+            for i in self.directionSpeed_ofObjects:
+                i.remove()
+            del self.directionSpeed_ofObjects[:]
+            self.canvas.draw()
+
+    def remove_allDefinedPassesForSnapShot(self):
+        if self.displayPasses_forSnapShot:
+            for i in self.definedPasses_forSnapShot:
+                i.remove()
+            del self.definedPasses_forSnapShot[:]
+            self.canvas.draw()
 
     def annotateDirectionSpeedOfObjects_forGivenTime(self, half, minute, second, milisecond):
         homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = self.getDirectionOfObjects_forGivenTime(
@@ -430,7 +442,32 @@ class Visualization(object):
                 self.texts.append(dr)
         self.definePasses = DraggablePass(self.ax, self.texts)
         self.definePasses.set_passDisplayer(self.text_toDisplayPasses)
-        #self.definePasses.setCoordinateDataOfObjects(self.texts)
+
+        for i in self.texts:
+            i.set_passDisplayer(self.text_toDisplayPasses)
+            i.set_definedPasses(self.definePasses.definedPasses)
+            i.set_coordinatesOfObjects(self.texts)
+
+
+    def getObjectsCoords_forSnapShot(self):
+        teams = {(0.0, 0.0, 1.0, 0.5): "home", (1.0, 0.0, 0.0, 0.5): "away",
+                      (1.0, 1.0, 0.0, 0.5): "referee", (0.0, 0.0, 0.0, 0.5): "unknown"}
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = dict(), dict(), dict(), dict()
+        for object_info in self.texts:
+            q = object_info.point
+            positionX, positionY = q.get_position()
+            team = teams[q.get_bbox_patch().get_facecolor()]
+            jersey_number = q.get_text()
+            jersey_number, positionX, positionY = int(jersey_number), float(positionX), float(positionY)
+            if team  == "home":
+                homeTeamPlayers[jersey_number] = [positionX, positionY]
+            elif team == "away":
+                awayTeamPlayers[jersey_number] = [positionX, positionY]
+            elif team == "referee":
+                referees[jersey_number] = [positionX, positionY]
+            else:
+                unknownObjects[jersey_number] = [positionX, positionY]
+        return (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
 
     def remove_previousJerseyNumbers(self):
         for player_js in self.texts:
@@ -478,7 +515,11 @@ class Visualization(object):
         except KeyError:
             print "missing data"
 
-        if self.eventAnnotation != None: self.eventAnnotation.remove(); del self.eventAnnotation; self.eventAnnotation = None
+        self.count_forEventAndPassEffect += 1
+        if self.count_forEventAndPassEffect == 5:
+            if self.eventAnnotation != None: self.eventAnnotation.remove(); del self.eventAnnotation; self.eventAnnotation = None
+            if self.passEffectivenessAnnotation != None: self.passEffectivenessAnnotation.remove(); del self.passEffectivenessAnnotation; self.passEffectivenessAnnotation = None
+            self.count_forEventAndPassEffect = 0
         if self.passAnnotation != None: self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
 
         if current_eventID != 1:
@@ -507,7 +548,16 @@ class Visualization(object):
                 if (previous_eventID not in [4, 12]) and previous_xBall != None and xBall != None:
                     self.passAnnotation = self.ax.annotate('', xy=(.5, .5), xycoords=(player_current), xytext=(.5, .5),
                         textcoords=(player_previous), size=20, arrowprops=dict(arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
-                    self.displayDefinedPass(self.passAnnotation)
+
+                    effectiveness = self.displayDefinedPass(self.passAnnotation)
+
+                    current_coordX, current_coordY = player_current.get_position()
+                    pre_coordX, pre_coordY = player_previous.get_position()
+                    ultX, ultY = ((current_coordX + pre_coordX) / 2.), ((current_coordY + pre_coordY) / 2.)
+                    self.passEffectivenessAnnotation = self.ax.annotate(("effectiveness %.2f"%(effectiveness)), xy=(ultX-10, ultY),
+                        xycoords="data", va="center", ha="center", xytext=(ultX-10, ultY), textcoords="offset points",
+                        size=10, bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7), ec=(1., .5, .5)))
+
             else:
                 if self.trailAnnotation == None:
                     self.entire_trailX, self.entire_trailY = [],[]
@@ -524,12 +574,16 @@ class Visualization(object):
         p2 = definedPass.xycoords
 
         q = Pass(self.texts)
+        effectiveness = q.effectiveness(p1, p2)
+
         self.text_toDisplayPasses.insert("1.0", "goal_chance = %s\n" %q.goalChance(p2))
-        self.text_toDisplayPasses.insert("1.0", "effectiveness = %s\n" %q.effectiveness(p1, p2))
+        self.text_toDisplayPasses.insert("1.0", "effectiveness = %s\n" %effectiveness)
         self.text_toDisplayPasses.insert("1.0", "pass_advantage = %s (%s)\n" %q.passAdvantage(p2))
         self.text_toDisplayPasses.insert("1.0", "gain = %s\n" %q.gain(p1, p2))
         self.text_toDisplayPasses.insert("1.0", "overall_risk = %s\n" %q.overallRisk(p1, p2))
         self.text_toDisplayPasses.insert("1.0", "\n%s --> %s\n" %(p1.get_text(), p2.get_text()))
+
+        return effectiveness
 
     def get_currentEventData(self, half, minute, second, milisec):
         try:
