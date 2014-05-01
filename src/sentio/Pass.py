@@ -4,12 +4,57 @@ __author__ = 'doktoray'
 
 
 class Pass:
-    def __init__(self, coordinateDataOfObjects):
+    def __init__(self, coordinateDataOfObjects=None):
         self.coordinateDataOfObjects = coordinateDataOfObjects
         self.teams = {(0.0, 0.0, 1.0, 0.5): "home", (1.0, 0.0, 0.0, 0.5): "away",
                       (1.0, 1.0, 0.0, 0.5): "referee", (0.0, 0.0, 0.0, 0.5): "unknown"}
 
+    def displayDefinedPass(self, definedPass, passDisplayer):
+        p1 = definedPass.textcoords
+        p2 = definedPass.xycoords
+
+        effectiveness = self.effectiveness(p1, p2)
+
+        passDisplayer.insert("1.0", "goal_chance = %.2f\n" %self.goalChance(p2))
+        passDisplayer.insert("1.0", "effectiveness = %.2f\n" %effectiveness)
+        passDisplayer.insert("1.0", "pass_advantage = %.2f (%s)\n" %self.passAdvantage(p2))
+        passDisplayer.insert("1.0", "gain = %.2f\n" %self.gain(p1, p2))
+        passDisplayer.insert("1.0", "overall_risk(%s->g_Kpr) = %.2f\n" %(p2.get_text(), self.overallRisk(p2, [0.0, 32.75])))
+        passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.get_text(), p2.get_text(), self.overallRisk(p1, p2)))
+        passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.get_text(), p2.get_text()))
+
+        return effectiveness
+
+
     def risk(self, p1, p3, p2):
+        risk = 0.0
+
+        try: x1, y1 = p1.get_position()
+        except AttributeError: x1, y1 = p1
+
+        try: x2, y2 = p2.get_position()
+        except AttributeError: x2, y2 = p2
+
+        try: x3, y3 = p3.get_position()
+        except AttributeError: x3, y3 = p3
+
+        slope = (y2 - y1) / (x2 - x1)
+        a = slope
+        b = -1
+        c = ( ( slope * (-x1) ) + y1 )
+        d2 = math.fabs(a * x3 + b * y3 + c) / math.sqrt(math.pow(a, 2) + math.pow(b, 2))
+        hipotenus_1to3 = math.sqrt(math.pow(x3 - x1, 2) + math.pow(y3 - y1, 2))
+        d1 = math.sqrt(math.pow(hipotenus_1to3, 2) - math.pow(d2, 2))
+        try:
+            risk = d1 / d2
+        except ZeroDivisionError:
+            risk = d1
+        return risk
+
+
+    def overallRisk(self, p1, p2):
+        overallRisk = 0.0
+
         x1, y1 = p1.get_position()
         team1 = self.teams[p1.get_bbox_patch().get_facecolor()]
         js1 = p1.get_text()
@@ -22,34 +67,19 @@ class Pass:
         except AttributeError:
             x2, y2 = p2
 
-        x3, y3 = p3.get_position()
-        js3 = p3.get_text()
-        team3 = self.teams[p3.get_bbox_patch().get_facecolor()]
-
-        risk = 0.0
-        #if (x1<=x3<=x2 or x2<=x3<=x1) and (y1<=y3<=y2 or y2<=y3<=y1):
-        if x1 <= x3 <= x2 or x2 <= x3 <= x1:
-            if team3 not in [team1, "referee", "unknown"]:
-                slope = (y2 - y1) / (x2 - x1)
-                a = slope
-                b = -1
-                c = ( ( slope * (-x1) ) + y1 )
-                d2 = math.fabs(a * x3 + b * y3 + c) / math.sqrt(math.pow(a, 2) + math.pow(b, 2))
-                hipotenus_1to3 = math.sqrt(math.pow(x3 - x1, 2) + math.pow(y3 - y1, 2))
-                d1 = math.sqrt(math.pow(hipotenus_1to3, 2) - math.pow(d2, 2))
-                try:
-                    risk = d1 / d2
-                except ZeroDivisionError:
-                    risk = d1
-        return risk
-
-    def overallRisk(self, p1, p2):
-        overallRisk = 0.0
         for dragged in self.coordinateDataOfObjects:
             p3 = dragged.point
-            overallRisk += self.risk(p1, p3, p2)
+
+            x3, y3 = p3.get_position()
+            js3 = p3.get_text()
+            team3 = self.teams[p3.get_bbox_patch().get_facecolor()]
+
+            if x1 <= x3 <= x2 or x2 <= x3 <= x1:
+                if team3 not in [team1, "referee", "unknown"]:
+                    overallRisk += self.risk(p1, p3, p2)
         #print overallRisk, self.gain(p1,p2)
         return overallRisk
+
 
     def gain(self, p1, p2):
         x1, y1 = p1.get_position()
@@ -86,6 +116,7 @@ class Pass:
             if x1 < x2: return -gain
             else: return gain
 
+
     def passAdvantage(self, p1):
         x1, y1 = p1.get_position()
         team1 = self.teams[p1.get_bbox_patch().get_facecolor()]
@@ -105,6 +136,7 @@ class Pass:
         max_pass = max(passAdvantages.keys())
         return max_pass, passAdvantages[max_pass]
 
+
     def goalChance(self, p1):
         x1, y1 = p1.get_position()
         team1 = self.teams[p1.get_bbox_patch().get_facecolor()]
@@ -117,13 +149,15 @@ class Pass:
         angle = math.fabs(90 - angle)
         q = self.overallRisk(p1, [goalKeeperX, goalKeeperY])
         q = (1 if q == 0 else q)
-        print "%s, angle: %s, risk: %s, distance: %s" % (js1, angle, q, d1)
+        #print "%s, angle: %s, risk: %s, distance: %s" % (js1, angle, q, d1)
 
         return (d2 / d1) * (min(angle, (180 - angle)) / 90) / q * 1000
+
 
     def effectiveness(self, p1, p2):
         w1, w2, w3, w4 = 1, 1, 1, 1
         return w1 * self.gain(p1, p2) + w3 * self.passAdvantage(p2)[0] + w4 * self.goalChance(p2)
+
 
     def __str__(self):
         pass

@@ -1,7 +1,11 @@
 # coding=utf-8
 import time as tm
+from matplotlib.colors import Colormap
+import numpy
+from numpy.matlib import rand
 from src.sentio.Match import Match
 from src.sentio.Sentio import Sentio
+from pylab import *
 from src.sentio.Time import Time
 
 __author__ = 'emrullah'
@@ -15,6 +19,10 @@ def main():
 
     match = Match(sentio)
     match.visualizeMatch()
+
+
+
+
 
 
 

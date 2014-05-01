@@ -18,8 +18,10 @@ class Match(object):
 
         self.teamNames = self.getTeamNames()
 
+
     def getMatchID(self):
         return self.sentio.getCoordinateData()[0][1]
+
 
     def getValidEventDataTime_forGivenTime(self, half, minute, second, milisec):
         try:
@@ -31,6 +33,7 @@ class Match(object):
             back_time = time.back()
             #print back_time.half, back_time.minute, back_time.second, back_time.mili_second
             return self.getValidEventDataTime_forGivenTime(back_time.half, back_time.minute, back_time.second, back_time.mili_second)
+
 
     def getMatchScore_forGivenTime(self, half_, minute_, second_, milisec_):
         d = {team_name:0 for team_name in self.teamNames}
@@ -70,6 +73,7 @@ class Match(object):
                 break
         return (homeTeam, awayTeam)
 
+
     def getPlayersOfTeams(self):
         teams_players = dict()
         for line in self.sentio.getEventData():
@@ -82,21 +86,26 @@ class Match(object):
                         teams_players[teamName] += [player_jerseyNumber]
         return teams_players
 
+
     def getHomeTeam(self):
         homeTeamName = self.teamNames[0]
         team = Team(homeTeamName, self.homeTeamPlayers)
         return team
+
 
     def getAwayTeam(self):
         awayTeamName = self.teamNames[1]
         team = Team(awayTeamName, self.awayTeamPlayers)
         return team
 
+
     def get_referees(self):
         return self.referees
 
+
     def get_unknownObjects(self):
         return self.unknownObjects
+
 
     def get_ID_Explanation(self):
         a = dict()
@@ -104,6 +113,7 @@ class Match(object):
             id, explanation = int(line[5]), line[6]
             a[id] = explanation
         return a
+
 
     def get_minMaxOfHalf(self):
         a, index, q = dict(), 0, self.sentio.getCoordinateData()
@@ -126,6 +136,7 @@ class Match(object):
                                                     int(q[index][5]), int(q[index][2][-3])
         a[max_half].append([max_minute, max_second, max_mili_second])
         return a
+
 
     def compute_someEvents(self):
         teamName_previous, js_previous, eventID_previous = None, None, None
@@ -164,6 +175,7 @@ class Match(object):
                         teamName_previous, js_previous, eventID_previous = teamName_current, js_current, eventID_current
                         time_previous_miliseconds = time_current_miliseconds
 
+
     def get_timeInterval_ofGameStop(self):
         game_stop_time_intervals = dict()
         time = Time()
@@ -178,6 +190,7 @@ class Match(object):
             except KeyError:
                 break
         return game_stop_time_intervals
+
 
     def checkForGameStopEvent(self, time, game_stop_time_intervals, q):
         try:
@@ -204,7 +217,9 @@ class Match(object):
         myDict[half].setdefault(minute, {})
         myDict[half][minute].setdefault(second, {})
         myDict[half][minute][second][mili_second] = None
+
         return myDict
+
 
     def identifyObjects(self):
         gameStop = self.get_timeInterval_ofGameStop()
@@ -226,6 +241,7 @@ class Match(object):
             except KeyError:
                 break
 
+
     def makeClassification(self, time_info, objects_coord_info, events_info, gameStop):
         types = [[0,3], [1,4], [2,6,7,8,9], [-1]]
         for player_coord_info in objects_coord_info:
@@ -239,6 +255,7 @@ class Match(object):
                         if object_type in [0, 3]: teamName = self.teamNames[0]
                         elif object_type in [1, 4]: teamName = self.teamNames[1]
                         object_class[jersey_number] = Player(teamName, time_info, player_coord_info, events_info, gameStop)
+
 
     def visualizeMatch(self):
         visualization = Visualization(self.sentio.getCoordinateData_byTime(),self.sentio.getEventData_byTime(),

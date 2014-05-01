@@ -1,4 +1,5 @@
 from Tkconstants import END
+from src.sentio.HeatMap import HeatMap
 from src.sentio.Pass import Pass
 from matplotlib import pylab as p
 from matplotlib.text import Text
@@ -17,13 +18,17 @@ class DraggablePass(Pass):
         self.definedPasses = []
         self.ax = ax
         self.figure = figure
+        self.heatMap = HeatMap(self.ax)
+
 
     def connect(self):
         self.cidpick = self.figure.canvas.mpl_connect("pick_event", self.on_pick_event)
         self.cidmotion = self.figure.canvas.mpl_connect("motion_notify_event", self.on_motion_event)
 
+
     def set_passDisplayer(self, passDisplayer):
         self.passDisplayer = passDisplayer
+
 
     def on_pick_event(self, event):
         if isinstance(event.artist, Text):
@@ -33,6 +38,9 @@ class DraggablePass(Pass):
                 self.passAnnotation.xy = (.5,.5)
                 self.passAnnotation.xycoords = self.dragged2
                 self.passAnnotation.arrowprops["patchB"] = self.dragged2.get_bbox_patch()
+
+                self.heatMap.remove()
+                self.heatMap.draw(self.passAnnotation)
 
                 self.figure.canvas.draw()
                 self.definedPasses.append(self.passAnnotation)
@@ -59,19 +67,12 @@ class DraggablePass(Pass):
             except TypeError:
                 pass
 
+
     def displayDefinedPasses(self):
         self.passDisplayer.delete("1.0", END)
-        for i in self.definedPasses:
-            p1 = i.textcoords
-            p2 = i.xycoords
+        for dPass in self.definedPasses:
+            self.displayDefinedPass(dPass, self.passDisplayer)
 
-            self.passDisplayer.insert("1.0", "goal_chance = %.2f\n" %self.goalChance(p2))
-            self.passDisplayer.insert("1.0", "effectiveness = %.2f\n" %self.effectiveness(p1, p2))
-            self.passDisplayer.insert("1.0", "pass_advantage = %.2f (%s)\n" %self.passAdvantage(p2))
-            self.passDisplayer.insert("1.0", "gain = %.2f\n" %self.gain(p1, p2))
-            self.passDisplayer.insert("1.0", "overall_risk(%s->g_Kpr) = %.2f\n" %(p2.get_text(), self.overallRisk(p2, [0.0, 32.75])))
-            self.passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.get_text(), p2.get_text(), self.overallRisk(p1, p2)))
-            self.passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.get_text(), p2.get_text()))
 
     def disconnect(self):
         try:
