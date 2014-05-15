@@ -18,7 +18,7 @@ class DraggablePass(Pass):
         self.definedPasses = []
         self.ax = ax
         self.figure = figure
-        self.heatMap = HeatMap(self.ax)
+        self.heatMap = HeatMap(ax, coordinateDataOfObjects)
 
 
     def connect(self):
@@ -40,7 +40,10 @@ class DraggablePass(Pass):
                 self.passAnnotation.arrowprops["patchB"] = self.dragged2.get_bbox_patch()
 
                 self.heatMap.remove()
-                self.heatMap.draw(self.passAnnotation)
+                #self.heatMap.draw(self.passAnnotation)
+                #self.heatMap.draw_defencePositionTaking(self.passAnnotation, "16")
+                #self.heatMap.draw_positionOfTargetOfPass(self.passAnnotation)
+                self.heatMap.draw_positionOfSourceOfPass(self.passAnnotation)
 
                 self.figure.canvas.draw()
                 self.definedPasses.append(self.passAnnotation)

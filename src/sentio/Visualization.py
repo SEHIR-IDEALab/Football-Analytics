@@ -98,7 +98,7 @@ class Visualization(object):
 
         self.ax = fig.add_subplot(111)
         im = plt.imread('source/background.png')
-        self.ax.imshow(im, zorder=0, extent=[-6.5, 111.5, -1.2, 67.0], aspect="auto")
+        self.ax.imshow(im, zorder=0, extent=[-5.0, 110.0, 0, 65.0], aspect="auto")
         self.ax.grid()
         self.ax.axes.invert_yaxis()
         self.ax.set_xticks(numpy.arange(-5, 120, 5))

@@ -4,10 +4,11 @@ __author__ = 'doktoray'
 
 
 class Pass:
+    teams = {(0.0, 0.0, 1.0, 0.5): "home", (1.0, 0.0, 0.0, 0.5): "away",
+                      (1.0, 1.0, 0.0, 0.5): "referee", (0.0, 0.0, 0.0, 0.5): "unknown"}
+
     def __init__(self, coordinateDataOfObjects=None):
         self.coordinateDataOfObjects = coordinateDataOfObjects
-        self.teams = {(0.0, 0.0, 1.0, 0.5): "home", (1.0, 0.0, 0.0, 0.5): "away",
-                      (1.0, 1.0, 0.0, 0.5): "referee", (0.0, 0.0, 0.0, 0.5): "unknown"}
 
     def displayDefinedPass(self, definedPass, passDisplayer):
         p1 = definedPass.textcoords
@@ -38,7 +39,10 @@ class Pass:
         try: x3, y3 = p3.get_position()
         except AttributeError: x3, y3 = p3
 
-        slope = (y2 - y1) / (x2 - x1)
+        try:
+            slope = (y2 - y1) / (x2 - x1)
+        except ZeroDivisionError:
+            slope = (y2 - y1)
         a = slope
         b = -1
         c = ( ( slope * (-x1) ) + y1 )
@@ -74,9 +78,9 @@ class Pass:
             js3 = p3.get_text()
             team3 = self.teams[p3.get_bbox_patch().get_facecolor()]
 
-            if x1 <= x3 <= x2 or x2 <= x3 <= x1:
-                if team3 not in [team1, "referee", "unknown"]:
-                    overallRisk += self.risk(p1, p3, p2)
+            #if x1 <= x3 <= x2 or x2 <= x3 <= x1:
+            if team3 not in [team1, "referee", "unknown"]:
+                overallRisk += self.risk(p1, p3, p2)
         #print overallRisk, self.gain(p1,p2)
         return overallRisk
 
