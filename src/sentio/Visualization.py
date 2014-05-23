@@ -1,5 +1,5 @@
 # coding=utf-8
-from Tkconstants import VERTICAL, Y, LEFT, END
+from Tkconstants import VERTICAL, Y, LEFT, END, E, NE
 
 import Tkinter as Tk
 import csv
@@ -13,8 +13,7 @@ import numpy
 from src.sentio.CircleStyle import CircleStyle
 from src.sentio.DraggablePass import DraggablePass
 from src.sentio.DraggableText import DraggableText
-from src.sentio.HeatMap import HeatMap
-from src.sentio.Pass import Pass
+from src.sentio.Player_base import Player_base
 from src.sentio.Time import Time
 
 __author__ = 'emrullah'
@@ -55,8 +54,24 @@ class Visualization(object):
         rb_drag = Tk.Radiobutton(self.master, text= "Draggable Objects", variable=rb_var,value=2,
                                  command=self.rb_drag_objects).pack(side='top')
 
-        self.text_toDisplayPasses = Tk.Text(self.master, width=35, height=45)
-        self.text_toDisplayPasses.pack(side="left")
+        self.heatmapTypeVariable = Tk.StringVar()
+        self.heatmapTypeVariable.set("-----")
+        heatmapType_options = Tk.OptionMenu(self.frame, self.heatmapTypeVariable, "-----", "defence position taking",
+                                            "position of target of pass", "position of source of pass").pack(side="top",anchor=NE)
+        self.resolutionLevelVariable = Tk.StringVar()
+        self.resolutionLevelVariable.set("2")
+        resolutionLevel_options = Tk.OptionMenu(self.frame, self.resolutionLevelVariable,
+                                                "0.5", "1", "2", "3", "4", "5", "10").pack(side="top", anchor=NE)
+
+
+        self.componentsOfEffectivenessVariable = Tk.StringVar()
+        self.componentsOfEffectivenessVariable.set("effectiveness")
+        componentsOfEffectiveness_options = Tk.OptionMenu(self.frame, self.componentsOfEffectivenessVariable,
+                            "effectiveness", "gain", "pass advantage", "goal chance", "overall risk").pack(side="top",anchor=NE)
+
+
+        self.text_toDisplayPasses = Tk.Text(self.master, width=35, height=35)
+        self.text_toDisplayPasses.pack(side="left", anchor="nw")
         yscrollbar = Tk.Scrollbar(self.master, orient=VERTICAL, command=self.text_toDisplayPasses.yview)
         yscrollbar.pack(side=LEFT, fill=Y)
         self.text_toDisplayPasses["yscrollcommand"]=yscrollbar.set
@@ -370,7 +385,7 @@ class Visualization(object):
         self.canvas.draw()
 
 
-    def getDirectionOfObjects_forGivenTime(self, half, minute, sec, milisec):
+    def getDirectionOfObjects_forGivenTime(self, half, minute, sec, milisec): # should be rewritten
         time = Time(half, minute, sec, milisec)
         time.set_minMaxOfHalf(self.minMaxOfHalf)
         homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
@@ -395,7 +410,7 @@ class Visualization(object):
         return (team for team in teams)
 
 
-    def getSpeedOfObjects_forGivenTime(self, half, minute, sec, milisec):
+    def getSpeedOfObjects_forGivenTime(self, half, minute, sec, milisec): # should be rewritten
         time = Time(half, minute, sec, milisec)
         time.set_minMaxOfHalf(self.minMaxOfHalf)
         homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
@@ -431,18 +446,14 @@ class Visualization(object):
 
     def getObjectsCoords_forGivenTime(self, half, minute, sec, milisec):
         coordinatesData_current = self.coordinatesData_byTime[half][minute][sec][milisec]
-        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = dict(), dict(), dict(), dict()
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = [], [], [], []
         for object_info in coordinatesData_current:
-            q = object_info
-            object_type, jersey_number, positionX, positionY = int(q[0]), int(q[2]), float(q[3]), float(q[4])
-            if object_type in [0,3]:
-                homeTeamPlayers[jersey_number] = [positionX, positionY]
-            elif object_type in [1,4]:
-                awayTeamPlayers[jersey_number] = [positionX, positionY]
-            elif object_type in [2,6,7,8,9]:
-                referees[jersey_number] = [positionX, positionY]
-            else:
-                unknownObjects[jersey_number] = [positionX, positionY]
+            player_base = Player_base(object_info)
+            q = player_base.getObjectType()
+            if q in [0,3]: homeTeamPlayers.append(player_base)
+            elif q in [1,4]: awayTeamPlayers.append(player_base)
+            elif q in [2,6,7,8,9]: referees.append(player_base)
+            else: unknownObjects.append(player_base)
         return (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
 
 
@@ -450,15 +461,18 @@ class Visualization(object):
         BoxStyle._style_list["circle"] = CircleStyle
         colors = ["blue", "red", "yellow", "black"]
         for index, players in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
-            for player in players:
-                coordX, coordY, js = players[player][0], players[player][1], player
-                player_js = self.ax.text(coordX, coordY, js, color="w", fontsize=(11 if len(str(player))==1 else 10),
-                                         picker=True,zorder=1, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index],
-                                                                ec=colors[index], alpha=0.5))
+            for player_base in players:
+                player_js = self.ax.text(player_base.getPositionX(), player_base.getPositionY(), player_base.getJerseyNumber(),
+                                color="w", fontsize=(11 if len(str(player_base.getJerseyNumber()))==1 else 10), picker=True,
+                                zorder=1, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index], ec=colors[index], alpha=0.5))
+                player_js.object_type = player_base.getObjectType()
+                player_js.object_id = player_base.getObjectID()
                 dr = DraggableText(player_js)
                 self.texts.append(dr)
         self.definePasses = DraggablePass(self.ax, self.texts)
         self.definePasses.set_passDisplayer(self.text_toDisplayPasses)
+        self.definePasses.set_variables(self.heatmapTypeVariable, self.resolutionLevelVariable,
+                                        self.componentsOfEffectivenessVariable)
 
         for i in self.texts:
             i.set_passDisplayer(self.text_toDisplayPasses)

@@ -1,5 +1,6 @@
 from Tkconstants import END
 from src.sentio.Pass import Pass
+from src.sentio.Player_base import Player_base
 
 
 class DraggableText:
@@ -90,14 +91,19 @@ class DraggableText:
         for i in self.definedPasses:
             p1 = i.textcoords
             p2 = i.xycoords
+            object_type1, object_id1, js1, (x1, y1) = p1.object_type, p1.object_id, p1.get_text(), p1.get_position()
+            object_type2, object_id2, js2, (x2, y2) = p2.object_type, p2.object_id, p2.get_text(), p2.get_position()
+
+            p1 = Player_base([object_type1, object_id1,js1, x1, y1])
+            p2 = Player_base([object_type2, object_id2,js2, x2, y2])
 
             self.passDisplayer.insert("1.0", "goal_chance = %.2f\n" %passes.goalChance(p2))
             self.passDisplayer.insert("1.0", "effectiveness = %.2f\n" %passes.effectiveness(p1, p2))
             self.passDisplayer.insert("1.0", "pass_advantage = %.2f (%s)\n" %passes.passAdvantage(p2))
             self.passDisplayer.insert("1.0", "gain = %.2f\n" %passes.gain(p1, p2))
-            self.passDisplayer.insert("1.0", "overall_risk(%s->g_Kpr) = %.2f\n" %(p2.get_text(), passes.overallRisk(p2, [0.0, 32.75])))
-            self.passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.get_text(), p2.get_text(), passes.overallRisk(p1, p2)))
-            self.passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.get_text(), p2.get_text()))
+            self.passDisplayer.insert("1.0", "overall_risk(%s->g_Kpr) = %.2f\n" %(p2.getJerseyNumber(), passes.overallRisk(p2, [0.0, 32.75])))
+            self.passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.getJerseyNumber(), p2.getJerseyNumber(), passes.overallRisk(p1, p2)))
+            self.passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
 
     def disconnect(self):
         'disconnect all the stored connection ids'
