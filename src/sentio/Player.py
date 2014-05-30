@@ -1,37 +1,40 @@
 import math
+from src.sentio.Player_base import Player_base
 from src.sentio.Time import Time
-import numpy as np
-import matplotlib.pyplot as plt
 
 __author__ = 'emrullah'
 
 
-class Player(object):
+class Player(Player_base):
 
-    def __init__(self, team_name, time, player_coord_info, events_info, game_stop_time_interval):
-        self.initial_info = player_coord_info
-        self.object_types = {0: "Home Team Player", 1: "Away Team Player", 2: "Referee", 3: "Home Team Goalkeeper",
-                             4: "Away Team Goalkeeper", -1: "Unknown object", 6: "The other referees",
-                             7: "The other referees", 8: "The other referees", 9: "The other referees"}
-        self.player_coord_info = {time.half: {time.minute: {time.second: {time.mili_second:
-                                                [float(self.initial_info[3]), float(self.initial_info[4])]}}}}
-        self.events_info = events_info
+    def __init__(self, team_name, time, object_info):
+        Player_base.__init__(self, object_info)
+        self.player_coord_info = {time.half: {time.minute: {time.second: {time.mili_second: self.get_position() }}}}
         self.team_name = team_name
-        self.game_stop_time_interval = game_stop_time_interval
-
         self.ball_steal = 0
         self.ball_lose = 0
         self.ball_pass = 0
         self.ball_ownership_time = 0
 
+
+    def set_eventsInfo(self, events_info):
+        self.events_info = events_info
+
+    def set_gameStopTimeInterval(self, game_stop_time_interval):
+        self.game_stop_time_interval = game_stop_time_interval
+
+
     def add_ballSteal(self):
         self.ball_steal += 1
+
 
     def add_ballLose(self):
         self.ball_lose += 1
 
+
     def add_ballPass(self):
         self.ball_pass += 1
+
 
     def add_ballOwnershipTime(self, bown_time):
         self.ball_ownership_time += bown_time
@@ -50,8 +53,10 @@ class Player(object):
     def get_playerCoordInfo(self):
         return self.player_coord_info
 
+
     def get_eventsInfo(self):
         return self.events_info
+
 
     def get_ballOwnershipTime(self):
         time = Time().int_to_time(self.ball_ownership_time)
@@ -59,17 +64,22 @@ class Player(object):
         q = "%s.%s" % (minute, second)
         return float(q)
 
+
     def get_totalBallSteal(self):
         return self.ball_steal
+
 
     def get_totalBallLose(self):
         return self.ball_lose
 
+
     def get_totalBallPass(self):
         return self.ball_pass
 
+
     def getTeamName(self):
         return self.team_name
+
 
     def isPlayerInGame(self, half, minute, sec, milisec):
         try:
@@ -79,12 +89,14 @@ class Player(object):
         except KeyError:
             return False
 
+
     def getTimeInterval_played(self):
         a = list()
         for half in self.player_coord_info:
             minutes = self.player_coord_info[half].keys()
             a.append(minutes)
         return a
+
 
     def getSpeedOfPlayer_atAllPoints(self):
         time = Time()
@@ -122,6 +134,7 @@ class Player(object):
             except KeyError:
                 pass
 
+
     def get_minMaxOfHalf_forPlayer(self):
         a = {}
         q = self.get_playerCoordInfo()
@@ -136,6 +149,7 @@ class Player(object):
             a[half].append([min_minute, min_second, min_milisecond])
             a[half].append([max_minute, max_second, max_milisecond])
         return a
+
 
     def compute_runningDistance_withGameStopAndSpeedFilter(self):
         gameStop = self.game_stop_time_interval
@@ -157,6 +171,7 @@ class Player(object):
                         x_previous, y_previous = x_current, y_current
         return total_runningDistance
 
+
     def compute_runningDistance_withGameStopFilter(self):
         gameStop = self.game_stop_time_interval
         x_previous, y_previous = None, None
@@ -175,6 +190,7 @@ class Player(object):
                         x_previous, y_previous = x_current, y_current
         return total_runningDistance
 
+
     def compute_runningDistance(self):
         x_previous, y_previous = None, None
         total_runningDistance = 0.0
@@ -189,6 +205,7 @@ class Player(object):
                             total_runningDistance += math.sqrt(pow(x_current-x_previous,2) + pow(y_current-y_previous,2))
                         x_previous, y_previous = x_current, y_current
         return total_runningDistance
+
 
     def get_averageLocation(self):
         q = self.get_playerCoordInfo()
@@ -205,21 +222,11 @@ class Player(object):
         x_average, y_average = (x_total/count), (y_total/count)
         return (x_average, y_average)
 
-    def getObjectType(self):
-        return int(self.initial_info[0])
-
-    def getObjectName(self):
-        return self.object_types[int(self.initial_info[0])]
-
-    def getObjectID(self):
-        return int(self.initial_info[1])
-
-    def getJerseyNumber(self):
-        return int(self.initial_info[2])
 
     def getCoordinateXY(self, half, minute, sec, milisec):
         x,y = self.player_coord_info[half][minute][sec][milisec]
         return (x,y)
 
+
     def __str__(self):
-        return "%s %2s" %(str(self.getObjectName()).ljust(20), self.getJerseyNumber())
+        return "%s %2s" %(str(self.getObjectTypeName()).ljust(20), self.getJerseyNumber())

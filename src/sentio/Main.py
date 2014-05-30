@@ -1,12 +1,7 @@
 # coding=utf-8
 import time as tm
-from matplotlib.colors import Colormap
-import numpy
-from numpy.matlib import rand
 from src.sentio.Match import Match
 from src.sentio.Sentio import Sentio
-from pylab import *
-from src.sentio.Time import Time
 
 __author__ = 'emrullah'
 
@@ -34,21 +29,21 @@ def main():
     #
     #
     # match.identifyObjects()
-    # match.compute_someEvents()
+    # #match.compute_someEvents()
     # q = match.getHomeTeam().getTeamPlayers()
     # for i in q:
     #     player = q[i]
     #     print player.compute_runningDistance_withGameStopAndSpeedFilter()
     # #
-    #
+
     # match.identifyObjects()
     # q = match.getHomeTeam().getTeamPlayers()
     #
     # for i in q:
     #     print q[i].getTeamName(), q[i].getJerseyNumber(), q[i].compute_runningDistance(), \
     #         q[i].compute_runningDistance_withGameStopFilter()
-    #     # #print q[i].getJerseyNumber(), q[i].drawHeatMap()
-    #     #
+        # #print q[i].getJerseyNumber(), q[i].drawHeatMap()
+        #
     #
 
 

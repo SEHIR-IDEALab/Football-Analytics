@@ -1,4 +1,5 @@
 from Tkconstants import END
+import tkSimpleDialog
 import numpy
 from src.sentio.HeatMap import HeatMap
 from src.sentio.Pass import Pass
@@ -6,7 +7,7 @@ from matplotlib import pylab as p
 from matplotlib.text import Text
 from src.sentio.Player_base import Player_base
 
-__author__ = 'doktoray'
+__author__ = 'emrullah'
 
 
 class DraggablePass(Pass):
@@ -33,6 +34,10 @@ class DraggablePass(Pass):
 
     def set_passDisplayer(self, passDisplayer):
         self.passDisplayer = passDisplayer
+
+
+    def set_effectivenessWithComponentsLabel_forChosenPoint(self, v):
+        self.effect_withCompLabel_forChosenPoint = v
 
 
     def set_variables(self, heatMap, resolution, components):
@@ -82,7 +87,10 @@ class DraggablePass(Pass):
         p2 = Player_base([object_type2, object_id2,js2, x2, y2])
 
         if chosenHeatMap == "defence position taking":
-            self.effectiveness_withComp = self.heatMap.draw_defencePositionTaking((p1,p2), 16,
+            chosenNumber = tkSimpleDialog.askstring('##### Jersey Number #####',
+                                                    'Enter the jersey number of a player from the opponent team')
+            if chosenNumber:
+                self.effectiveness_withComp = self.heatMap.draw_defencePositionTaking((p1,p2), int(chosenNumber),
                                                            number_of_points=self.resolutionToNumberOfPoints())
         elif chosenHeatMap == "position of target of pass":
             self.effectiveness_withComp = self.heatMap.draw_positionOfTargetOfPass((p1,p2),
@@ -101,11 +109,11 @@ class DraggablePass(Pass):
                 self.passAnnotation.xycoords = self.dragged2
                 self.passAnnotation.arrowprops["patchB"] = self.dragged2.get_bbox_patch()
 
-                self.draw_heatMapChosen()
-
-                self.figure.canvas.draw()
                 self.definedPasses.append(self.passAnnotation)
                 self.displayDefinedPasses()
+
+                self.draw_heatMapChosen()
+                self.figure.canvas.draw()
 
                 self.dragged, self.dragged2, self.passAnnotation = None, None, None
             else:
@@ -137,7 +145,16 @@ class DraggablePass(Pass):
             givenCoordinate_x, givenCoordinate_y = event.xdata, event.ydata
             coord_x = min(x_coords, key=lambda x:abs(x-givenCoordinate_x))
             coord_y = min(y_coords, key=lambda y:abs(y-givenCoordinate_y))
-            print self.heatMap.get_totalEffectiveness_withComponents_byCoordinates(coord_x, coord_y)
+            effectiveness, gain, passAdvantage, goalChance, overallRisk = \
+                self.heatMap.get_totalEffectiveness_withComponents_byCoordinates(coord_x, coord_y)
+            q = ""
+            q += ("overall_risk = %.2f\n" %overallRisk)
+            q += ("gain = %.2f\n" %gain)
+            q += ("pass_advantage = %.2f\n" %passAdvantage)
+            q += ("goal_chance = %.2f\n" %goalChance)
+            q += ("effectiveness = %.2f\n" %effectiveness)
+
+            self.effect_withCompLabel_forChosenPoint.set(q)
 
 
     def displayDefinedPasses(self):

@@ -43,7 +43,6 @@ class Pass:
 
 
     def risk(self, p1, p3, p2):
-        risk = 0.0
 
         try: x1, y1 = p1.getPositionX(), p1.getPositionY()
         except AttributeError: x1, y1 = p1

@@ -222,19 +222,19 @@ class Match(object):
 
 
     def identifyObjects(self):
-        gameStop = self.get_timeInterval_ofGameStop()
-        events_info = self.sentio.getEventData_byTime()
+        event_data = self.sentio.getEventData_byTime()
+        game_stop = self.get_timeInterval_ofGameStop()
         time = Time()
         time.set_minMaxOfHalf(self.get_minMaxOfHalf())
         q = self.sentio.getCoordinateData_byTime()
         players_coord_info = q[time.half][time.minute][time.second][time.mili_second]
-        self.makeClassification(time, players_coord_info, events_info, gameStop)
+        self.makeClassification(time, players_coord_info, event_data, game_stop)
         while True:
             try:
                 next_time = time.next()
                 try:
                     players_coord_info = q[next_time.half][next_time.minute][next_time.second][next_time.mili_second]
-                    self.makeClassification(time, players_coord_info, events_info, gameStop)
+                    self.makeClassification(time, players_coord_info, event_data, game_stop)
                 except KeyError:
                     #print half, minute, second, mili_second
                     pass
@@ -242,7 +242,7 @@ class Match(object):
                 break
 
 
-    def makeClassification(self, time_info, objects_coord_info, events_info, gameStop):
+    def makeClassification(self, time_info, objects_coord_info, event_data, game_stop):
         types = [[0,3], [1,4], [2,6,7,8,9], [-1]]
         for player_coord_info in objects_coord_info:
             object_type, jersey_number = int(player_coord_info[0]), int(player_coord_info[2])
@@ -254,7 +254,10 @@ class Match(object):
                         teamName = None
                         if object_type in [0, 3]: teamName = self.teamNames[0]
                         elif object_type in [1, 4]: teamName = self.teamNames[1]
-                        object_class[jersey_number] = Player(teamName, time_info, player_coord_info, events_info, gameStop)
+                        object_class[jersey_number] = Player(teamName, time_info, player_coord_info)
+                        player = object_class[jersey_number]
+                        player.set_eventsInfo(event_data)
+                        player.set_gameStopTimeInterval(game_stop)
 
 
     def visualizeMatch(self):

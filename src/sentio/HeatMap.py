@@ -1,18 +1,20 @@
-import math
 import numpy
 from src.sentio.Pass import Pass
 from src.sentio.Player_base import Player_base
+import matplotlib.pyplot as plt
 
-__author__ = 'doktoray'
+__author__ = 'emrullah'
 
 class HeatMap:
     def __init__(self, ax, coordOfObjects):
         self.ax = ax
         self.hm = None
+        self.cbar = None
         self.allObjects = self.convertTextsToPlayers(coordOfObjects)
         self.clt_pass = Pass()
 
         self.totalEffectiveness_withComponents_byCoordinates = {}
+
 
     def convertTextsToPlayers(self, coordinateDataOfObjects):
         if coordinateDataOfObjects == None: return None
@@ -79,7 +81,8 @@ class HeatMap:
 
         p_chosen.set_position(p_chosen_initialPosition)
         q = totalEffectiveness_withComponents["effectiveness"]
-        self.hm = self.ax.imshow(q, interpolation='bilinear',aspect="auto", extent=[-5.0, 110.0, 65.0, 0], vmax=12, alpha=0.8)
+        self.hm = self.ax.imshow(q, interpolation='bilinear',aspect="auto", extent=[-5.0, 110.0, 65.0, 0], alpha=0.8)
+        if self.cbar == None: self.cbar = plt.colorbar(self.hm)
         self.ax.set_xlim(-5.0, 110.0)
         self.ax.set_ylim(0, 65.0)
         self.ax.axes.invert_yaxis()
@@ -121,6 +124,7 @@ class HeatMap:
         p2.set_position(p_target_initialPosition)
         q = totalEffectiveness_withComponents["effectiveness"]
         self.hm = self.ax.imshow(q, interpolation='bilinear',aspect="auto", extent=[-5.0, 110.0, 65.0, 0], vmax=12, alpha=0.8)
+        if self.cbar == None: self.cbar = plt.colorbar(self.hm)
         self.ax.set_xlim(-5.0, 110.0)
         self.ax.set_ylim(0, 65.0)
         self.ax.axes.invert_yaxis()
@@ -158,6 +162,7 @@ class HeatMap:
         p1.set_position(p_source_initialPosition)
         q = totalEffectiveness_withComponents["effectiveness"]
         self.hm = self.ax.imshow(q, interpolation='bilinear',aspect="auto", extent=[-5.0, 110.0, 65.0, 0], vmax=12, alpha=0.8)
+        if self.cbar == None: self.cbar = plt.colorbar(self.hm)
         self.ax.set_xlim(-5.0, 110.0)
         self.ax.set_ylim(0, 65.0)
         self.ax.axes.invert_yaxis()

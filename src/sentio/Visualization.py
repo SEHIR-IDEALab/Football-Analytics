@@ -6,6 +6,7 @@ import csv
 import time as tm
 import math
 import tkFileDialog
+import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.patches import BoxStyle
 import matplotlib.pyplot as plt
@@ -27,6 +28,7 @@ class Visualization(object):
         self.teamNames = teamNames
         self.minMaxOfHalf = minMaxOfHalf
         self.event_id_explanation = id_explanation
+
 
         self.master = Tk.Tk()
         self.master.wm_title("Game Data Visualization")
@@ -75,6 +77,11 @@ class Visualization(object):
         yscrollbar = Tk.Scrollbar(self.master, orient=VERTICAL, command=self.text_toDisplayPasses.yview)
         yscrollbar.pack(side=LEFT, fill=Y)
         self.text_toDisplayPasses["yscrollcommand"]=yscrollbar.set
+
+        self.effec_withCompVariable_forChosenPoint = Tk.StringVar()
+        self.effec_withCompVariable_forChosenPoint.set("dasdasdasdasdasdasdasdas")
+        displayChosenPoint = Tk.Label(master=self.frame, textvariable=self.effec_withCompVariable_forChosenPoint, justify=LEFT)\
+            .pack()
 
         button_scaleDraw = Tk.Button(master=self.frame, text='Draw', command=self.scaleDraw).pack(side="left")
         button_play = Tk.Button(master=self.frame, text='Play', command=self.play).pack(side="left")
@@ -470,6 +477,7 @@ class Visualization(object):
                 dr = DraggableText(player_js)
                 self.texts.append(dr)
         self.definePasses = DraggablePass(self.ax, self.texts)
+        self.definePasses.set_effectivenessWithComponentsLabel_forChosenPoint(self.effec_withCompVariable_forChosenPoint)
         self.definePasses.set_passDisplayer(self.text_toDisplayPasses)
         self.definePasses.set_variables(self.heatmapTypeVariable, self.resolutionLevelVariable,
                                         self.componentsOfEffectivenessVariable)

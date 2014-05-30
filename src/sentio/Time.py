@@ -1,4 +1,4 @@
-__author__ = 'doktoray'
+__author__ = 'emrullah'
 
 class Time(object):
 
@@ -10,21 +10,25 @@ class Time(object):
 
         self.minMaxOfHalf = {1:[[0,0,0],[44,59,8]], 2:[[45,0,0],[89,59,8]]}
 
+
     def __sub__(self, other):
         first = self.time_to_int(self)
         second = self.time_to_int(other)
         result = abs(first-second)
         return self.int_to_time(result)
 
+
     def set_minMaxOfHalf(self, minMaxOfHalf):
         self.minMaxOfHalf = minMaxOfHalf
         #self.half = min(self.minMaxOfHalf.keys())
         #self.minute, self.second, self.mili_second = self.minMaxOfHalf[self.half][0]
 
+
     def time_to_int(self, time):
         seconds = time.minute * 60 + time.second
         mili_seconds = seconds * 10 + time.mili_second
         return mili_seconds
+
 
     def int_to_time(self, mili_seconds):
         seconds, self.mili_second = divmod(mili_seconds, 10)
@@ -56,15 +60,18 @@ class Time(object):
             #     return Time(self.half, self.minute, self.second, self.mili_second)
         return Time(self.half, self.minute, self.second, self.mili_second)
 
+
     def next(self):
         time = Time(half=self.half, minute=self.minute, second=self.second, mili_second=self.mili_second)
         total_miliseconds = self.time_to_int(time)
         return self.int_to_time(total_miliseconds+2)
 
+
     def back(self):
         time = Time(half=self.half, minute=self.minute, second=self.second, mili_second=self.mili_second)
         total_miliseconds = self.time_to_int(time)
         return self.int_to_time(total_miliseconds-2)
+
 
     def __str__(self):
         return "half = %s\nminute = %s\nsecond = %s\nmili_second = %s" % (self.half, self.minute, self.second, self.mili_second)
