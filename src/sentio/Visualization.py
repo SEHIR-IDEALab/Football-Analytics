@@ -367,10 +367,11 @@ class Visualization(object):
             half, minute, second, milisecond)
         teams = self.getSpeedOfObjects_forGivenTime(half, minute, second, milisecond)
         for index, team in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
-            for player in team:
-                currentX, nextX = team[player][0]
-                currentY, nextY = team[player][1]
-                speed = teams[index][player]
+            for js in team:
+                player = team[js]
+                currentX, nextX = player.getPositionX()
+                currentY, nextY = player.getPositionY()
+                speed = teams[index][js]
 
                 lengthX = (nextX - currentX) * speed
                 nextX = lengthX + currentX
@@ -399,18 +400,21 @@ class Visualization(object):
                 self.getObjectsCoords_forGivenTime(half, minute, sec, milisec)
         teams = [homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]
         for team in teams:
-            for player in team:
-                coordX, coordY = team[player]
-                team[player] = ([coordX],[coordY])
+            for js in team:
+                player_base = team[js]
+                coordX, coordY = player_base.get_position()
+                player_base.set_position(([coordX],[coordY]))
         next_time = time.next()
         homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
                 self.getObjectsCoords_forGivenTime(next_time.half, next_time.minute,
                                                    next_time.second, next_time.mili_second)
         for index, team in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
-                for player in team:
+                for js in team:
                     try:
-                        coordX, coordY= team[player]
-                        x, y = teams[index][player][0], teams[index][player][1]
+                        player_base = team[js]
+                        coordX, coordY= player_base.get_position()
+                        ult_player_base = teams[index][js]
+                        x, y = ult_player_base.getPositionX(), ult_player_base.getPositionY()
                         x.append(coordX), y.append(coordY)
                     except:
                         pass
@@ -424,21 +428,25 @@ class Visualization(object):
                 self.getObjectsCoords_forGivenTime(half, minute, sec, milisec)
         teams = [homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]
         for team in teams:
-            for player in team:
-                coordX, coordY = team[player]
-                team[player] = ([coordX],[coordY])
+            for js in team:
+                player_base = team[js]
+                coordX, coordY = player_base.get_position()
+                player_base.set_position(([coordX],[coordY]))
         for i in range(5):
             pre_time = time.back()
             homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
                 self.getObjectsCoords_forGivenTime(pre_time.half, pre_time.minute, pre_time.second, pre_time.mili_second)
             for index, team in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
-                for player in team:
-                    coordX, coordY= team[player]
-                    x, y = teams[index][player][0], teams[index][player][1]
+                for js in team:
+                    player_base = team[js]
+                    coordX, coordY= player_base.get_position()
+                    ult_player_base = teams[index][js]
+                    x, y = ult_player_base.getPositionX(), ult_player_base.getPositionY()
                     x.append(coordX), y.append(coordY)
         for team in teams:
-            for player in team:
-                coordsX, coordsY = team[player]
+            for js in team:
+                player_base = team[js]
+                coordsX, coordsY = player_base.get_position()
                 total = 0.0
                 for i in range(5):
                     try:
@@ -447,20 +455,20 @@ class Visualization(object):
                         total += math.sqrt(pow(x_current-x_previous,2) + pow(y_current-y_previous,2))
                     except:
                         pass
-                team[player] = total
+                team[js] = total
         return teams
 
 
     def getObjectsCoords_forGivenTime(self, half, minute, sec, milisec):
         coordinatesData_current = self.coordinatesData_byTime[half][minute][sec][milisec]
-        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = [], [], [], []
+        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = {},{},{},{}
         for object_info in coordinatesData_current:
             player_base = Player_base(object_info)
             q = player_base.getObjectType()
-            if q in [0,3]: homeTeamPlayers.append(player_base)
-            elif q in [1,4]: awayTeamPlayers.append(player_base)
-            elif q in [2,6,7,8,9]: referees.append(player_base)
-            else: unknownObjects.append(player_base)
+            if q in [0,3]: homeTeamPlayers[player_base.getJerseyNumber()] = player_base
+            elif q in [1,4]: awayTeamPlayers[player_base.getJerseyNumber()] = player_base
+            elif q in [2,6,7,8,9]: referees[player_base.getJerseyNumber()] = player_base
+            else: unknownObjects[player_base.getJerseyNumber()] = player_base
         return (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
 
 
@@ -468,7 +476,8 @@ class Visualization(object):
         BoxStyle._style_list["circle"] = CircleStyle
         colors = ["blue", "red", "yellow", "black"]
         for index, players in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
-            for player_base in players:
+            for js in players:
+                player_base = players[js]
                 player_js = self.ax.text(player_base.getPositionX(), player_base.getPositionY(), player_base.getJerseyNumber(),
                                 color="w", fontsize=(11 if len(str(player_base.getJerseyNumber()))==1 else 10), picker=True,
                                 zorder=1, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index], ec=colors[index], alpha=0.5))
@@ -550,11 +559,12 @@ class Visualization(object):
         xBall, yBall = None, None
         try:
             if current_teamName == homeTeamName:
-                xBall, yBall = homeTeamPlayers[current_js]
-                player_current = self.detectParticularPlayer(current_js, xBall, yBall)
+                player_base = homeTeamPlayers[current_js]
+                xBall, yBall = player_base.get_position()
             elif current_teamName == awayTeamName:
-                xBall, yBall = awayTeamPlayers[current_js]
-                player_current = self.detectParticularPlayer(current_js, xBall, yBall)
+                player_base = awayTeamPlayers[current_js]
+                xBall, yBall = player_base.get_position()
+            player_current = self.detectParticularPlayer(current_js, xBall, yBall)
         except KeyError:
             print "missing data"
 
@@ -581,11 +591,12 @@ class Visualization(object):
                 previous_xBall, previous_yBall = None, None
                 try:
                     if previous_teamName == homeTeamName:
-                        previous_xBall, previous_yBall = homeTeamPlayers[previous_js]
-                        player_previous = self.detectParticularPlayer(previous_js, previous_xBall, previous_yBall)
+                        player_base = homeTeamPlayers[previous_js]
+                        previous_xBall, previous_yBall = player_base.get_position()
                     elif previous_teamName == awayTeamName:
-                        previous_xBall, previous_yBall = awayTeamPlayers[previous_js]
-                        player_previous  = self.detectParticularPlayer(previous_js, previous_xBall, previous_yBall)
+                        player_base = awayTeamPlayers[previous_js]
+                        previous_xBall, previous_yBall = player_base.get_position()
+                    player_previous  = self.detectParticularPlayer(previous_js, previous_xBall, previous_yBall)
                 except KeyError:
                     print "missing data 2"
                 if (previous_eventID not in [4, 12]) and previous_xBall != None and xBall != None:
