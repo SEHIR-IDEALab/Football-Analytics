@@ -60,17 +60,16 @@ class Visualization(object):
         self.heatmapTypeVariable.set("-----")
         heatmapType_options = Tk.OptionMenu(self.frame, self.heatmapTypeVariable, "-----", "defence position taking",
                                             "position of target of pass", "position of source of pass").pack(side="top",anchor=NE)
+
         self.resolutionLevelVariable = Tk.StringVar()
         self.resolutionLevelVariable.set("2")
         resolutionLevel_options = Tk.OptionMenu(self.frame, self.resolutionLevelVariable,
                                                 "0.5", "1", "2", "3", "4", "5", "10").pack(side="top", anchor=NE)
 
-
         self.componentsOfEffectivenessVariable = Tk.StringVar()
         self.componentsOfEffectivenessVariable.set("effectiveness")
         componentsOfEffectiveness_options = Tk.OptionMenu(self.frame, self.componentsOfEffectivenessVariable,
                             "effectiveness", "gain", "pass advantage", "goal chance", "overall risk").pack(side="top",anchor=NE)
-
 
         self.text_toDisplayPasses = Tk.Text(self.master, width=35, height=35)
         self.text_toDisplayPasses.pack(side="left", anchor="nw")
@@ -80,8 +79,8 @@ class Visualization(object):
 
         self.effec_withCompVariable_forChosenPoint = Tk.StringVar()
         self.effec_withCompVariable_forChosenPoint.set("dasdasdasdasdasdasdasdas")
-        displayChosenPoint = Tk.Label(master=self.frame, textvariable=self.effec_withCompVariable_forChosenPoint, justify=LEFT)\
-            .pack()
+        displayChosenPoint = Tk.Label(master=self.frame, textvariable=self.effec_withCompVariable_forChosenPoint,
+                                      justify=LEFT).pack()
 
         button_scaleDraw = Tk.Button(master=self.frame, text='Draw', command=self.scaleDraw).pack(side="left")
         button_play = Tk.Button(master=self.frame, text='Play', command=self.play).pack(side="left")
@@ -129,8 +128,8 @@ class Visualization(object):
         homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = \
             self.getObjectsCoords_forGivenTime(1, 0, 0, 0)
 
-        self.trailAnnotation, self.eventAnnotation, self.passAnnotation, self.passEffectivenessAnnotation, self.ballAnnotation = None, None, None, None, None
-        self.count_forEventAndPassEffect = 0
+        self.trailAnnotation, self.eventAnnotation, self.passAnnotation, self.passEffectivenessAnnotation = None, None, None, None
+        self.passEffectiveness_count = 0
 
         self.texts = list()
         self.definePasses = None
@@ -478,13 +477,14 @@ class Visualization(object):
         for index, players in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
             for js in players:
                 player_base = players[js]
-                player_js = self.ax.text(player_base.getPositionX(), player_base.getPositionY(), player_base.getJerseyNumber(),
-                                color="w", fontsize=(11 if len(str(player_base.getJerseyNumber()))==1 else 10), picker=True,
-                                zorder=1, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index], ec=colors[index], alpha=0.5))
-                player_js.object_type = player_base.getObjectType()
-                player_js.object_id = player_base.getObjectID()
-                dr = DraggableText(player_js)
-                self.texts.append(dr)
+                if player_base.getJerseyNumber() in range(1, 100): # this condition may be changed ***
+                    player_js = self.ax.text(player_base.getPositionX(), player_base.getPositionY(), player_base.getJerseyNumber(),
+                                    color="w", fontsize=(11 if len(str(player_base.getJerseyNumber()))==1 else 10), picker=True,
+                                    zorder=1, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index], ec=colors[index], alpha=0.5))
+                    player_js.object_type = player_base.getObjectType()
+                    player_js.object_id = player_base.getObjectID()
+                    dr = DraggableText(player_js)
+                    self.texts.append(dr)
         self.definePasses = DraggablePass(self.ax, self.texts)
         self.definePasses.set_effectivenessWithComponentsLabel_forChosenPoint(self.effec_withCompVariable_forChosenPoint)
         self.definePasses.set_passDisplayer(self.text_toDisplayPasses)
@@ -551,78 +551,85 @@ class Visualization(object):
                 return plyr.point
 
 
-    def annotate_currentEvent(self, half, minute, second, milisec, homeTeamPlayers, awayTeamPlayers, skip_times): # not completed
-        eventData_current = self.get_currentEventData(half, minute, second, milisec)
-        current_teamName, current_js, current_eventID = eventData_current[0]
+    def annotate_currentEvent_base(self, event_data, homeTeamPlayers, awayTeamPlayers):
         homeTeamName, awayTeamName = self.teamNames
-        player_current = None
+        teamName, js, eventID = event_data[0]
+        player = None
         xBall, yBall = None, None
         try:
-            if current_teamName == homeTeamName:
-                player_base = homeTeamPlayers[current_js]
+            if teamName == homeTeamName:
+                player_base = homeTeamPlayers[js]
                 xBall, yBall = player_base.get_position()
-            elif current_teamName == awayTeamName:
-                player_base = awayTeamPlayers[current_js]
+            elif teamName == awayTeamName:
+                player_base = awayTeamPlayers[js]
                 xBall, yBall = player_base.get_position()
-            player_current = self.detectParticularPlayer(current_js, xBall, yBall)
+            player = self.detectParticularPlayer(js, xBall, yBall)
         except KeyError:
             print "missing data"
+        return (player, eventID)
 
-        self.count_forEventAndPassEffect += 1
-        if self.count_forEventAndPassEffect == 5:
-            if self.eventAnnotation != None: self.eventAnnotation.remove(); del self.eventAnnotation; self.eventAnnotation = None
-            if self.passEffectivenessAnnotation != None: self.passEffectivenessAnnotation.remove(); del self.passEffectivenessAnnotation; self.passEffectivenessAnnotation = None
-            self.count_forEventAndPassEffect = 0
-        if self.passAnnotation != None: self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
 
-        if current_eventID != 1:
-            if self.trailAnnotation!=None: self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
-            if self.ballAnnotation!=None: self.ballAnnotation.remove(); del self.ballAnnotation; self.ballAnnotation = None
-            self.eventAnnotation = self.ax.annotate(self.event_id_explanation[current_eventID], xy=(52.5,32.5),  xycoords='data',
+    def remove_eventAnnotation(self):
+        if self.eventAnnotation != None:
+            self.eventAnnotation.remove(); del self.eventAnnotation; self.eventAnnotation = None
+
+
+    def remove_passAnnotation(self):
+        if self.passAnnotation != None:
+            self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
+
+
+    def remove_passEffectivenessAnnotation(self):
+        if self.passEffectivenessAnnotation != None:
+            self.passEffectivenessAnnotation.remove(); del self.passEffectivenessAnnotation; self.passEffectivenessAnnotation = None
+
+
+    def remove_trailAnnotation(self):
+        if self.trailAnnotation!=None:
+            self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
+
+
+    def annotate_currentEvent(self, half, minute, second, milisec, homeTeamPlayers, awayTeamPlayers, skip_times): # not completed
+        eventData_current = self.get_currentEventData(half, minute, second, milisec)
+        player_current, eventID_current = self.annotate_currentEvent_base(eventData_current,
+                                                                          homeTeamPlayers, awayTeamPlayers)
+        if self.passEffectiveness_count != 0:
+            self.passEffectiveness_count += 1
+            if self.passEffectiveness_count == 5: self.remove_passEffectivenessAnnotation()
+        self.remove_passAnnotation()
+        self.remove_eventAnnotation()
+
+        if eventID_current != 1:
+            self.remove_trailAnnotation()
+            self.eventAnnotation = self.ax.annotate(self.event_id_explanation[eventID_current], xy=(52.5,32.5),  xycoords='data',
                                                     va="center", ha="center", xytext=(0, 0), textcoords='offset points', size=20,
                                                     bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7), ec=(1., .5, .5)))
         else:
             eventData_previous = self.get_previousEventData(half, minute, second, milisec, skip_times)
-            previous_teamName, previous_js, previous_eventID = eventData_previous[0]
-            if previous_teamName != current_teamName or previous_js != current_js:
-                if self.trailAnnotation!=None: self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
-                if self.ballAnnotation!=None: self.ballAnnotation.remove(); del self.ballAnnotation; self.ballAnnotation = None
-                player_previous = None
-                previous_xBall, previous_yBall = None, None
-                try:
-                    if previous_teamName == homeTeamName:
-                        player_base = homeTeamPlayers[previous_js]
-                        previous_xBall, previous_yBall = player_base.get_position()
-                    elif previous_teamName == awayTeamName:
-                        player_base = awayTeamPlayers[previous_js]
-                        previous_xBall, previous_yBall = player_base.get_position()
-                    player_previous  = self.detectParticularPlayer(previous_js, previous_xBall, previous_yBall)
-                except KeyError:
-                    print "missing data 2"
-                if (previous_eventID not in [4, 12]) and previous_xBall != None and xBall != None:
-                    self.passAnnotation = self.ax.annotate('', xy=(.5, .5), xycoords=(player_current), xytext=(.5, .5),
-                        textcoords=(player_previous), size=20, arrowprops=dict(arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
+            player_previous, eventID_previous = self.annotate_currentEvent_base(eventData_previous,
+                                                                                homeTeamPlayers, awayTeamPlayers)
+            if player_previous != player_current:
+                self.remove_trailAnnotation()
+                self.passAnnotation = self.ax.annotate('', xy=(.5, .5), xycoords=(player_current), xytext=(.5, .5),
+                    textcoords=(player_previous), size=20, arrowprops=dict(arrowstyle="fancy", fc="0.6", ec="none",
+                                                                           connectionstyle="arc3"))
+                effectiveness = self.definePasses.displayDefinedPass(self.passAnnotation, self.text_toDisplayPasses)
 
-                    #HeatMap(self.ax).draw(self.passAnnotation)
-
-                    effectiveness = self.definePasses.displayDefinedPass(self.passAnnotation, self.text_toDisplayPasses)
-
-                    current_coordX, current_coordY = player_current.get_position()
-                    pre_coordX, pre_coordY = player_previous.get_position()
-                    ultX, ultY = ((current_coordX + pre_coordX) / 2.), ((current_coordY + pre_coordY) / 2.)
-                    self.passEffectivenessAnnotation = self.ax.annotate(("effectiveness %.2f"%(effectiveness)), xy=(ultX-10, ultY),
-                        xycoords="data", va="center", ha="center", xytext=(ultX-10, ultY), textcoords="offset points",
-                        size=10, bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7), ec=(1., .5, .5)))
+                ultX = ((player_current.get_position()[0] + player_previous.get_position()[0]) / 2.)
+                ultY = ((player_current.get_position()[1] + player_previous.get_position()[1]) / 2.)
+                self.remove_passEffectivenessAnnotation()
+                self.passEffectivenessAnnotation = self.ax.annotate(("effectiveness %.2f"%(effectiveness)),
+                    xy=(ultX-10, ultY), xycoords="data", va="center", ha="center", xytext=(ultX-10, ultY),
+                    textcoords="offset points", size=10, bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7),
+                                                                   ec=(1., .5, .5)))
+                self.passEffectiveness_count = 1
             else:
                 if self.trailAnnotation == None:
-                    self.entire_trailX, self.entire_trailY = [],[]
-                    self.entire_trailX.append(xBall), self.entire_trailY.append(yBall)
+                    self.entire_trailX, self.entire_trailY = [player_current.get_position()[0]],[player_current.get_position()[1]]
                     self.trailAnnotation, = self.ax.plot(self.entire_trailX, self.entire_trailY, "--", color="yellow")
-                    self.ballAnnotation, = self.ax.plot(xBall, yBall, "o", markersize=26,mfc="none",markeredgewidth=3.0,markeredgecolor="yellow")
                 else:
-                    self.entire_trailX.append(xBall), self.entire_trailY.append(yBall)
+                    self.entire_trailX.append(player_current.get_position()[0]), self.entire_trailY.append(player_current.get_position()[1])
                     self.trailAnnotation.set_data(self.entire_trailX, self.entire_trailY)
-                    self.ballAnnotation.set_data(xBall, yBall)
 
 
     def get_currentEventData(self, half, minute, second, milisec):

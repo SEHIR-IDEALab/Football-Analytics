@@ -1,6 +1,7 @@
 __author__ = 'emrullah'
 
 class Player_base:
+
     object_types = {0: "Home Team Player", 1: "Away Team Player", 2: "Referee", 3: "Home Team Goalkeeper",
                     4: "Away Team Goalkeeper", -1: "Unknown object", 6: "The other referees",
                     7: "The other referees", 8: "The other referees", 9: "The other referees"}
