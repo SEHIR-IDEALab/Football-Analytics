@@ -54,7 +54,7 @@ class Pass:
         try: x3, y3 = p3.getPositionX(), p3.getPositionY()
         except AttributeError: x3, y3 = p3
 
-        # if not ((x1 <= x3 <= x2) or (x2 <= x3 <= x1)): return risk
+        #if not ((x1 <= x3 <= x2) or (x2 <= x3 <= x1)): return risk
 
         try:
             slope = (y2 - y1) / (x2 - x1)
