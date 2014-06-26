@@ -261,8 +261,7 @@ class Match(object):
 
 
     def visualizeMatch(self):
-        visualization = Visualization(self.sentio.getCoordinateData_byTime(),self.sentio.getEventData_byTime(),
-                                      self.getTeamNames(), self.get_minMaxOfHalf(), self.get_ID_Explanation())
+        visualization = Visualization(self.sentio, self.teamNames, self.get_minMaxOfHalf(), self.get_ID_Explanation())
 
 
     def __str__(self):

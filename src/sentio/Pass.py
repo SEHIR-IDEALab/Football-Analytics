@@ -5,6 +5,7 @@ __author__ = 'emrullah'
 
 
 class Pass:
+
     def __init__(self, coordinateDataOfObjects=None):
         self.coordinateDataOfObjects = self.convertTextsToPlayers(coordinateDataOfObjects)
 
@@ -35,7 +36,6 @@ class Pass:
         passDisplayer.insert("1.0", "effectiveness = %.2f\n" %effectiveness)
         passDisplayer.insert("1.0", "pass_advantage = %.2f (%s)\n" %self.passAdvantage(p2))
         passDisplayer.insert("1.0", "gain = %.2f\n" %self.gain(p1, p2))
-        passDisplayer.insert("1.0", "overall_risk(%s->g_Kpr) = %.2f\n" %(p2.getJerseyNumber(), self.overallRisk(p2, [0.0, 32.75])))
         passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.getJerseyNumber(), p2.getJerseyNumber(), self.overallRisk(p1, p2)))
         passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
 
@@ -43,6 +43,7 @@ class Pass:
 
 
     def risk(self, p1, p3, p2):
+        risk = 0.0
 
         try: x1, y1 = p1.getPositionX(), p1.getPositionY()
         except AttributeError: x1, y1 = p1
@@ -52,6 +53,8 @@ class Pass:
 
         try: x3, y3 = p3.getPositionX(), p3.getPositionY()
         except AttributeError: x3, y3 = p3
+
+        # if not ((x1 <= x3 <= x2) or (x2 <= x3 <= x1)): return risk
 
         try:
             slope = (y2 - y1) / (x2 - x1)
@@ -73,53 +76,34 @@ class Pass:
     def overallRisk(self, p1, p2, goalKeeper=True):
         overallRisk = 0.0
 
-        x1, y1 = p1.getPositionX(), p1.getPositionY()
         team1 = p1.getTypeName()
-        js1 = p1.getJerseyNumber()
-
-        x2, y2 = None, None
-        try:
-            x2, y2 = p2.getPositionX(), p2.getPositionY()
-            team2 = p2.getTypeName()
-            js2 = p2.getJerseyNumber()
-        except AttributeError:
-            x2, y2 = p2
-
         for p3 in self.coordinateDataOfObjects:
-            x3, y3 = p3.getPositionX(), p3.getPositionY()
-            js3 = p3.getJerseyNumber()
             team3 = p3.getTypeName()
 
-            #if x1 <= x3 <= x2 or x2 <= x3 <= x1:
             if team3 not in [team1, "referee", "unknown"]:
                 if goalKeeper:
                     overallRisk += self.risk(p1, p3, p2)
                 else:
                     if not p3.isGoalKeeper():
                         overallRisk += self.risk(p1, p3, p2)
-        #print overallRisk, self.gain(p1,p2)
         return overallRisk
 
 
     def gain(self, p1, p2):
         x1, y1 = p1.getPositionX(), p1.getPositionY()
         team1 = p1.getTypeName()
-        js1 = p1.getJerseyNumber()
 
         x2, y2 = p2.getPositionX(), p2.getPositionY()
-        team2 = p2.getTypeName()
-        js2 = p2.getJerseyNumber()
 
         gain = 0
         left = False
         for p3 in self.coordinateDataOfObjects:
             x3, y3 = p3.get_position()
-            js3 = p3.getJerseyNumber()
             team3 = p3.getTypeName()
             if team3 not in [team1, "referee", "unknown"]:
                 if x1 <= x3 <= x2 or x2 <= x3 <= x1:
                     gain += 1
-                elif p3.isGoalKeeper():
+                if p3.isGoalKeeper():
                     if x3 <= x1 and x3 <= x2:
                         left = True
         if left:
@@ -131,13 +115,11 @@ class Pass:
 
 
     def passAdvantage(self, p1):
-        x1, y1 = p1.getPositionX(), p1.getPositionY()
         team1 = p1.getTypeName()
         js1 = p1.getJerseyNumber()
 
         passAdvantages = {}
         for p2 in self.coordinateDataOfObjects:
-            x2, y2 = p2.getPositionX(), p2.getPositionY()
             js2 = p2.getJerseyNumber()
             team2 = p2.getTypeName()
 
@@ -148,26 +130,58 @@ class Pass:
         return max_pass, passAdvantages[max_pass]
 
 
+    def opponentGoalKeeperLocation_isLeft(self, p1):
+        team1 = p1.getTypeName()
+
+        goalKeeper_1, goalKeeper_2 = None, None
+        for p2 in self.coordinateDataOfObjects:
+            x2, y2 = p2.getPositionX(), p2.getPositionY()
+            team2 = p2.getTypeName()
+
+            if p2.isGoalKeeper():
+                if team2 == team1: goalKeeper_1 = x2
+                else: goalKeeper_2 = x2
+
+        if goalKeeper_2 < goalKeeper_1:
+            return True
+        return False
+
+
     def goalChance(self, p1):
         x1, y1 = p1.getPositionX(), p1.getPositionY()
-        team1 = p1.getTypeName()
-        js1 = p1.getJerseyNumber()
 
-        goalKeeperX, goalKeeperY = 0.0, 32.75
+        leftGoalKeeperXY = 0.0, 32.5
+        rightGoalKeeperXY = 105.0, 32.5
+
+        if self.opponentGoalKeeperLocation_isLeft(p1): goalKeeperX, goalKeeperY = leftGoalKeeperXY
+        else: goalKeeperX, goalKeeperY = rightGoalKeeperXY
+
         d1 = math.sqrt(math.pow(goalKeeperX - x1, 2) + math.pow(goalKeeperY - y1, 2))
         d2 = 8.5
         angle = math.atan2(math.fabs(y1 - goalKeeperY), math.fabs(x1 - goalKeeperX)) * 180 / math.pi
         angle = math.fabs(90 - angle)
         q = self.overallRisk(p1, [goalKeeperX, goalKeeperY], goalKeeper=False)
         q = (1 if q == 0 else q)
-        #print "%s, angle: %s, risk: %s, distance: %s" % (js1, angle, q, d1)
+        goalCoefficient = 1000
 
-        return (d2 / d1) * (min(angle, (180 - angle)) / 90) / q * 1000
+        d1 = (1 if d1 == 0 else d1)
+        return (d2 / d1) * (min(angle, (180 - angle)) / 90.) * (1. / (1 + q)) * goalCoefficient
+
+
+    def isSuccessfulPass(self, p1, p2):
+        team1 = p1.getTypeName()
+        team2 = p2.getTypeName()
+        if team1 == team2:
+            return True
+        return False
 
 
     def effectiveness(self, p1, p2):
         w1, w2, w3, w4 = 1, 1, 1, 1
-        return w1 * self.gain(p1, p2) + w3 * self.passAdvantage(p2)[0] + w4 * self.goalChance(p2)
+        effectiveness = w1 * self.gain(p1, p2) + w3 * self.passAdvantage(p2)[0] + w4 * self.goalChance(p2)
+        if not self.isSuccessfulPass(p1, p2):
+            return -effectiveness
+        return effectiveness
 
 
     def effectiveness_withComponents(self, p1, p2):
@@ -177,6 +191,8 @@ class Pass:
         goalChance = w4 * self.goalChance(p2)
         overallRisk = self.overallRisk(p1, p2)
         effectiveness = gain + passAdvantage + goalChance
+        if not self.isSuccessfulPass(p1, p2):
+            effectiveness = -effectiveness
 
         return (effectiveness, gain, passAdvantage, goalChance, overallRisk)
 

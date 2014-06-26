@@ -101,7 +101,6 @@ class DraggableText:
             self.passDisplayer.insert("1.0", "effectiveness = %.2f\n" %passes.effectiveness(p1, p2))
             self.passDisplayer.insert("1.0", "pass_advantage = %.2f (%s)\n" %passes.passAdvantage(p2))
             self.passDisplayer.insert("1.0", "gain = %.2f\n" %passes.gain(p1, p2))
-            self.passDisplayer.insert("1.0", "overall_risk(%s->g_Kpr) = %.2f\n" %(p2.getJerseyNumber(), passes.overallRisk(p2, [0.0, 32.75])))
             self.passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.getJerseyNumber(), p2.getJerseyNumber(), passes.overallRisk(p1, p2)))
             self.passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
 

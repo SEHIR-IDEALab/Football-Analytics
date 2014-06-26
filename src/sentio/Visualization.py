@@ -1,12 +1,11 @@
 # coding=utf-8
-from Tkconstants import VERTICAL, Y, LEFT, END, E, NE
 
+from Tkconstants import VERTICAL, Y, LEFT, END, E, NE
 import Tkinter as Tk
 import csv
 import time as tm
 import math
 import tkFileDialog
-import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.patches import BoxStyle
 import matplotlib.pyplot as plt
@@ -21,10 +20,12 @@ __author__ = 'emrullah'
 
 
 class Visualization(object):
-    def __init__(self, coordinateData_byTme, eventData_byTime, teamNames, minMaxOfHalf, id_explanation):
+    def __init__(self, sentio, teamNames, minMaxOfHalf, id_explanation):
+        self.sentio = sentio
 
-        self.coordinatesData_byTime = coordinateData_byTme
-        self.eventData_byTime = eventData_byTime
+        self.coordinatesData_byTime = self.sentio.getCoordinateData_byTime()
+        self.eventData_byTime = self.sentio.getEventData_byTime()
+
         self.teamNames = teamNames
         self.minMaxOfHalf = minMaxOfHalf
         self.event_id_explanation = id_explanation
@@ -215,19 +216,15 @@ class Visualization(object):
                                                 arrowstyle="simple", connectionstyle="arc3",fc="cyan", ec="b", lw=2))
                     self.directionSpeed_ofObjects.append(passAnnotation)
 
-                    if teamID in [0]:
-                        homeTeamPlayers[jersey_number] = [currentX, currentY]
-                    elif teamID in [1]:
-                        awayTeamPlayers[jersey_number] = [currentX, currentY]
-                    elif teamID in [2]:
-                        referees[jersey_number] = [currentX, currentY]
-                    else:
-                        unknownObjects[jersey_number] = [currentX, currentY]
+                    if teamID in [0]: homeTeamPlayers[jersey_number] = [currentX, currentY]
+                    elif teamID in [1]: awayTeamPlayers[jersey_number] = [currentX, currentY]
+                    elif teamID in [2]: referees[jersey_number] = [currentX, currentY]
+                    else: unknownObjects[jersey_number] = [currentX, currentY]
 
-            if self.eventAnnotation != None: self.eventAnnotation.remove(); del self.eventAnnotation; self.eventAnnotation = None
-            if self.passAnnotation != None: self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
-            if self.trailAnnotation!=None: self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
-            if self.ballAnnotation!=None: self.ballAnnotation.remove(); del self.ballAnnotation; self.ballAnnotation = None
+            self.remove_eventAnnotation()
+            self.remove_passAnnotation()
+            self.remove_trailAnnotation()
+            self.remove_passEffectivenessAnnotation()
 
             self.remove_previousJerseyNumbers()
             self.text_toDisplayPasses.delete("1.0", END)
@@ -277,8 +274,8 @@ class Visualization(object):
     def rb_define_pass(self):
         if self.directionSpeed_ofObjects:
             self.remove_directionSpeedOfObjects()  # remove previous annotations
-        for player_js in self.texts:
-            player_js.disconnect()
+        #for player_js in self.texts:
+         #   player_js.disconnect()
         self.definePasses.connect()
 
 
@@ -471,20 +468,36 @@ class Visualization(object):
         return (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
 
 
+    def getPlayersOfTeams(self):
+        teams_players = dict()
+        for line in self.sentio.getEventData():
+            if line[3]:
+                teamName, player_jerseyNumber = line[3], int(line[4])
+                if teamName not in teams_players:
+                    teams_players[teamName] = [player_jerseyNumber]
+                else:
+                    if player_jerseyNumber not in teams_players[teamName]:
+                        teams_players[teamName] += [player_jerseyNumber]
+        return teams_players
+
+
     def setJerseyNumbers_forGivenObjects(self, homeTeamPlayers, awayTeamPlayers, referees, unknownObjects):
         BoxStyle._style_list["circle"] = CircleStyle
         colors = ["blue", "red", "yellow", "black"]
+        # teams_and_players = self.getPlayersOfTeams()
+        # print teams_and_players[self.teamNames[0]]
+        # print teams_and_players[self.teamNames[1]]
         for index, players in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
             for js in players:
                 player_base = players[js]
-                if player_base.getJerseyNumber() in range(1, 100): # this condition may be changed ***
-                    player_js = self.ax.text(player_base.getPositionX(), player_base.getPositionY(), player_base.getJerseyNumber(),
-                                    color="w", fontsize=(11 if len(str(player_base.getJerseyNumber()))==1 else 10), picker=True,
-                                    zorder=1, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index], ec=colors[index], alpha=0.5))
-                    player_js.object_type = player_base.getObjectType()
-                    player_js.object_id = player_base.getObjectID()
-                    dr = DraggableText(player_js)
-                    self.texts.append(dr)
+                #if player_base.getJerseyNumber() in range(1, 100): # this condition may be changed ***
+                player_js = self.ax.text(player_base.getPositionX(), player_base.getPositionY(), player_base.getJerseyNumber(),
+                                color="w", fontsize=(11 if len(str(player_base.getJerseyNumber()))==1 else 10), picker=True,
+                                zorder=1, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index], ec=colors[index], alpha=0.5))
+                player_js.object_type = player_base.getObjectType()
+                player_js.object_id = player_base.getObjectID()
+                dr = DraggableText(player_js)
+                self.texts.append(dr)
         self.definePasses = DraggablePass(self.ax, self.texts)
         self.definePasses.set_effectivenessWithComponentsLabel_forChosenPoint(self.effec_withCompVariable_forChosenPoint)
         self.definePasses.set_passDisplayer(self.text_toDisplayPasses)
@@ -603,7 +616,7 @@ class Visualization(object):
             self.remove_trailAnnotation()
             self.eventAnnotation = self.ax.annotate(self.event_id_explanation[eventID_current], xy=(52.5,32.5),  xycoords='data',
                                                     va="center", ha="center", xytext=(0, 0), textcoords='offset points', size=20,
-                                                    bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7), ec=(1., .5, .5)))
+                                                    bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7), ec=(1., .5, .5), alpha=0.5))
         else:
             eventData_previous = self.get_previousEventData(half, minute, second, milisec, skip_times)
             player_previous, eventID_previous = self.annotate_currentEvent_base(eventData_previous,
@@ -621,7 +634,7 @@ class Visualization(object):
                 self.passEffectivenessAnnotation = self.ax.annotate(("effectiveness %.2f"%(effectiveness)),
                     xy=(ultX-10, ultY), xycoords="data", va="center", ha="center", xytext=(ultX-10, ultY),
                     textcoords="offset points", size=10, bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7),
-                                                                   ec=(1., .5, .5)))
+                                                                   ec=(1., .5, .5), alpha=0.5))
                 self.passEffectiveness_count = 1
             else:
                 if self.trailAnnotation == None:
