@@ -10,7 +10,8 @@ class Pass:
         self.coordinateDataOfObjects = self.convertTextsToPlayers(coordinateDataOfObjects)
 
 
-    def convertTextsToPlayers(self, coordinateDataOfObjects):
+    @staticmethod
+    def convertTextsToPlayers(coordinateDataOfObjects):
         if coordinateDataOfObjects == None: return None
         q = []
         for p in coordinateDataOfObjects:
@@ -36,10 +37,28 @@ class Pass:
         passDisplayer.insert("1.0", "effectiveness = %.2f\n" %effectiveness)
         passDisplayer.insert("1.0", "pass_advantage = %.2f (%s)\n" %self.passAdvantage(p2))
         passDisplayer.insert("1.0", "gain = %.2f\n" %self.gain(p1, p2))
-        passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.getJerseyNumber(), p2.getJerseyNumber(), self.overallRisk(p1, p2)))
+        passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.getJerseyNumber(), p2.getJerseyNumber(),
+                                                                      self.overallRisk(p1, p2)))
         passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
 
         return effectiveness
+
+
+    def isInRange(self, p1, p3, p2):
+        x1, y1 = p1
+        x2, y2 = p2
+        x3, y3 = p3
+
+        additional_r = 1
+
+        distance_1to2 = math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
+        radius_x, radius_y = ((x1 + x2) / 2.), ((y1 + y2) / 2.)
+        distance_radiusTo3 = math.sqrt(math.pow(radius_x - x3, 2) + math.pow(radius_y - y3, 2))
+        radius = (distance_1to2 / 2.) + additional_r
+
+        if distance_radiusTo3 <= radius:
+            return True
+        return False
 
 
     def risk(self, p1, p3, p2):
@@ -54,22 +73,22 @@ class Pass:
         try: x3, y3 = p3.getPositionX(), p3.getPositionY()
         except AttributeError: x3, y3 = p3
 
-        #if not ((x1 <= x3 <= x2) or (x2 <= x3 <= x1)): return risk
+        if not self.isInRange((x1,y1), (x3,y3), (x2,y2)): return risk
 
-        try:
+        if x2 != x1:
             slope = (y2 - y1) / (x2 - x1)
-        except ZeroDivisionError:
-            slope = (y2 - y1)
-        a = slope
-        b = -1
-        c = ( ( slope * (-x1) ) + y1 )
-        d2 = math.fabs(a * x3 + b * y3 + c) / math.sqrt(math.pow(a, 2) + math.pow(b, 2))
-        hipotenus_1to3 = math.sqrt(math.pow(x3 - x1, 2) + math.pow(y3 - y1, 2))
-        d1 = math.sqrt(math.pow(hipotenus_1to3, 2) - math.pow(d2, 2))
-        try:
-            risk = d1 / d2
-        except ZeroDivisionError:
-            risk = d1
+            a = slope
+            b = -1
+            c = ( ( slope * (-x1) ) + y1 )
+            d2 = math.fabs(a * x3 + b * y3 + c) / math.sqrt(math.pow(a, 2) + math.pow(b, 2))
+        else:
+            d2 = math.fabs(x3 - x1)
+        hypotenuse_1to3 = math.sqrt(math.pow(x3 - x1, 2) + math.pow(y3 - y1, 2))
+        d1 = math.sqrt(math.pow(hypotenuse_1to3, 2) - math.pow(d2, 2))
+
+        try: risk = d1 / d2
+        except ZeroDivisionError: risk = d1
+
         return risk
 
 
@@ -77,15 +96,27 @@ class Pass:
         overallRisk = 0.0
 
         team1 = p1.getTypeName()
+
+        try: js2 = p2.getJerseyNumber()
+        except AttributeError: js2 = None
+
         for p3 in self.coordinateDataOfObjects:
             team3 = p3.getTypeName()
 
             if team3 not in [team1, "referee", "unknown"]:
-                if goalKeeper:
-                    overallRisk += self.risk(p1, p3, p2)
+                if js2 != None:
+                    if js2 != p3.getJerseyNumber():
+                        if goalKeeper:
+                            overallRisk += self.risk(p1, p3, p2)
+                        else:
+                            if not p3.isGoalKeeper():
+                                overallRisk += self.risk(p1, p3, p2)
                 else:
-                    if not p3.isGoalKeeper():
+                    if goalKeeper:
                         overallRisk += self.risk(p1, p3, p2)
+                    else:
+                        if not p3.isGoalKeeper():
+                            overallRisk += self.risk(p1, p3, p2)
         return overallRisk
 
 

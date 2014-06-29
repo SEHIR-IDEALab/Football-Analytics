@@ -110,7 +110,7 @@ class Visualization(object):
 
         fig = plt.figure(figsize=(5,4))
 
-        self.canvas = FigureCanvasTkAgg(fig,master=self.master)
+        self.canvas = FigureCanvasTkAgg(fig, master=self.master)
         self.canvas.show()
         self.canvas.get_tk_widget().pack(side='top', fill='both', expand=1)
 
@@ -120,7 +120,7 @@ class Visualization(object):
 
         self.ax = fig.add_subplot(111)
         im = plt.imread('source/background.png')
-        self.ax.imshow(im, zorder=0, extent=[-5.0, 110.0, 0, 65.0], aspect="auto")
+        self.ax.imshow(im, zorder=0, extent=[-6.5, 111.5, -1.5, 66.5])
         self.ax.grid()
         self.ax.axes.invert_yaxis()
         self.ax.set_xticks(numpy.arange(-5, 120, 5))
@@ -468,25 +468,9 @@ class Visualization(object):
         return (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
 
 
-    def getPlayersOfTeams(self):
-        teams_players = dict()
-        for line in self.sentio.getEventData():
-            if line[3]:
-                teamName, player_jerseyNumber = line[3], int(line[4])
-                if teamName not in teams_players:
-                    teams_players[teamName] = [player_jerseyNumber]
-                else:
-                    if player_jerseyNumber not in teams_players[teamName]:
-                        teams_players[teamName] += [player_jerseyNumber]
-        return teams_players
-
-
     def setJerseyNumbers_forGivenObjects(self, homeTeamPlayers, awayTeamPlayers, referees, unknownObjects):
         BoxStyle._style_list["circle"] = CircleStyle
         colors = ["blue", "red", "yellow", "black"]
-        # teams_and_players = self.getPlayersOfTeams()
-        # print teams_and_players[self.teamNames[0]]
-        # print teams_and_players[self.teamNames[1]]
         for index, players in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
             for js in players:
                 player_base = players[js]
