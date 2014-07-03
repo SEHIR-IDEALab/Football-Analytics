@@ -843,7 +843,7 @@
 2	57	42	Fenerbahçe	88	1	Hasball
 2	57	46	Fenerbahçe	5	1	Hasball
 2	57	47	Fenerbahçe	22	1	Hasball
-2	57	50	Fenerbahçe	1	1	Hershel
+2	57	50	Fenerbahçe	1	1	Hasball
 2	57	55	Galatasaray	21	1	Hasball
 2	57	55	Fenerbahçe	25	1	Hasball
 2	57	58	Galatasaray	26	1	Hasball

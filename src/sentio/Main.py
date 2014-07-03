@@ -13,15 +13,6 @@ def main():
     sentio.parseSentioData()
 
     match = Match(sentio)
-    # match.identifyObjects()
-    # match.compute_someEvents()
-    # q = match.getHomeTeam().getTeamPlayers()
-    # print "js, ball_time, time_played"
-    # for i in q:
-    #     player = q[i]
-    #     print player.getJerseyNumber(), player.get_ballOwnershipTime(), player.getTimeInterval_played()
-
-
     match.visualizeMatch()
 
 

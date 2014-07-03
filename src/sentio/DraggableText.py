@@ -107,8 +107,8 @@ class DraggableText:
     def disconnect(self):
         'disconnect all the stored connection ids'
         try:
-            self.point.figure.canvas.mpl_disconnect(self.cidpress)
-            self.point.figure.canvas.mpl_disconnect(self.cidrelease)
+            #self.point.figure.canvas.mpl_disconnect(self.cidpress)
+            #self.point.figure.canvas.mpl_disconnect(self.cidrelease)
             self.point.figure.canvas.mpl_disconnect(self.cidmotion)
         except AttributeError:
             pass

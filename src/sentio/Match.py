@@ -107,16 +107,9 @@ class Match(object):
         return self.unknownObjects
 
 
-    def get_ID_Explanation(self):
-        a = dict()
-        for line in self.sentio.getEventData():
-            id, explanation = int(line[5]), line[6]
-            a[id] = explanation
-        return a
-
-
-    def get_minMaxOfHalf(self):
-        a, index, q = dict(), 0, self.sentio.getCoordinateData()
+    @staticmethod
+    def get_minMaxOfHalf(coordinate_data):
+        a, index, q = dict(), 0, coordinate_data
         min_half, min_minute, min_second, min_mili_second = int(q[index][3]), int(q[index][4]),\
                                                          int(q[index][5]), int(q[index][2][-3])
         a[min_half] = []
@@ -261,7 +254,7 @@ class Match(object):
 
 
     def visualizeMatch(self):
-        visualization = Visualization(self.sentio, self.teamNames, self.get_minMaxOfHalf(), self.get_ID_Explanation())
+        visualization = Visualization(self.sentio, self.teamNames)
 
 
     def __str__(self):

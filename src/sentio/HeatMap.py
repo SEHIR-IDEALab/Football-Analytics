@@ -2,6 +2,7 @@ import math
 import numpy
 from src.sentio.Pass import Pass
 import matplotlib.pyplot as plt
+from src.sentio.Player_base import Player_base
 
 __author__ = 'emrullah'
 
@@ -54,12 +55,12 @@ class HeatMap:
         mean, standard_deviation = HeatMap.compute_standard_deviation(data)
         v_min = mean - standard_deviation
         v_max = mean + standard_deviation
-        if not self.hm is None:
+        if self.hm is not None:
             self.hm.set_data(data)
             self.cbar.set_clim(vmin=v_min,vmax=v_max)
             self.cbar.draw_all()
         else:
-            self.hm = self.ax.imshow(data, interpolation='bilinear', extent=[0.0, 105.0, 0.0, 65.0],
+            self.hm = self.ax.imshow(data, interpolation='bilinear', extent=[0.0, 105.0, 65.0, 0.0],
                                  vmin=v_min, vmax=v_max, alpha=0.8)
             self.cbar = plt.colorbar(self.hm)
 
@@ -73,7 +74,6 @@ class HeatMap:
 
     def heatmap_base(self, definedPass, p_accordingTo, number_of_points):
         p1, p2 = definedPass
-        p_initial_pos = p_accordingTo.get_position()
 
         x_points, y_points = number_of_points
         x_coord = numpy.linspace(0, 105, x_points)
@@ -81,14 +81,22 @@ class HeatMap:
 
         totalEffectiveness_withComponents = {"effectiveness": [], "gain": [], "passAdvantage": [], "goalChance": [],
                                              "overallRisk": []}
+        pass_ = Pass(self.allObjects)
+        for player in pass_.allObjects:
+            if player.object_id == p_accordingTo.object_id:
+                p_accordingTo = player
+
         for y in y_coord:
             temp_effect, temp_gain, temp_passAdv, temp_goalChange, temp_overRisk = [], [], [], [], []
             for x in x_coord:
                 p_accordingTo.set_position((x, y))
-                self.clt_pass.coordinateDataOfObjects = Pass.convertTextsToPlayers(self.allObjects)
-                currentEffectiveness_withComponents = self.clt_pass.effectiveness_withComponents(p1, p2)
+                if p_accordingTo.object_id == p1.object_id:
+                    currentEffectiveness_withComponents = pass_.effectiveness_withComponents(p_accordingTo, p2)
+                elif p_accordingTo.object_id == p2.object_id:
+                    currentEffectiveness_withComponents = pass_.effectiveness_withComponents(p1, p_accordingTo)
+                else:
+                    currentEffectiveness_withComponents = pass_.effectiveness_withComponents(p1, p2)
                 self.totalEffectiveness_withComponents_byCoordinates[(x, y)] = currentEffectiveness_withComponents
-                # (effectiveness, gain, passAdvantage, goalChance) = currentEffectiveness_withComponents
                 for index, component in enumerate(
                         [temp_effect, temp_gain, temp_passAdv, temp_goalChange, temp_overRisk]):
                     component.append(currentEffectiveness_withComponents[index])
@@ -99,7 +107,6 @@ class HeatMap:
             totalEffectiveness_withComponents["goalChance"].append(temp_goalChange)
             totalEffectiveness_withComponents["overallRisk"].append(temp_overRisk)
 
-        p_accordingTo.set_position(p_initial_pos)
         data = totalEffectiveness_withComponents["effectiveness"]
         self.draw(data)
         return totalEffectiveness_withComponents
@@ -110,7 +117,7 @@ class HeatMap:
         p_chosen = None
 
         p1_team = p1.getTypeName()
-        for obj in Pass.convertTextsToPlayers(self.allObjects):
+        for obj in Player_base.convertTextsToPlayers(self.allObjects):
             temp_obj_js = obj.getJerseyNumber()
             temp_obj_team = obj.getTypeName()
             if (temp_obj_js == chosenObject) and (temp_obj_team not in [p1_team, "referee", "unknown"]):

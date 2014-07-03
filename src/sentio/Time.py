@@ -20,8 +20,7 @@ class Time(object):
 
     def set_minMaxOfHalf(self, minMaxOfHalf):
         self.minMaxOfHalf = minMaxOfHalf
-        #self.half = min(self.minMaxOfHalf.keys())
-        #self.minute, self.second, self.mili_second = self.minMaxOfHalf[self.half][0]
+        self.compute_minMaxOfHalf_inMiliseconds()
 
 
     def time_to_int(self, time):
@@ -30,35 +29,30 @@ class Time(object):
         return mili_seconds
 
 
-    def int_to_time(self, mili_seconds):
-        seconds, self.mili_second = divmod(mili_seconds, 10)
-        self.minute, self.second = divmod(seconds, 60)
-
+    def compute_minMaxOfHalf_inMiliseconds(self):
         max_minute, max_second, max_milisecond = self.minMaxOfHalf[self.half][1]
         min_minute, min_second, min_milisecond = self.minMaxOfHalf[self.half][0]
         time_max = Time(minute=max_minute, second=max_second, mili_second=max_milisecond)
         time_min = Time(minute=min_minute, second=min_second, mili_second=min_milisecond)
-        if mili_seconds < self.time_to_int(time_min):
+        self.time_min, self.time_max = self.time_to_int(time_min), self.time_to_int(time_max)
+
+
+    def int_to_time(self, mili_seconds):
+        seconds, self.mili_second = divmod(mili_seconds, 10)
+        self.minute, self.second = divmod(seconds, 60)
+
+        if mili_seconds < self.time_min:
             if self.half != 1:
                 self.half -= 1
-                try:
-                    self.minute, self.second, self.mili_second = self.minMaxOfHalf[self.half][1]
-                except:
-                    pass
+                self.minute, self.second, self.mili_second = self.minMaxOfHalf[self.half][1]
             else:
                 self.minute, self.second, self.mili_second = self.minMaxOfHalf[self.half][0]
-                return Time(self.half, self.minute, self.second, self.mili_second)
-        if mili_seconds > self.time_to_int(time_max):
-            #if (self.half+1) in self.minMaxOfHalf:
-                self.half += 1
-                try:
-                    self.minute, self.second, self.mili_second = self.minMaxOfHalf[self.half][0]
-                except:
-                    pass
-            # else:
-            #     self.minute, self.second, self.mili_second = self.minMaxOfHalf[self.half][1]
-            #     return Time(self.half, self.minute, self.second, self.mili_second)
-        return Time(self.half, self.minute, self.second, self.mili_second)
+        elif mili_seconds > self.time_max:
+            self.half += 1
+            self.minute, self.second, self.mili_second = self.minMaxOfHalf[self.half][0]
+        time = Time(self.half, self.minute, self.second, self.mili_second)
+        time.set_minMaxOfHalf(self.minMaxOfHalf)
+        return time
 
 
     def next(self):

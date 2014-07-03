@@ -8,12 +8,25 @@ class Player_base:
                     7: "The other referees", 8: "The other referees", 9: "The other referees"}
 
 
-    def __init__(self, object_info):
-        self.object_type = int(object_info[0])
-        self.object_id = int(object_info[1])
-        self.jersey_number = int(object_info[2])
-        self.position_x = float(object_info[3])
-        self.position_y = float(object_info[4])
+    def __init__(self, object_info=None):
+        if object_info is not None:
+            self.object_type = int(object_info[0])
+            self.object_id = int(object_info[1])
+            self.jersey_number = int(object_info[2])
+            self.position_x = float(object_info[3])
+            self.position_y = float(object_info[4])
+
+
+    @staticmethod
+    def convertTextsToPlayers(coordinateDataOfObjects):
+        if coordinateDataOfObjects is None: return None
+        q = []
+        for p in coordinateDataOfObjects:
+            p = p.point
+            object_type, object_id, js, (x, y) = p.object_type, p.object_id, p.get_text(), p.get_position()
+            player_base = Player_base([object_type, object_id, js, x, y])
+            q.append(player_base)
+        return q
 
 
     def getObjectType(self):

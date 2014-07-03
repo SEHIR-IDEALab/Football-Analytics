@@ -87,10 +87,10 @@ class DraggablePass(Pass):
         p2 = Player_base([object_type2, object_id2,js2, x2, y2])
 
         if chosenHeatMap == "defence position taking":
-            chosenNumber = tkSimpleDialog.askstring('##### Jersey Number #####',
+            chosenNumber = tkSimpleDialog.askinteger('##### Jersey Number #####',
                                                     'Enter the jersey number of a player from the opponent team')
             if chosenNumber:
-                self.effectiveness_withComp = self.heatMap.draw_defencePositionTaking((p1,p2), int(chosenNumber),
+                self.effectiveness_withComp = self.heatMap.draw_defencePositionTaking((p1,p2), chosenNumber,
                                                            number_of_points=self.resolutionToNumberOfPoints())
         elif chosenHeatMap == "position of target of pass":
             self.effectiveness_withComp = self.heatMap.draw_positionOfTargetOfPass((p1,p2),
@@ -147,6 +147,7 @@ class DraggablePass(Pass):
             coord_y = min(y_coords, key=lambda y:abs(y-givenCoordinate_y))
             effectiveness, gain, passAdvantage, goalChance, overallRisk = \
                 self.heatMap.get_totalEffectiveness_withComponents_byCoordinates(coord_x, coord_y)
+            print coord_x, coord_y
             q = ""
             q += ("overall_risk = %.2f\n" %overallRisk)
             q += ("gain = %.2f\n" %gain)
