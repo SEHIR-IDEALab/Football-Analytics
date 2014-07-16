@@ -1,7 +1,8 @@
 from src.sentio.Player import Player
 from src.sentio.Team import Team
 from src.sentio.Time import Time
-from src.sentio.Visualization import Visualization
+from src.sentio.wxVisualization import wxVisualization
+import wx
 
 __author__ = 'emrullah'
 
@@ -172,7 +173,7 @@ class Match(object):
     def get_timeInterval_ofGameStop(self):
         game_stop_time_intervals = dict()
         time = Time()
-        time.set_minMaxOfHalf(self.get_minMaxOfHalf())
+        time.set_minMaxOfHalf(self.get_minMaxOfHalf(self.sentio.getCoordinateData()))
         q = self.sentio.getEventData_byTime()
         game_stop_time_intervals = self.checkForGameStopEvent(time, game_stop_time_intervals, q)
         while True:
@@ -218,7 +219,7 @@ class Match(object):
         event_data = self.sentio.getEventData_byTime()
         game_stop = self.get_timeInterval_ofGameStop()
         time = Time()
-        time.set_minMaxOfHalf(self.get_minMaxOfHalf())
+        time.set_minMaxOfHalf(self.get_minMaxOfHalf(self.sentio.getCoordinateData()))
         q = self.sentio.getCoordinateData_byTime()
         players_coord_info = q[time.half][time.minute][time.second][time.mili_second]
         self.makeClassification(time, players_coord_info, event_data, game_stop)
@@ -254,7 +255,10 @@ class Match(object):
 
 
     def visualizeMatch(self):
-        visualization = Visualization(self.sentio, self.teamNames)
+        app = wx.App()
+        app.frame = wxVisualization(self.sentio, self.teamNames)
+        app.frame.Show()
+        app.MainLoop()
 
 
     def __str__(self):

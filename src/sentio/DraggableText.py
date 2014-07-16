@@ -1,20 +1,22 @@
-from Tkconstants import END
 from src.sentio.Pass import Pass
 from src.sentio.Player_base import Player_base
 
 
 class DraggableText:
     lock = None #only one can be animated at a time
+
     def __init__(self, point):
         self.point = point
         self.press = None
         self.background = None
+
 
     def connect(self):
         'connect to all the events we need'
         self.cidpress = self.point.figure.canvas.mpl_connect('button_press_event', self.on_press)
         self.cidrelease = self.point.figure.canvas.mpl_connect('button_release_event', self.on_release)
         self.cidmotion = self.point.figure.canvas.mpl_connect('motion_notify_event', self.on_motion)
+
 
     def on_press(self, event):
         if event.inaxes != self.point.axes: return
@@ -36,6 +38,7 @@ class DraggableText:
 
         # and blit just the redrawn area
         canvas.blit(axes.bbox)
+
 
     def on_motion(self, event):
         if DraggableText.lock is not self:
@@ -59,6 +62,7 @@ class DraggableText:
         # blit just the redrawn area
         canvas.blit(axes.bbox)
 
+
     def on_release(self, event):
         'on release we reset the press data'
         if DraggableText.lock is not self:
@@ -76,17 +80,21 @@ class DraggableText:
 
         self.displayDefinedPasses()
 
+
     def set_passDisplayer(self, passDisplayer):
         self.passDisplayer = passDisplayer
+
 
     def set_definedPasses(self, definedPasses):
         self.definedPasses = definedPasses
 
+
     def set_coordinatesOfObjects(self, coord):
         self.coordinatesOfObjects = coord
 
+
     def displayDefinedPasses(self):
-        self.passDisplayer.delete("1.0", END)
+        self.passDisplayer.Clear()
         passes = Pass(self.coordinatesOfObjects)
         for i in self.definedPasses:
             p1 = i.textcoords
@@ -97,17 +105,20 @@ class DraggableText:
             p1 = Player_base([object_type1, object_id1,js1, x1, y1])
             p2 = Player_base([object_type2, object_id2,js2, x2, y2])
 
-            self.passDisplayer.insert("1.0", "goal_chance = %.2f\n" %passes.goalChance(p2))
-            self.passDisplayer.insert("1.0", "effectiveness = %.2f\n" %passes.effectiveness(p1, p2))
-            self.passDisplayer.insert("1.0", "pass_advantage = %.2f (%s)\n" %passes.passAdvantage(p2))
-            self.passDisplayer.insert("1.0", "gain = %.2f\n" %passes.gain(p1, p2))
-            self.passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.getJerseyNumber(), p2.getJerseyNumber(), passes.overallRisk(p1, p2)))
-            self.passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
+            self.passDisplayer.WriteText("\n%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
+            self.passDisplayer.WriteText("overall_risk = %.2f\n" %(passes.overallRisk(p1, p2)))
+            self.passDisplayer.WriteText("gain = %.2f\n" %passes.gain(p1, p2))
+            self.passDisplayer.WriteText("pass_advantage = %.2f (%s)\n" %passes.passAdvantage(p2))
+            self.passDisplayer.WriteText("goal_chance = %.2f (%s)\n" %(passes.goalChance(p2), p2.getJerseyNumber()))
+            self.passDisplayer.WriteText("effectiveness = %.2f\n" %passes.effectiveness(p1, p2))
+
+            self.passDisplayer.SetInsertionPoint(0)
+
 
     def disconnect(self):
         'disconnect all the stored connection ids'
         try:
-            #self.point.figure.canvas.mpl_disconnect(self.cidpress)
+            self.point.figure.canvas.mpl_disconnect(self.cidpress)
             #self.point.figure.canvas.mpl_disconnect(self.cidrelease)
             self.point.figure.canvas.mpl_disconnect(self.cidmotion)
         except AttributeError:

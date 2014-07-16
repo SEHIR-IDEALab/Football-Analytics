@@ -1,4 +1,3 @@
-from Tkconstants import END
 import tkSimpleDialog
 import numpy
 from src.sentio.HeatMap import HeatMap
@@ -6,6 +5,7 @@ from src.sentio.Pass import Pass
 from matplotlib import pylab as p
 from matplotlib.text import Text
 from src.sentio.Player_base import Player_base
+import wx
 
 __author__ = 'emrullah'
 
@@ -21,7 +21,7 @@ class DraggablePass(Pass):
         self.definedPasses = []
         self.ax = ax
         self.figure = figure
-        self.heatMap = HeatMap(ax, coordinateDataOfObjects)
+        self.heatMap = HeatMap(ax, coordinateDataOfObjects, figure)
 
         self.effectiveness_withComp_byTime = None
 
@@ -45,17 +45,25 @@ class DraggablePass(Pass):
         self.chosenResolution = resolution
         self.chosenComponent = components
 
-        self.chosenComponent.trace("w", self.draw_withChosenComponent)
+        self.chosenComponent.Bind(wx.EVT_COMBOBOX, self.draw_withChosenComponent)
 
 
     def resolutionToNumberOfPoints(self):
-        chosenResolution = self.chosenResolution.get()
-        q = {"10":(10,6), "5":(20,12), "4":(27,17), "3":(40,25), "2":(53,33), "1":(105,65), "0.5":(210,130)}
+        chosenResolution = self.chosenResolution.GetValue()
+        print chosenResolution
+        q = {1:(11,7), 2:(21,13), 3:(35,22), 4:(105,65), 5:(210,130)}
+        """
+        5 ---> 0.5m
+        4 --> 1m
+        3 -> 3m
+        2 --> 5m
+        1 --> 10m
+        """
         return q[chosenResolution]
 
 
     def draw_withChosenComponent(self, *args):
-        chosenComponent = self.chosenComponent.get()
+        chosenComponent = self.chosenComponent.GetValue()
         print chosenComponent
         if chosenComponent == "effectiveness":
             q = self.effectiveness_withComp["effectiveness"]
@@ -76,7 +84,8 @@ class DraggablePass(Pass):
 
     def draw_heatMapChosen(self):
         self.heatMap.remove()
-        chosenHeatMap = self.chosenHeatMap.get()
+        chosenHeatMap = self.chosenHeatMap.GetValue()
+        print chosenHeatMap
 
         p1 = self.passAnnotation.textcoords
         p2 = self.passAnnotation.xycoords
@@ -159,7 +168,7 @@ class DraggablePass(Pass):
 
 
     def displayDefinedPasses(self):
-        self.passDisplayer.delete("1.0", END)
+        self.passDisplayer.Clear()
         for dPass in self.definedPasses:
             self.displayDefinedPass(dPass, self.passDisplayer)
 

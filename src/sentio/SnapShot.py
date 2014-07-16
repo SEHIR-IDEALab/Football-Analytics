@@ -1,9 +1,27 @@
 import csv
 import tkFileDialog
+from src.sentio.Parameters import INITIAL_ARROW_SIZE
 from src.sentio.Pass import Pass
 from src.sentio.Player_base import Player_base
 
 __author__ = 'emrullah'
+
+
+def adjust_arrow_size(current_position, next_position, speed):
+    current_x, current_y = current_position
+    next_x, next_y = next_position
+
+    length_x = (next_x - current_x) * speed
+    next_x = length_x + current_x
+    length_y = (next_y - current_y) * speed
+    next_y = length_y + current_y
+
+    if length_x >= 0: next_x += INITIAL_ARROW_SIZE
+    else: next_x -= INITIAL_ARROW_SIZE
+    if length_y >= 0: next_y += INITIAL_ARROW_SIZE
+    else: next_y -= INITIAL_ARROW_SIZE
+
+    return next_x, next_y
 
 
 class SnapShot:
@@ -68,18 +86,7 @@ class SnapShot:
                     int(object_type), int(object_ID), teamName, int(jersey_number), float(currentX), float(currentY), \
                     float(nextX), float(nextY), float(speed), passTo
 
-                lengthX = (nextX - currentX) * speed
-                nextX = lengthX + currentX
-
-                lengthY = (nextY - currentY) * speed
-                nextY = lengthY + currentY
-
-                default_arrow_size = 2
-                if lengthX >= 0: nextX += default_arrow_size
-                else: nextX -= default_arrow_size
-                if lengthY >= 0: nextY += default_arrow_size
-                else: nextY -= default_arrow_size
-
+                nextX, nextY = adjust_arrow_size((currentX, currentY), (nextX, nextY), speed)
                 directionAnnotation = ax.annotate('', xy=(nextX,nextY), xycoords='data', xytext=(currentX,currentY),
                                             textcoords='data',size=20, va="center", ha="center",zorder=2, arrowprops=dict(
                                             arrowstyle="simple", connectionstyle="arc3",fc="cyan", ec="b", lw=2))

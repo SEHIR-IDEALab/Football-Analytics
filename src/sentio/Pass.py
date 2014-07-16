@@ -22,13 +22,14 @@ class Pass:
 
         effectiveness = self.effectiveness(p1, p2)
 
-        passDisplayer.insert("1.0", "goal_chance = %.2f\n" %self.goalChance(p2))
-        passDisplayer.insert("1.0", "effectiveness = %.2f\n" %effectiveness)
-        passDisplayer.insert("1.0", "pass_advantage = %.2f (%s)\n" %self.passAdvantage(p2))
-        passDisplayer.insert("1.0", "gain = %.2f\n" %self.gain(p1, p2))
-        passDisplayer.insert("1.0", "overall_risk(%s->%s) = %.2f\n" %(p1.getJerseyNumber(), p2.getJerseyNumber(),
-                                                                      self.overallRisk(p1, p2)))
-        passDisplayer.insert("1.0", "\n%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
+        passDisplayer.WriteText("\n%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
+        passDisplayer.WriteText("overall_risk = %.2f\n" %(self.overallRisk(p1, p2)))
+        passDisplayer.WriteText("gain = %.2f\n" %self.gain(p1, p2))
+        passDisplayer.WriteText("pass_advantage = %.2f (%s)\n" %self.passAdvantage(p2))
+        passDisplayer.WriteText("goal_chance = %.2f (%s)\n" %(self.goalChance(p2), p2.getJerseyNumber()))
+        passDisplayer.WriteText("effectiveness = %.2f\n" %effectiveness)
+
+        passDisplayer.SetInsertionPoint(0)
 
         return effectiveness
 
@@ -170,26 +171,22 @@ class Pass:
     def goalChance(self, p1):
         x1, y1 = p1.getPositionX(), p1.getPositionY()
 
-        leftGoalKeeperX = 0.0
-        rightGoalKeeperX = 105.0
-
-        if self.opponentGoalKeeperLocation_isLeft(p1): goalKeeperX = leftGoalKeeperX
-        else: goalKeeperX = rightGoalKeeperX
+        if self.opponentGoalKeeperLocation_isLeft(p1): goalKeeperX = FOOTBALL_FIELD_MIN_X
+        else: goalKeeperX = FOOTBALL_FIELD_MAX_X
 
         if y1 < GOALPOST_MIN_Y: goalKeeperY = GOALPOST_MIN_Y
         elif y1 > GOALPOST_MAX_Y: goalKeeperY = GOALPOST_MAX_Y
         else: goalKeeperY = y1
 
         d1 = math.sqrt(math.pow(goalKeeperX - x1, 2) + math.pow(goalKeeperY - y1, 2))
-        d2 = 8.5
+        d2 = GOALPOST_LENGTH
         angle = math.atan2(math.fabs(y1 - goalKeeperY), math.fabs(x1 - goalKeeperX)) * 180 / math.pi
         angle = math.fabs(90 - angle)
         q = self.overallRisk(p1, [goalKeeperX, goalKeeperY], goalKeeper=False)
         q = (1 if q == 0 else q)
-        goalCoefficient = 1000
 
         d1 = (1 if d1 == 0 else d1)
-        return (d2 / d1) * (min(angle, (180 - angle)) / 90.) * (1. / (1 + q)) * goalCoefficient
+        return (d2 / d1) * (min(angle, (180 - angle)) / 90.) * (1. / (1 + q)) * GOAL_COEFFICIENT
 
 
     def isSuccessfulPass(self, p1, p2):

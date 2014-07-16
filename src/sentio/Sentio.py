@@ -19,12 +19,12 @@ class Sentio(object):
     def getCoordinateData_byTime(self):
         a = dict()
         for line in self.coordinateData:
-            half, minute, second, mili_second, coord_data = int(line[3]), int(line[4]), int(line[5]), int(line[2][-3]), \
+            half, minute, second, millisecond, coord_data = int(line[3]), int(line[4]), int(line[5]), int(line[2][-3]),\
                                                         [playerInfo.split(",") for playerInfo in line[6].split("+")[:-1]]
             a.setdefault(half, {})
             a[half].setdefault(minute, {})
             a[half][minute].setdefault(second, {})
-            a[half][minute][second][mili_second] = coord_data
+            a[half][minute][second][millisecond] = coord_data
         return a
 
 

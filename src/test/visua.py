@@ -4,7 +4,6 @@ from Tkconstants import VERTICAL, Y, LEFT, END, NE
 import Tkinter as Tk
 import time as tm
 import math
-import tkFileDialog
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 from matplotlib.patches import BoxStyle
 import matplotlib.pyplot as plt
@@ -12,14 +11,13 @@ import numpy
 from src.sentio.CircleStyle import CircleStyle
 from src.sentio.DraggablePass import DraggablePass
 from src.sentio.DraggableText import DraggableText
-from src.sentio.Player_base import Player_base
-from src.sentio.SnapShot import SnapShot
+from src.sentio.SnapShot import *
 from src.sentio.Time import Time
 
 __author__ = 'emrullah'
 
 
-class Visualization(object):
+class Visua(object):
     def __init__(self, sentio, teamNames):
         self.sentio = sentio
         self.teamNames = teamNames
@@ -313,23 +311,12 @@ class Visualization(object):
         for index, team in enumerate(list_of_directions_of_objects):
             for js in team:
                 player = team[js]
-                currentX, nextX = player.getPositionX()
-                currentY, nextY = player.getPositionY()
+                current_x, next_x = player.getPositionX()
+                current_y, next_y = player.getPositionY()
                 speed = teams[index][js]
 
-                lengthX = (nextX - currentX) * speed
-                nextX = lengthX + currentX
-
-                lengthY = (nextY - currentY) * speed
-                nextY = lengthY + currentY
-
-                default_arrow_size = 2
-                if lengthX >= 0: nextX += default_arrow_size
-                else: nextX -= default_arrow_size
-                if lengthY >= 0: nextY += default_arrow_size
-                else: nextY -= default_arrow_size
-
-                passAnnotation = self.ax.annotate('', xy=(nextX,nextY), xycoords='data', xytext=(currentX,currentY),
+                next_x, next_y = adjust_arrow_size((current_x, current_y), (next_x, next_y), speed)
+                passAnnotation = self.ax.annotate('', xy=(next_x,next_y), xycoords='data', xytext=(current_x,current_y),
                                                   textcoords='data',size=20, va="center", ha="center", arrowprops=dict(
                         arrowstyle="simple", connectionstyle="arc3",
                         fc="cyan", ec="b", lw=2))
@@ -486,12 +473,9 @@ class Visualization(object):
 
 
     def time_adjust(self, minute, sec, milisec):
-        if len(milisec) == 1:
-            return (minute), (sec), (milisec)
-        elif milisec[0] =="9":
-            return (minute), str(int(sec)+1), str(0)
-        else:
-            return (minute), (sec), (str(round(int(milisec),-1))[0])
+        if len(milisec) == 1: return (minute), (sec), (milisec)
+        elif milisec[0] =="9": return (minute), str(int(sec)+1), str(0)
+        else: return (minute), (sec), (str(round(int(milisec),-1))[0])
 
 
     def scale_timeInterval(self, val, src, dst):

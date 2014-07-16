@@ -1,5 +1,6 @@
 import math
 import numpy
+import wx
 from src.sentio.Pass import Pass
 import matplotlib.pyplot as plt
 from src.sentio.Player_base import Player_base
@@ -8,11 +9,12 @@ __author__ = 'emrullah'
 
 
 class HeatMap:
-    def __init__(self, ax, coordOfObjects):
+    def __init__(self, ax, coordOfObjects, figure=None):
         self.allObjects = coordOfObjects
         self.ax = ax
         self.hm = None
         self.cbar = None
+        self.figure = figure
         self.clt_pass = Pass()
 
         self.totalEffectiveness_withComponents_byCoordinates = {}
@@ -51,18 +53,48 @@ class HeatMap:
         return mean, standard_deviation
 
 
+    def set_color_bar_listeners(self, (vmin_custom, vmin_text), (vmax_custom, vmax_text), refresh_button):
+        self.vmin_custom = vmin_custom
+        self.vmin_text = vmin_text
+        self.vmax_custom = vmax_custom
+        self.vmax_text = vmax_text
+        self.refresh_button = refresh_button
+
+        self.refresh_button.Bind(wx.EVT_BUTTON, self.adjust_color_bar)
+
+
+    def set_color_bar(self, color_bar, color_bar_canvas):
+        self.color_bar = color_bar
+        self.color_bar_canvas = color_bar_canvas
+
+
+    def adjust_color_bar(self, *args):
+        if self.vmin_custom.GetValue(): vmin = self.vmin_text.GetValue()
+        else: vmin = self.hm.norm.vmin
+        if self.vmax_custom.GetValue(): vmax = self.vmax_text.GetValue()
+        else: vmax = self.hm.norm.vmax
+
+        print vmin, vmax
+        self.color_bar.set_clim(vmin=vmin, vmax=vmax)
+        self.hm.set_clim(vmin=vmin, vmax=vmax)
+        self.color_bar.draw_all()
+
+        self.color_bar_canvas.draw()
+        self.figure.canvas.draw()
+
+
     def adjust_heatMap(self, data):
         mean, standard_deviation = HeatMap.compute_standard_deviation(data)
-        v_min = mean - standard_deviation
-        v_max = mean + standard_deviation
+        v_min = mean - 2*standard_deviation
+        v_max = mean + 2*standard_deviation
         if self.hm is not None:
             self.hm.set_data(data)
-            self.cbar.set_clim(vmin=v_min,vmax=v_max)
-            self.cbar.draw_all()
         else:
             self.hm = self.ax.imshow(data, interpolation='bilinear', extent=[0.0, 105.0, 65.0, 0.0],
                                  vmin=v_min, vmax=v_max, alpha=0.8)
-            self.cbar = plt.colorbar(self.hm)
+        self.color_bar.set_clim(vmin=v_min, vmax=v_max)
+        self.color_bar.draw_all()
+        self.color_bar_canvas.draw()
 
 
     def draw(self, data, canvas=None):
