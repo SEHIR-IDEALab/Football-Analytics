@@ -34,7 +34,7 @@ class Pass:
         return effectiveness
 
 
-    def isInRange(self, p1, p3, p2):
+    def isInRange2(self, p1, p3, p2):
         x1, y1 = p1
         x2, y2 = p2
         x3, y3 = p3
@@ -50,6 +50,61 @@ class Pass:
             return True
         return False
 
+    def getNewCoords(self,p1,p2):
+        x1,y1=p1  # source of pass
+        x2,y2=p2  # target of pass
+
+        radius = (math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2)))/2.0
+
+        if x2 !=x1 and y2 !=y1:
+            m1=(y2-y1)/float(x2-x1)
+            m2=-1/m1
+            x_up,y_up=(x2+(radius)*(1/(math.pow(m2,2)+1)),y2+(radius)*(m2/(math.pow(m2,2)+1)))
+            x_down,y_down=(x2-(radius)*(1/((math.pow(m2,2))+1)),y2-(radius)*(m2/((math.pow(m2,2))+1)))
+        if x2==x1:
+            x_up,y_up=x2+radius,y2
+            x_down,y_down=x2-radius,y2
+        if y2==y1:
+            x_up,y_up=x2,y2+radius
+            x_down,y_down=x2,y2-radius
+        return (x_up,y_up,x_down,y_down)
+
+
+    def getPoint(self,p1,p2,r=2):
+        x1,y1=p1  # source of pass
+        x2,y2=p2  # target of pass
+        radius = (math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2)))/2.0
+        distace=2.0*r
+        Ux,Uy=(x2-x1)/(2*radius),(y2-y1)/(2*radius)
+        x,y=x1-(distace*Ux),y1-(distace*Uy)
+        return (x,y)
+
+
+
+    def isInRange(self,p1, p3, p2):
+        x_Sou_orijine,y_Sou_orijine=p1
+        x_Tar_orijine,y_Tar_orijine=p2
+        x,y=p3
+
+        radiusT = (math.sqrt(math.pow(x_Tar_orijine - x_Sou_orijine, 2) + math.pow(y_Tar_orijine - y_Sou_orijine, 2)))/2.0
+        radiusS=2
+        xT1,yT1,xT2,yT2=self.getNewCoords(p1,p2) # coordinates on the target circle
+        xS1,yS1,xS2,yS2=self.getNewCoords(self.getPoint(p1,p2,r=2),p1) ## coordinates on the source circle
+
+
+        radiusTarToP3 = math.sqrt(math.pow(x_Tar_orijine - x, 2) + math.pow(y_Tar_orijine - y, 2))
+        radiusSouToP3 = math.sqrt(math.pow(x_Sou_orijine - x, 2) + math.pow(y_Sou_orijine - y, 2))
+
+        Area_Trapezoid=(2.0*(radiusS+radiusT))*radiusT
+
+        pointsList=[(x,y,xT1,yT1,xT2,yT2),(x,y,xT1,yT1,xS1,yS1),(x,y,xS1,yS1,xS2,yS2),(x,y,xS2,yS2,xT2,yT2)]
+        sum_Area=0
+        for point in pointsList:
+            x1,y1,x2,y2,x3,y3=point
+            sum_Area+=math.fabs((x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1-y2))/2.0)
+        if sum_Area==Area_Trapezoid or radiusSouToP3 <= radiusS or radiusTarToP3 <= radiusT:
+            return True
+        return False
 
     def risk(self, p1, p3, p2):
         risk = 0.0
