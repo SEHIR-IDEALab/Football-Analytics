@@ -1,5 +1,5 @@
-import tkSimpleDialog
 import numpy
+from src.sentio import Dialogs
 from src.sentio.HeatMap import HeatMap
 from src.sentio.Pass import Pass
 from matplotlib import pylab as p
@@ -30,6 +30,7 @@ class DraggablePass(Pass):
         self.cidpick = self.figure.canvas.mpl_connect("pick_event", self.on_pick_event)
         self.cidmotion = self.figure.canvas.mpl_connect("motion_notify_event", self.on_motion_event)
         self.cidpress = self.figure.canvas.mpl_connect('button_press_event', self.on_press_event)
+        self.cidrelease = self.figure.canvas.mpl_connect('button_release_event', self.on_release_event)
 
 
     def set_passDisplayer(self, passDisplayer):
@@ -63,29 +64,18 @@ class DraggablePass(Pass):
 
 
     def draw_withChosenComponent(self, *args):
-        chosenComponent = self.chosenComponent.GetValue()
-        print chosenComponent
-        if chosenComponent == "effectiveness":
-            q = self.effectiveness_withComp["effectiveness"]
-            return self.heatMap.draw(q, self.figure.canvas)
-        elif chosenComponent == "gain":
-            q = self.effectiveness_withComp["gain"]
-            return self.heatMap.draw(q, self.figure.canvas)
-        elif chosenComponent == "pass advantage":
-            q = self.effectiveness_withComp["passAdvantage"]
-            return self.heatMap.draw(q, self.figure.canvas)
-        elif chosenComponent == "goal chance":
-            q = self.effectiveness_withComp["goalChance"]
-            return self.heatMap.draw(q, self.figure.canvas)
-        elif chosenComponent == "overall risk":
-            q = self.effectiveness_withComp["overallRisk"]
-            return self.heatMap.draw(q, self.figure.canvas)
+        chosenComponent = self.chosenComponent.GetSelection()
+        if chosenComponent == 0: q = self.effectiveness_withComp["overallRisk"]
+        elif chosenComponent == 1: q = self.effectiveness_withComp["gain"]
+        elif chosenComponent == 2: q = self.effectiveness_withComp["passAdvantage"]
+        elif chosenComponent == 3: q = self.effectiveness_withComp["goalChance"]
+        else: q = self.effectiveness_withComp["effectiveness"]
+        return self.heatMap.draw(q)
 
 
     def draw_heatMapChosen(self):
         self.heatMap.remove()
-        chosenHeatMap = self.chosenHeatMap.GetValue()
-        print chosenHeatMap
+        chosenHeatMap = self.chosenHeatMap.GetSelection()
 
         p1 = self.passAnnotation.textcoords
         p2 = self.passAnnotation.xycoords
@@ -95,18 +85,24 @@ class DraggablePass(Pass):
         p1 = Player_base([object_type1, object_id1,js1, x1, y1])
         p2 = Player_base([object_type2, object_id2,js2, x2, y2])
 
-        if chosenHeatMap == "defence position taking":
-            chosenNumber = tkSimpleDialog.askinteger('##### Jersey Number #####',
-                                                    'Enter the jersey number of a player from the opponent team')
-            if chosenNumber:
+        if chosenHeatMap == 1:
+            chosenNumber = Dialogs.ask(message='Enter the jersey number of a player from the opponent team')
+            print chosenNumber
+
+            if chosenNumber is not None:
+                chosenNumber = int(chosenNumber)
+                app = wx.App()
                 self.effectiveness_withComp = self.heatMap.draw_defencePositionTaking((p1,p2), chosenNumber,
                                                            number_of_points=self.resolutionToNumberOfPoints())
-        elif chosenHeatMap == "position of target of pass":
+                app.MainLoop()
+        elif chosenHeatMap == 2:
             self.effectiveness_withComp = self.heatMap.draw_positionOfTargetOfPass((p1,p2),
                                                             number_of_points=self.resolutionToNumberOfPoints())
-        elif chosenHeatMap == "position of source of pass":
+        elif chosenHeatMap == 3:
             self.effectiveness_withComp = self.heatMap.draw_positionOfSourceOfPass((p1,p2),
                                                             number_of_points=self.resolutionToNumberOfPoints())
+        else:
+            self.heatMap.clear()
 
 
     def on_pick_event(self, event):
@@ -122,9 +118,6 @@ class DraggablePass(Pass):
                 self.displayDefinedPasses()
 
                 self.draw_heatMapChosen()
-                self.figure.canvas.draw()
-
-                self.dragged, self.dragged2, self.passAnnotation = None, None, None
             else:
                 self.dragged = event.artist
                 xBall, yBall = (event.mouseevent.xdata, event.mouseevent.ydata)
@@ -137,7 +130,7 @@ class DraggablePass(Pass):
 
 
     def on_motion_event(self, event):
-        if self.dragged != None:
+        if self.dragged is not None and self.dragged2 is None:
             xBall, yBall = (event.xdata, event.ydata)
             try:
                 self.passAnnotation.xy = (xBall, yBall)
@@ -165,6 +158,11 @@ class DraggablePass(Pass):
             q += ("effectiveness = %.2f\n" %effectiveness)
 
             self.effect_withCompLabel_forChosenPoint.set(q)
+
+
+    def on_release_event(self, event):
+        if self.dragged is not None and self.dragged2 is not None:
+            self.dragged, self.dragged2, self.passAnnotation = None, None, None
 
 
     def displayDefinedPasses(self):

@@ -1,8 +1,8 @@
 import math
 import numpy
 import wx
+from src.sentio.Parameters import *
 from src.sentio.Pass import Pass
-import matplotlib.pyplot as plt
 from src.sentio.Player_base import Player_base
 
 __author__ = 'emrullah'
@@ -26,6 +26,12 @@ class HeatMap:
 
     def remove(self):
         self.totalEffectiveness_withComponents_byCoordinates = {}
+
+
+    def clear(self):
+        if self.hm is not None:
+            self.hm.remove(); self.hm = None
+            self.figure.canvas.draw()
 
 
     @staticmethod
@@ -53,14 +59,56 @@ class HeatMap:
         return mean, standard_deviation
 
 
-    def set_color_bar_listeners(self, (vmin_custom, vmin_text), (vmax_custom, vmax_text), refresh_button):
+    def set_color_bar_listeners(self, (vmin_auto, vmin_custom, vmin_text), (vmax_auto, vmax_custom, vmax_text),
+                                refresh_button):
+        self.vmin_auto = vmin_auto
         self.vmin_custom = vmin_custom
         self.vmin_text = vmin_text
+        self.vmax_auto = vmax_auto
         self.vmax_custom = vmax_custom
         self.vmax_text = vmax_text
         self.refresh_button = refresh_button
 
         self.refresh_button.Bind(wx.EVT_BUTTON, self.adjust_color_bar)
+        self.vmax_auto.Bind(wx.EVT_RADIOBUTTON, self.on_vmax_auto)
+        self.vmin_auto.Bind(wx.EVT_RADIOBUTTON, self.on_vmin_auto)
+
+
+    def on_vmax_auto(self, event):
+        try:
+            self.vmax_text.Disable()
+            print self.v_max
+
+            self.color_bar.set_clim(vmax=self.v_max)
+            self.hm.set_clim(vmax=self.v_max)
+            self.color_bar.draw_all()
+
+            self.color_bar_canvas.draw()
+            self.figure.canvas.draw()
+        except AttributeError:
+            pass
+
+
+    def on_vmin_auto(self, event):
+        try:
+            self.vmin_text.Disable()
+            print self.v_min
+
+            self.color_bar.set_clim(vmin=self.v_min)
+            self.hm.set_clim(vmin=self.v_min)
+            self.color_bar.draw_all()
+
+            self.color_bar_canvas.draw()
+            self.figure.canvas.draw()
+        except AttributeError:
+            pass
+
+
+    def refresh_colorbar_setup(self):
+        self.vmin_auto.SetValue(True)
+        self.vmax_auto.SetValue(True)
+        self.vmin_text.Disable()
+        self.vmax_text.Disable()
 
 
     def set_color_bar(self, color_bar, color_bar_canvas):
@@ -74,7 +122,6 @@ class HeatMap:
         if self.vmax_custom.GetValue(): vmax = self.vmax_text.GetValue()
         else: vmax = self.hm.norm.vmax
 
-        print vmin, vmax
         self.color_bar.set_clim(vmin=vmin, vmax=vmax)
         self.hm.set_clim(vmin=vmin, vmax=vmax)
         self.color_bar.draw_all()
@@ -85,41 +132,45 @@ class HeatMap:
 
     def adjust_heatMap(self, data):
         mean, standard_deviation = HeatMap.compute_standard_deviation(data)
-        v_min = mean - 2*standard_deviation
-        v_max = mean + 2*standard_deviation
+        self.v_min = mean - 2*standard_deviation
+        self.v_max = mean + 2*standard_deviation
+        print self.v_min, self.v_max
         if self.hm is not None:
             self.hm.set_data(data)
+            self.hm.set_clim(vmin=self.v_min, vmax=self.v_max)
         else:
             self.hm = self.ax.imshow(data, interpolation='bilinear', extent=[0.0, 105.0, 65.0, 0.0],
-                                 vmin=v_min, vmax=v_max, alpha=0.8)
-        self.color_bar.set_clim(vmin=v_min, vmax=v_max)
+                                 vmin=self.v_min, vmax=self.v_max, alpha=0.8)
+
+        self.color_bar.set_clim(vmin=self.v_min, vmax=self.v_max)
         self.color_bar.draw_all()
         self.color_bar_canvas.draw()
+        self.figure.canvas.draw()
+
+        self.refresh_colorbar_setup()
 
 
-    def draw(self, data, canvas=None):
-        self.adjust_heatMap(data)
+    def draw(self, data):
         self.ax.set_xlim(-6.5, 111.5)
         self.ax.set_ylim(66.5, -1.5)
-        if canvas is not None: canvas.draw()
+        self.adjust_heatMap(data)
 
 
     def heatmap_base(self, definedPass, p_accordingTo, number_of_points):
         p1, p2 = definedPass
 
         x_points, y_points = number_of_points
-        x_coord = numpy.linspace(0, 105, x_points)
-        y_coord = numpy.linspace(0, 65, y_points)
+        x_coord = numpy.linspace(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X, x_points)
+        y_coord = numpy.linspace(FOOTBALL_FIELD_MIN_Y, FOOTBALL_FIELD_MAX_Y, y_points)
 
-        totalEffectiveness_withComponents = {"effectiveness": [], "gain": [], "passAdvantage": [], "goalChance": [],
-                                             "overallRisk": []}
+        totalEffectiveness_withComponents = {"overallRisk": [], "gain": [], "passAdvantage": [], "goalChance": [],
+                                             "effectiveness": []}
         pass_ = Pass(self.allObjects)
-        for player in pass_.allObjects:
-            if player.object_id == p_accordingTo.object_id:
-                p_accordingTo = player
+        if p_accordingTo.getTypeName() == "home": p_accordingTo = pass_.allObjects[0][p_accordingTo.getJerseyNumber()]
+        else: p_accordingTo = pass_.allObjects[1][p_accordingTo.getJerseyNumber()]
 
         for y in y_coord:
-            temp_effect, temp_gain, temp_passAdv, temp_goalChange, temp_overRisk = [], [], [], [], []
+            temp_overRisk, temp_gain, temp_passAdv, temp_goalChange, temp_effect = [], [], [], [], []
             for x in x_coord:
                 p_accordingTo.set_position((x, y))
                 if p_accordingTo.object_id == p1.object_id:
@@ -130,31 +181,29 @@ class HeatMap:
                     currentEffectiveness_withComponents = pass_.effectiveness_withComponents(p1, p2)
                 self.totalEffectiveness_withComponents_byCoordinates[(x, y)] = currentEffectiveness_withComponents
                 for index, component in enumerate(
-                        [temp_effect, temp_gain, temp_passAdv, temp_goalChange, temp_overRisk]):
+                        [temp_overRisk, temp_gain, temp_passAdv, temp_goalChange, temp_effect]):
                     component.append(currentEffectiveness_withComponents[index])
                     # print x,y
-            totalEffectiveness_withComponents["effectiveness"].append(temp_effect)
+            totalEffectiveness_withComponents["overallRisk"].append(temp_overRisk)
             totalEffectiveness_withComponents["gain"].append(temp_gain)
             totalEffectiveness_withComponents["passAdvantage"].append(temp_passAdv)
             totalEffectiveness_withComponents["goalChance"].append(temp_goalChange)
-            totalEffectiveness_withComponents["overallRisk"].append(temp_overRisk)
+            totalEffectiveness_withComponents["effectiveness"].append(temp_effect)
 
         data = totalEffectiveness_withComponents["effectiveness"]
         self.draw(data)
         return totalEffectiveness_withComponents
 
 
-    def draw_defencePositionTaking(self, definedPass, chosenObject, number_of_points=(105, 65)):
+    def draw_defencePositionTaking(self, definedPass, chosen_js, number_of_points=(105, 65)):
         p1, p2 = definedPass
-        p_chosen = None
 
         p1_team = p1.getTypeName()
-        for obj in Player_base.convertTextsToPlayers(self.allObjects):
-            temp_obj_js = obj.getJerseyNumber()
-            temp_obj_team = obj.getTypeName()
-            if (temp_obj_js == chosenObject) and (temp_obj_team not in [p1_team, "referee", "unknown"]):
-                p_chosen = obj
+        teams = Player_base.convertTextsToPlayers(self.allObjects)
+        if p1_team == "home": opponent_team = teams[1]
+        else: opponent_team = teams[0]
 
+        p_chosen = opponent_team[chosen_js]
         return self.heatmap_base(definedPass, p_chosen, number_of_points)
 
 

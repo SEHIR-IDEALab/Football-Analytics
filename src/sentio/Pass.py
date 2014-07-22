@@ -106,6 +106,7 @@ class Pass:
             return True
         return False
 
+
     def risk(self, p1, p3, p2):
         risk = 0.0
 
@@ -145,23 +146,25 @@ class Pass:
         try: js2 = p2.getJerseyNumber()
         except AttributeError: js2 = None
 
-        for p3 in self.allObjects:
-            team3 = p3.getTypeName()
+        if team1 == "home": opponent_players = self.allObjects[1]
+        else: opponent_players = self.allObjects[0]
 
-            if team3 not in [team1, "referee", "unknown"]:
-                if js2 != None:
-                    if js2 != p3.getJerseyNumber():
-                        if goalKeeper:
-                            overallRisk += self.risk(p1, p3, p2)
-                        else:
-                            if not p3.isGoalKeeper():
-                                overallRisk += self.risk(p1, p3, p2)
-                else:
+        if js2 != None:
+            for p3 in opponent_players.values():
+                if js2 != p3.getJerseyNumber():
                     if goalKeeper:
                         overallRisk += self.risk(p1, p3, p2)
                     else:
                         if not p3.isGoalKeeper():
                             overallRisk += self.risk(p1, p3, p2)
+        else:
+            for p3 in opponent_players.values():
+                if goalKeeper:
+                    overallRisk += self.risk(p1, p3, p2)
+                else:
+                    if not p3.isGoalKeeper():
+                        overallRisk += self.risk(p1, p3, p2)
+
         return overallRisk
 
 
@@ -173,15 +176,15 @@ class Pass:
 
         gain = 0
         left = False
-        for p3 in self.allObjects:
+        if team2 == "home": opponent_team = self.allObjects[1]
+        else: opponent_team = self.allObjects[0]
+        for p3 in opponent_team.values():
             x3, y3 = p3.get_position()
-            team3 = p3.getTypeName()
-            if team3 not in [team2, "referee", "unknown"]:
-                if x1 <= x3 <= x2 or x2 <= x3 <= x1:
-                    gain += 1
-                if p3.isGoalKeeper():
-                    if x3 <= x1 and x3 <= x2:
-                        left = True
+            if x1 <= x3 <= x2 or x2 <= x3 <= x1:
+                gain += 1
+            if p3.isGoalKeeper():
+                if x3 <= x1 and x3 <= x2:
+                    left = True
         if left:
             if x1 < x2: return -gain
             else: return gain
@@ -195,11 +198,11 @@ class Pass:
         js1 = p1.getJerseyNumber()
 
         passAdvantages = {}
-        for p2 in self.allObjects:
-            js2 = p2.getJerseyNumber()
-            team2 = p2.getTypeName()
-
-            if team2 == team1 and js2 != js1:
+        if team1 == "home": own_team = self.allObjects[0]
+        else: own_team = self.allObjects[1]
+        for js2 in own_team:
+            if js1 != js2:
+                p2 = own_team[js2]
                 pa = ((10 + self.gain(p1, p2)) / (10 + self.overallRisk(p1, p2)))
                 passAdvantages[pa] = js2
         max_pass = max(passAdvantages.keys())
@@ -208,17 +211,17 @@ class Pass:
 
     def opponentGoalKeeperLocation_isLeft(self, p1):
         team1 = p1.getTypeName()
+        goal_keeper_own, goal_keeper_opposite = None, None
 
-        goalKeeper_1, goalKeeper_2 = None, None
-        for p2 in self.allObjects:
-            x2, y2 = p2.getPositionX(), p2.getPositionY()
-            team2 = p2.getTypeName()
-
+        teams = self.allObjects[0].values() + self.allObjects[1].values()
+        for p2 in teams:
             if p2.isGoalKeeper():
-                if team2 == team1: goalKeeper_1 = x2
-                else: goalKeeper_2 = x2
+                team2 = p2.getTypeName()
+                x2 = p2.getPositionX()
+                if team1 == team2: goal_keeper_own = x2
+                else: goal_keeper_opposite = x2
 
-        if goalKeeper_2 < goalKeeper_1:
+        if goal_keeper_opposite < goal_keeper_own:
             return True
         return False
 
@@ -282,7 +285,7 @@ class Pass:
             else:
                 effectiveness = -effectiveness * 10
 
-        return (effectiveness, gain, passAdvantage, goalChance, overallRisk)
+        return (overallRisk, gain, passAdvantage, goalChance, effectiveness)
 
 
     def __str__(self):

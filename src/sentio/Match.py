@@ -195,9 +195,9 @@ class Match(object):
                     game_stop_time_intervals = self.append_newEventTimeIntervals(game_stop_time_intervals, time)
         except KeyError:
             back_time = time.back()
-            back_half, back_minute, back_second, back_milisec = back_time.half, back_time.minute, back_time.second, back_time.mili_second
+            back_half, back_minute, back_second, back_millisec = back_time.half, back_time.minute, back_time.second, back_time.millisecond
             try:
-                checkIfInside = game_stop_time_intervals[back_half][back_minute][back_second][back_milisec]
+                checkIfInside = game_stop_time_intervals[back_half][back_minute][back_second][back_millisec]
                 current_time = time.next()
                 game_stop_time_intervals = self.append_newEventTimeIntervals(game_stop_time_intervals, current_time)
             except KeyError:
@@ -206,7 +206,7 @@ class Match(object):
 
 
     def append_newEventTimeIntervals(self, myDict, new_time_info):
-        half, minute, second, mili_second = new_time_info.half, new_time_info.minute, new_time_info.second, new_time_info.mili_second
+        half, minute, second, mili_second = new_time_info.half, new_time_info.minute, new_time_info.second, new_time_info.millisecond
         myDict.setdefault(half, {})
         myDict[half].setdefault(minute, {})
         myDict[half][minute].setdefault(second, {})
@@ -221,7 +221,7 @@ class Match(object):
         time = Time()
         time.set_minMaxOfHalf(self.get_minMaxOfHalf(self.sentio.getCoordinateData()))
         q = self.sentio.getCoordinateData_byTime()
-        players_coord_info = q[time.half][time.minute][time.second][time.mili_second]
+        players_coord_info = q[time.half][time.minute][time.second][time.millisecond]
         self.makeClassification(time, players_coord_info, event_data, game_stop)
         while True:
             try:

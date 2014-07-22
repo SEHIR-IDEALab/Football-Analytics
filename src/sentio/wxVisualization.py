@@ -24,7 +24,9 @@ import wx.media
 import numpy
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
-from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigCanvas
+from matplotlib.backends.backend_wxagg import \
+    FigureCanvasWxAgg as FigCanvas, \
+    NavigationToolbar2WxAgg as NavigationToolbar
 
 
 __author__ = 'emrullah'
@@ -38,7 +40,9 @@ class PageOne(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
 
-        self.logger = wx.TextCtrl(self, size=(215,500), style=wx.TE_MULTILINE | wx.TE_READONLY)
+        self.logger = wx.TextCtrl(self, size=(150,530), style=wx.TE_MULTILINE | wx.TE_READONLY)
+        font1 = wx.Font(10, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Consolas')
+        self.logger.SetFont(font1)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(self.logger)
@@ -52,10 +56,10 @@ class PageTwo(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
 
-        heat_map_types = ['-----', 'defence position taking','position of target of pass', 'position of source of pass']
-        comp_of_effectiveness = ["effectiveness", "gain", "pass advantage", "goal chance", "overall risk"]
-        self.heat_map = wx.ComboBox(self, size=(95, -1), choices=heat_map_types, style=wx.CB_READONLY)
-        self.effectiveness = wx.ComboBox(self, size=(95, -1), choices=comp_of_effectiveness, style=wx.CB_READONLY)
+        heat_map_types = ['-----', 'defence position','position of target', 'position of source']
+        comp_of_effectiveness = ["overall risk", "gain", "pass advantage", "goal chance", "effectiveness"]
+        self.heat_map = wx.ComboBox(self, size=(80,-1), choices=heat_map_types, style=wx.CB_READONLY)
+        self.effectiveness = wx.ComboBox(self, size=(80,-1), choices=comp_of_effectiveness, style=wx.CB_READONLY)
         self.resolution = wx.Slider(self, -1, value=2, minValue=0.5, maxValue=5)
 
         self.heat_map_label = wx.StaticText(self, label="Heatmap Type")
@@ -73,15 +77,20 @@ class PageTwo(wx.Panel):
         self.vmax_custom_entry = wx.TextCtrl(self, size=(50,-1))
 
         ### colorbar canvas
-        fig = Figure((0.5,3))
-        ax1 = fig.add_axes([0, 0.03, 0.5,0.94])
+        fig = Figure((0.7,3))
+        fig.set_facecolor((0.875, 0.875, 0.875, 1.0))
+        ax1 = fig.add_axes([0, 0.03, 0.4,0.94])
         self.colorbar_canvas = FigCanvas(self, -1, fig)
 
         #cmap = matplotlib.cm.hot
         #norm = matplotlib.colors.Normalize(vmin=0, vmax=0)
         self.color_bar = matplotlib.colorbar.ColorbarBase(ax1, orientation='vertical')
+        #font1 = wx.Font(10, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Consolas')
+        #self.color_bar.SetFont(font1)
 
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_resolution, self.resolution)
+        self.Bind(wx.EVT_RADIOBUTTON, self.on_vmin_custom, self.vmin_custom_rbutton)
+        self.Bind(wx.EVT_RADIOBUTTON, self.on_vmax_custom, self.vmax_custom_rbutton)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
 
@@ -93,10 +102,10 @@ class PageTwo(wx.Panel):
                      (self.effectiveness, 1, wx.EXPAND),
                      (wx.StaticText(self), wx.EXPAND),
                      (self.resolution_label),
-                     (self.resolution, 1, wx.EXPAND|wx.ALIGN_BOTTOM)])
-        vbox.Add(fgs, wx.ALIGN_LEFT)
+                     (self.resolution, 1, wx.EXPAND)])
+        vbox.Add(fgs)
         vbox.AddSpacer(10)
-        vbox.Add(wx.StaticLine(self, style=wx.HORIZONTAL, size=(150,2)), 0, wx.ALIGN_LEFT)
+        vbox.Add(wx.StaticLine(self, style=wx.HORIZONTAL, size=(150,2)), 0, wx.ALIGN_CENTER)
         vbox.AddSpacer(10)
 
         self.hbox_colorbar = wx.BoxSizer(wx.HORIZONTAL)
@@ -111,7 +120,7 @@ class PageTwo(wx.Panel):
         colorbar_vmax_box_sizer.Add(hbox_max_custom)
         self.vbox_colorbar_options.Add(colorbar_vmax_box_sizer, 0, wx.ALIGN_TOP|wx.ALIGN_CENTER)
 
-        self.vbox_colorbar_options.Add(self.colorbar_refresh_button, 0, wx.ALIGN_CENTER)
+        self.vbox_colorbar_options.Add(self.colorbar_refresh_button, 1, wx.ALIGN_CENTER)
 
         colorbar_vmin_box = wx.StaticBox(self, wx.ID_ANY, "min")
         colorbar_vmin_box_sizer = wx.StaticBoxSizer(colorbar_vmin_box, wx.VERTICAL)
@@ -123,11 +132,19 @@ class PageTwo(wx.Panel):
         self.vbox_colorbar_options.Add(colorbar_vmin_box_sizer, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER)
 
         self.hbox_colorbar.Add(self.vbox_colorbar_options, 1, wx.EXPAND)
-        self.hbox_colorbar.Add(self.colorbar_canvas, 1, wx.EXPAND)
+        self.hbox_colorbar.Add(self.colorbar_canvas, 0, wx.EXPAND)
 
         vbox.Add(self.hbox_colorbar, 1, wx.EXPAND)
         self.SetSizer(vbox)
         #vbox.Fit(self)
+
+
+    def on_vmin_custom(self, event):
+        self.vmin_custom_entry.Enable()
+
+
+    def on_vmax_custom(self, event):
+        self.vmax_custom_entry.Enable()
 
 
     def on_resolution(self, event):
@@ -160,8 +177,8 @@ class wxVisualization(wx.Frame):
         self.definePasses = None
         self.definedPasses_forSnapShot = list()
 
-        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = self.getObjectsCoords_forGivenTime(Time(1,0,0,0))
-        self.setJerseyNumbers_forGivenObjects(homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+        teams = self.getObjectsCoords_forGivenTime(Time(1,0,0,0))
+        self.set_positions_of_objects(teams)
 
         self.trailAnnotation, self.eventAnnotation, self.passAnnotation, self.passEffectivenessAnnotation = \
             None, None, None, None
@@ -203,11 +220,12 @@ class wxVisualization(wx.Frame):
 
         ### main canvas
         self.dpi = 100
-        self.fig = Figure((10,7), dpi=self.dpi)
+        self.fig = Figure((7,5), dpi=self.dpi)
         self.canvas = FigCanvas(self.panel, -1, self.fig)
-        #self.toolbar = NavigationToolbar(self.canvas)
+        self.toolbar = NavigationToolbar(self.canvas)
 
-        self.ax = self.fig.add_axes([0.015, 0.03, 0.990, 0.925])
+        self.ax = self.fig.add_axes([0.015, 0.03, 0.980, 0.925])
+
         im = plt.imread('source/background.png')
         self.ax.imshow(im, zorder=0, extent=[-6.5, 111.5, -1.5, 66.5])
         self.ax.grid()
@@ -224,11 +242,11 @@ class wxVisualization(wx.Frame):
         self.current_time_display = wx.StaticText(self.panel, -1, "Time = 00.00.00")
 
         radioList = ['New Pass', 'Drag Object']
-        self.rb = wx.RadioBox(self.panel,label="Mouse Action",choices=radioList, majorDimension=2,
+        self.rb = wx.RadioBox(self.panel,label="Mouse Action",choices=radioList, majorDimension=1,
                               style=wx.RA_SPECIFY_COLS)
 
         self.play_speed_slider = wx.Slider(self.panel, -1, value=2, minValue=1, maxValue=5)
-        self.slider = wx.Slider(self.panel, -1, value=0, minValue=0, maxValue=90)
+        self.slider = wx.Slider(self.panel, -1, value=0, minValue=0, maxValue=(5*60*90))
 
         self.upbmp = wx.Bitmap(os.path.join(bitmapDir, "play.png"), wx.BITMAP_TYPE_PNG)
         self.disbmp = wx.Bitmap(os.path.join(bitmapDir, "pause.png"), wx.BITMAP_TYPE_PNG)
@@ -237,7 +255,8 @@ class wxVisualization(wx.Frame):
         self.Bind(wx.EVT_RADIOBOX, self.on_mouse_action, self.rb)
         self.Bind(wx.EVT_BUTTON, self.on_play_button, self.play_button)
         self.Bind(wx.EVT_UPDATE_UI, self.on_update_play_button, self.play_button)
-        self.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_slider, self.slider)
+        self.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_slider_release, self.slider)
+        self.Bind(wx.EVT_COMMAND_SCROLL_THUMBTRACK, self.on_slider_shift, self.slider)
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_play_speed_slider, self.play_speed_slider)
 
 
@@ -255,8 +274,8 @@ class wxVisualization(wx.Frame):
         self.heatmap_setup_page = PageTwo(nb)
 
         # add the pages to the notebook with the label to show on the tab
-        nb.AddPage(self.pass_info_page, "Pass / Info")
-        nb.AddPage(self.heatmap_setup_page, "Heatmap Setup")
+        nb.AddPage(self.pass_info_page, "Info")
+        nb.AddPage(self.heatmap_setup_page, "Setup")
 
         # finally, put the notebook in a sizer for the panel to manage
         # the layout
@@ -265,26 +284,30 @@ class wxVisualization(wx.Frame):
         p.SetSizer(sizer)
 
         vbox_rb_notebook = wx.BoxSizer(wx.VERTICAL)
-        vbox_rb_notebook.Add(self.rb)
+        vbox_rb_notebook.Add(self.rb,0, wx.ALIGN_CENTER|wx.EXPAND)
         vbox_rb_notebook.Add(p,1, wx.EXPAND)
 
         self.play_speed_box = wx.StaticBox(self.panel, wx.ID_ANY, "Speed = 1x")
         play_speed_box_sizer = wx.StaticBoxSizer(self.play_speed_box, wx.VERTICAL)
-        play_speed_box_sizer.Add(self.play_speed_slider, wx.ALIGN_CENTER)
-        vbox_rb_notebook.Add(play_speed_box_sizer)
+        play_speed_box_sizer.Add(self.play_speed_slider)
+        vbox_rb_notebook.Add(play_speed_box_sizer, 0, wx.ALIGN_BOTTOM)
 
-        self.hbox.Add(vbox_rb_notebook)
-        self.hbox.Add(self.canvas, 1, wx.EXPAND)
+        self.hbox.Add(vbox_rb_notebook, 0, wx.EXPAND)
+
+        self.vbox_canvas = wx.BoxSizer(wx.VERTICAL)
+        self.vbox_canvas.Add(self.canvas, 1, wx.EXPAND)
+        self.vbox_canvas.Add(self.toolbar, 0, wx.EXPAND)
+
+        self.hbox.Add(self.vbox_canvas, 1, wx.EXPAND)
 
         self.vbox = wx.BoxSizer(wx.VERTICAL)
-        #self.vbox.Add(self.toolbar, 0, wx.EXPAND)
         self.vbox.Add(self.hbox, 1, wx.EXPAND)
 
         self.hbox_play = wx.BoxSizer(wx.HORIZONTAL)
         self.hbox_play.Add(self.play_button, 0, border=3, flag=wx.ALIGN_CENTER)
         self.hbox_play.Add(self.slider, 1, border=3, flag=wx.ALIGN_CENTER | wx.EXPAND)
         self.hbox_play.Add(self.current_time_display, 0, border=3, flag=flags)
-        self.vbox.Add(self.hbox_play, 0,  wx.EXPAND)
+        self.vbox.Add(self.hbox_play, 1,  wx.EXPAND)
 
         self.panel.SetSizer(self.vbox)
 
@@ -312,11 +335,10 @@ class wxVisualization(wx.Frame):
             self.pass_info_page.logger.Remove()
 
             snapShot = SnapShot()
-            (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects), list_of_directions = \
-                snapShot.loadSnapShot(filename, self.ax)
+            teams, list_of_directions = snapShot.loadSnapShot(filename, self.ax)
 
             self.directions_of_objects.extend(list_of_directions)
-            self.setJerseyNumbers_forGivenObjects(homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+            self.set_positions_of_objects(teams)
 
             all_defined_passes = snapShot.displayAllPasses(filename, self.ax, self.texts, self.pass_info_page.logger)
             self.definedPasses_forSnapShot.extend(all_defined_passes)
@@ -376,8 +398,23 @@ class wxVisualization(wx.Frame):
 
 
     ##### handling slider events #####
-    def on_slider(self, event):
-        pass
+    def on_slider_release(self, event):
+        milliseconds = self.slider.GetValue()
+        time = Time(self.current_time.half, self.current_time.minute,
+                    self.current_time.second, self.current_time.millisecond)
+        time.set_minMaxOfHalf(self.sentio.minMaxOfHalf)
+        time_adjust = time.milliseconds_to_time_self(milliseconds)
+        print time_adjust
+        self.visualizeCurrentPosition(time_adjust, skip_times=0)
+
+
+    def on_slider_shift(self, event):
+        milliseconds = self.slider.GetValue()
+        time = Time.milliseconds_to_time(milliseconds)
+
+        formatted_time = Time.time_display(time)
+        self.current_time_display.SetLabel(formatted_time)
+        self.current_time = time
 
 
     def on_play_speed_slider(self, event):
@@ -393,15 +430,17 @@ class wxVisualization(wx.Frame):
         if q == 0:
             if self.directions_of_objects:
                 self.remove_directionSpeedOfObjects()
-            for player_js in self.texts:
-                player_js.disconnect()
+            for team in self.texts:
+                for player_js in team.values():
+                    player_js.disconnect()
             self.definePasses.connect()
         elif q == 1:
             if self.directions_of_objects:
                 self.remove_directionSpeedOfObjects()
             self.definePasses.disconnect()
-            for player_js in self.texts:
-                player_js.connect()
+            for team in self.texts:
+                for player_js in team.values():
+                    player_js.connect()
 
 
     ##### handling button events #####
@@ -410,19 +449,26 @@ class wxVisualization(wx.Frame):
         self.play_button.SetBitmapLabel(bitmap)
 
 
-    def on_play_button(self, event):
-        self.paused = not self.paused
-
+    def refresh_ui(self):
         self.remove_allDefinedPassesForSnapShot()
-        if self.directions_of_objects: self.remove_directionSpeedOfObjects()
-        #self.pass_info_page.logger.Clear()
+        self.remove_directionSpeedOfObjects()
+
+        self.pass_info_page.logger.Clear()
+        self.definePasses.heatMap.clear()
+
+
+    def on_play_button(self, event):
+        self.refresh_ui()
+
+        self.paused = not self.paused
 
         current_time = self.current_time
         current_time.set_minMaxOfHalf(self.sentio.minMaxOfHalf)
 
+        self.remove_defined_passes()
+
         while not self.paused:
             next_time = current_time
-
             chosenSkip = 0
             if self.play_speed == 1: tm.sleep(0.1)
             elif self.play_speed == 2: chosenSkip = 0
@@ -437,17 +483,17 @@ class wxVisualization(wx.Frame):
 
             self.visualizeCurrentPosition(next_time, chosenSkip)
             self.current_time = next_time
+
             self.current_time_display.SetLabel(Time.time_display(self.current_time))
+            self.slider.SetValue(Time.time_to_milliseconds(self.current_time))
 
             wx.Yield()
 
 
     def visualizeCurrentPosition(self, time, skip_times):
-        self.remove_previousJerseyNumbers()
-
-        homeTeamPlayers, awayTeamPlayers, referees, unknownObjects = self.getObjectsCoords_forGivenTime(time)
-        self.setJerseyNumbers_forGivenObjects(homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
-        self.annotate_currentEvent(time, homeTeamPlayers, awayTeamPlayers, skip_times)
+        teams = self.getObjectsCoords_forGivenTime(time)
+        self.reposition_objects(teams)
+        self.annotate_currentEvent(time, teams, skip_times)
 
         self.canvas.draw()
 
@@ -456,29 +502,18 @@ class wxVisualization(wx.Frame):
         homeTeamName, awayTeamName = self.team_names
         teamName, js, eventID = event_data[0]
         player = None
-        xBall, yBall = None, None
         try:
-            if teamName == homeTeamName:
-                player_base = homeTeamPlayers[js]
-                xBall, yBall = player_base.get_position()
-            elif teamName == awayTeamName:
-                player_base = awayTeamPlayers[js]
-                xBall, yBall = player_base.get_position()
-            player = self.detectParticularPlayer(js, xBall, yBall)
+            if teamName == homeTeamName: player = self.texts[0][js]
+            elif teamName == awayTeamName: player = self.texts[1][js]
         except KeyError:
             print "missing data"
-        return (player, eventID)
+
+        if player != None: return (player.point, eventID)
+        else: return (player, eventID)
 
 
-    def detectParticularPlayer(self, js, x, y):
-        for plyr in self.texts:
-            x1, y1 = plyr.point.get_position()
-            js1 = plyr.point.get_text()
-            if x1==x and y1==y and int(js1)==js:
-                return plyr.point
-
-
-    def annotate_currentEvent(self, time, homeTeamPlayers, awayTeamPlayers, skip_times): # not completed
+    def annotate_currentEvent(self, time, teams, skip_times): # not completed
+        homeTeamPlayers, awayTeamPlayers, referees, unknown_objects = teams
         eventData_current = self.sentio.get_currentEventData(time)
         player_current, eventID_current = self.annotate_currentEvent_base(eventData_current,
                                                                           homeTeamPlayers, awayTeamPlayers)
@@ -497,6 +532,9 @@ class wxVisualization(wx.Frame):
             eventData_previous = self.sentio.get_previousEventData(time, skip_times)
             player_previous, eventID_previous = self.annotate_currentEvent_base(eventData_previous,
                                                                                 homeTeamPlayers, awayTeamPlayers)
+            if player_current == None or player_previous == None:
+                return
+
             if player_previous != player_current:
                 self.remove_trailAnnotation()
                 self.passAnnotation = self.ax.annotate('', xy=(.5, .5), xycoords=(player_current), xytext=(.5, .5),
@@ -611,16 +649,57 @@ class wxVisualization(wx.Frame):
             elif q in [1,4]: awayTeamPlayers[player.getJerseyNumber()] = player
             elif q in [2,6,7,8,9]: referees[player.getJerseyNumber()] = player
             else: unknownObjects[player.getJerseyNumber()] = player
-        return (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+        teams = (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+        return teams
 
 
-    def setJerseyNumbers_forGivenObjects(self, homeTeamPlayers, awayTeamPlayers, referees, unknownObjects):
-        self.texts = list()
+    def reposition_objects(self, teams):
+        colors = ["blue", "red", "yellow", "black"]
+        pre_teams = self.texts
+        current_teams = teams
+        for index, current_team in enumerate(current_teams):
+            pre_team = pre_teams[index]
+            current_team_set, pre_team_set = set(current_team), set(pre_team)
+            if current_team_set != pre_team_set:
+                if len(current_team_set) == len(pre_team_set):
+                    current_only_js = current_team_set.difference(pre_team_set)
+                    pre_only_js = pre_team_set.difference(current_team_set)
+                    for js_index, current_js in enumerate(current_only_js):
+                        pre_team[current_js] = pre_team.pop(tuple(pre_only_js)[js_index])
+                        pre_team[current_js].point.set_text(current_js) # set jersey number
+                elif len(current_team_set) < len(pre_team_set):
+                    pre_only_js = pre_team_set.difference(current_team_set)
+                    print pre_only_js
+                    for pre_js in pre_only_js:
+                        pre_team[pre_js].point.remove()
+                        del pre_team[pre_js]
+                else:
+                    current_only_js = current_team_set.difference(pre_team_set)
+                    for current_js in current_only_js:
+                        player = current_team[current_js]
+                        temp_player = self.ax.text(player.getPositionX(),player.getPositionY(),player.getJerseyNumber(),
+                            zorder=1, color="w", fontsize=(9 if len(str(player.getJerseyNumber()))==1 else 7),
+                            picker=True, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index], ec=colors[index], alpha=0.5))
+                        temp_player.object_type = player.getObjectType()
+                        temp_player.object_id = player.getObjectID()
+                        temp_player.jersey_number = player.getJerseyNumber()
+                        dr = DraggableText(temp_player)
+                        pre_team[current_js] = dr
+
+            current_team = current_teams[index]
+            for js in current_team:
+                player = pre_team[js]
+                player.point.set_position(current_team[js].get_position())
+
+
+    def set_positions_of_objects(self, teams):
+        self.texts = ( {}, {}, {}, {} )
         BoxStyle._style_list["circle"] = CircleStyle
         colors = ["blue", "red", "yellow", "black"]
-        for index, players in enumerate([homeTeamPlayers, awayTeamPlayers, referees, unknownObjects]):
-            for js in players:
-                player = players[js]
+        for index, team in enumerate(teams):
+            current_team = self.texts[index]
+            for js in team:
+                player = team[js]
                 player_js = self.ax.text(player.getPositionX(),player.getPositionY(),player.getJerseyNumber(), zorder=1,
                                 color="w", fontsize=(9 if len(str(player.getJerseyNumber()))==1 else 7), picker=True,
                                 bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index], ec=colors[index], alpha=0.5))
@@ -628,7 +707,7 @@ class wxVisualization(wx.Frame):
                 player_js.object_id = player.getObjectID()
                 player_js.jersey_number = player.getJerseyNumber()
                 dr = DraggableText(player_js)
-                self.texts.append(dr)
+                current_team[player.getJerseyNumber()] = dr
         self.definePasses = DraggablePass(self.ax, self.texts, self.fig)
         #self.definePasses.set_effectivenessWithComponentsLabel_forChosenPoint(self.effec_withCompVariable_forChosenPoint)
         self.definePasses.set_passDisplayer(self.pass_info_page.logger)
@@ -636,15 +715,19 @@ class wxVisualization(wx.Frame):
                                         self.heatmap_setup_page.effectiveness)
         self.definePasses.heatMap.set_color_bar(self.heatmap_setup_page.color_bar,
                                                 self.heatmap_setup_page.colorbar_canvas)
-        self.definePasses.heatMap.set_color_bar_listeners((self.heatmap_setup_page.vmin_custom_rbutton,
-                                                          self.heatmap_setup_page.vmin_custom_entry),
-                                                          (self.heatmap_setup_page.vmax_custom_rbutton,
-                                                          self.heatmap_setup_page.vmax_custom_entry),
+        self.definePasses.heatMap.set_color_bar_listeners((self.heatmap_setup_page.vmin_auto_rbutton,
+                                                           self.heatmap_setup_page.vmin_custom_rbutton,
+                                                           self.heatmap_setup_page.vmin_custom_entry),
+                                                          (self.heatmap_setup_page.vmax_auto_rbutton,
+                                                           self.heatmap_setup_page.vmax_custom_rbutton,
+                                                           self.heatmap_setup_page.vmax_custom_entry),
                                                           self.heatmap_setup_page.colorbar_refresh_button)
-        for i in self.texts:
-            i.set_passDisplayer(self.pass_info_page.logger)
-            i.set_definedPasses(self.definePasses.definedPasses)
-            i.set_coordinatesOfObjects(self.texts)
+        for team in self.texts:
+            for js in team:
+                draggableText = team[js]
+                draggableText.set_passDisplayer(self.pass_info_page.logger)
+                draggableText.set_definedPasses(self.definePasses.definedPasses)
+                draggableText.set_coordinatesOfObjects(self.texts)
 
 
     def remove_previousJerseyNumbers(self):
@@ -652,9 +735,11 @@ class wxVisualization(wx.Frame):
             player_js.point.remove()
         del self.texts[:]
 
-        if self.definePasses != None:
-            for i in self.definePasses.definedPasses:
-                i.remove(); del i
+
+    def remove_defined_passes(self):
+        if self.definePasses.definedPasses:
+            for i in self.definePasses.definedPasses: i.remove()
+            del self.definePasses.definedPasses[:]
 
 
     def remove_directionSpeedOfObjects(self):

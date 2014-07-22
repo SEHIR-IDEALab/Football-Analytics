@@ -20,13 +20,16 @@ class Player_base:
     @staticmethod
     def convertTextsToPlayers(coordinateDataOfObjects):
         if coordinateDataOfObjects is None: return None
-        q = []
-        for p in coordinateDataOfObjects:
-            p = p.point
-            object_type, object_id, js, (x, y) = p.object_type, p.object_id, p.get_text(), p.get_position()
-            player_base = Player_base([object_type, object_id, js, x, y])
-            q.append(player_base)
-        return q
+        teams = ( {}, {}, {}, {} )
+        for index, team in enumerate(coordinateDataOfObjects):
+            temp_team = teams[index]
+            for js in team:
+                p = team[js]
+                p = p.point
+                object_type, object_id, js, (x, y) = p.object_type, p.object_id, p.get_text(), p.get_position()
+                player = Player_base([object_type, object_id, js, x, y])
+                temp_team[player.getJerseyNumber()] = player
+        return teams
 
 
     def getObjectType(self):

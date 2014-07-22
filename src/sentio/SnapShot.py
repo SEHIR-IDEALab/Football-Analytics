@@ -99,7 +99,8 @@ class SnapShot:
                 elif q in [2,6,7,8,9]: referees[player.getJerseyNumber()] = player
                 else: unknownObjects[player.getJerseyNumber()] = player
 
-        return (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects), list_of_directions
+        teams = (homeTeamPlayers, awayTeamPlayers, referees, unknownObjects)
+        return teams, list_of_directions
 
 
     def displayAllPasses(self, filename, ax, list_of_objects, pass_display):
