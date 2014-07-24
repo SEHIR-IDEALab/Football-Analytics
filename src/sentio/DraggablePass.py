@@ -76,6 +76,7 @@ class DraggablePass(Pass):
     def draw_heatMapChosen(self):
         self.heatMap.remove()
         chosenHeatMap = self.chosenHeatMap.GetSelection()
+        self.chosenComponent.SetSelection(4)
 
         p1 = self.passAnnotation.textcoords
         p2 = self.passAnnotation.xycoords
@@ -108,16 +109,19 @@ class DraggablePass(Pass):
     def on_pick_event(self, event):
         if isinstance(event.artist, Text):
             if self.dragged != None:
+
                 self.dragged2 = event.artist
+                if self.dragged != self.dragged2:
+                    self.passAnnotation.xy = (.5,.5)
+                    self.passAnnotation.xycoords = self.dragged2
+                    self.passAnnotation.arrowprops["patchB"] = self.dragged2.get_bbox_patch()
 
-                self.passAnnotation.xy = (.5,.5)
-                self.passAnnotation.xycoords = self.dragged2
-                self.passAnnotation.arrowprops["patchB"] = self.dragged2.get_bbox_patch()
+                    self.definedPasses.append(self.passAnnotation)
+                    self.displayDefinedPasses()
 
-                self.definedPasses.append(self.passAnnotation)
-                self.displayDefinedPasses()
-
-                self.draw_heatMapChosen()
+                    self.draw_heatMapChosen()
+                else:
+                    self.dragged2 = None
             else:
                 self.dragged = event.artist
                 xBall, yBall = (event.mouseevent.xdata, event.mouseevent.ydata)

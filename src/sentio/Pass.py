@@ -25,8 +25,8 @@ class Pass:
         passDisplayer.WriteText("\n%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
         passDisplayer.WriteText("overall_risk = %.2f\n" %(self.overallRisk(p1, p2)))
         passDisplayer.WriteText("gain = %.2f\n" %self.gain(p1, p2))
-        passDisplayer.WriteText("pass_advantage = %.2f (%s)\n" %self.passAdvantage(p2))
-        passDisplayer.WriteText("goal_chance = %.2f (%s)\n" %(self.goalChance(p2), p2.getJerseyNumber()))
+        passDisplayer.WriteText("pass_advantage = %.2f(%s)\n" %self.passAdvantage(p2))
+        passDisplayer.WriteText("goal_chance = %.2f(%s)\n" %(self.goalChance(p2), p2.getJerseyNumber()))
         passDisplayer.WriteText("effectiveness = %.2f\n" %effectiveness)
 
         passDisplayer.SetInsertionPoint(0)

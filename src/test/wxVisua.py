@@ -317,7 +317,7 @@ class wxVisualization(wx.Frame):
             self,
             message="Save plot as...",
             defaultDir=os.getcwd(),
-            defaultFile="plot.png",
+            defaultFile="plot",
             wildcard=file_choices,
             style=wx.SAVE)
 

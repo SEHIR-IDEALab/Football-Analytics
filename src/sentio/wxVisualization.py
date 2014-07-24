@@ -41,7 +41,7 @@ class PageOne(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         self.logger = wx.TextCtrl(self, size=(150,530), style=wx.TE_MULTILINE | wx.TE_READONLY)
-        font1 = wx.Font(10, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Consolas')
+        font1 = wx.Font(9, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'New Times')
         self.logger.SetFont(font1)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
@@ -85,8 +85,7 @@ class PageTwo(wx.Panel):
         #cmap = matplotlib.cm.hot
         #norm = matplotlib.colors.Normalize(vmin=0, vmax=0)
         self.color_bar = matplotlib.colorbar.ColorbarBase(ax1, orientation='vertical')
-        #font1 = wx.Font(10, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'Consolas')
-        #self.color_bar.SetFont(font1)
+        self.color_bar.ax.tick_params(labelsize=8)
 
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_resolution, self.resolution)
         self.Bind(wx.EVT_RADIOBUTTON, self.on_vmin_custom, self.vmin_custom_rbutton)
@@ -199,7 +198,7 @@ class wxVisualization(wx.Frame):
         m_exit = menu_file.Append(-1, "&Exit\tCtrl-X", "Exit")
 
         menu_help = wx.Menu()
-        m_about = menu_help.Append(-1, "&About\tF1", "About the demo")
+        m_about = menu_help.Append(-1, "&About\tF1", "About the tool")
 
         self.Bind(wx.EVT_MENU, self.on_save_plot, m_save)
         self.Bind(wx.EVT_MENU, self.on_open_plot, m_open)
@@ -213,6 +212,13 @@ class wxVisualization(wx.Frame):
 
     def create_status_bar(self):
         self.statusbar = self.CreateStatusBar()
+
+
+    def flash_status_message(self, msg, flash_len_ms=1500):
+        self.statusbar.SetStatusText(msg)
+        self.timeroff = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.on_flash_status_off, self.timeroff)
+        self.timeroff.Start(flash_len_ms, oneShot=True)
 
 
     def create_main_panel(self):
@@ -290,7 +296,7 @@ class wxVisualization(wx.Frame):
         self.play_speed_box = wx.StaticBox(self.panel, wx.ID_ANY, "Speed = 1x")
         play_speed_box_sizer = wx.StaticBoxSizer(self.play_speed_box, wx.VERTICAL)
         play_speed_box_sizer.Add(self.play_speed_slider)
-        vbox_rb_notebook.Add(play_speed_box_sizer, 0, wx.ALIGN_BOTTOM)
+        vbox_rb_notebook.Add(play_speed_box_sizer, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER)
 
         self.hbox.Add(vbox_rb_notebook, 0, wx.EXPAND)
 
@@ -312,83 +318,76 @@ class wxVisualization(wx.Frame):
         self.panel.SetSizer(self.vbox)
 
 
-    def saveSnapShot(self):
-        current_time = self.current_time
-        defined_passes = self.definePasses.definedPasses
-        directions = self.getDirectionOfObjects_forGivenTime(current_time)
-        speeds = self.getSpeedOfObjects_forGivenTime(current_time)
-
-        snapShot = SnapShot()
-        snapShot.saveSnapShot(self.team_names, self.texts, defined_passes, directions, speeds)
-
-
-    def loadSnapShot(self):
-        filename = tkFileDialog.askopenfilename(initialdir="../../SampleScenarios")
-        if filename:
-            self.remove_directionSpeedOfObjects()
-            self.remove_allDefinedPassesForSnapShot()
-            self.remove_eventAnnotation()
-            self.remove_passAnnotation()
-            self.remove_trailAnnotation()
-            self.remove_passEffectivenessAnnotation()
-            self.remove_previousJerseyNumbers()
-            self.pass_info_page.logger.Remove()
-
-            snapShot = SnapShot()
-            teams, list_of_directions = snapShot.loadSnapShot(filename, self.ax)
-
-            self.directions_of_objects.extend(list_of_directions)
-            self.set_positions_of_objects(teams)
-
-            all_defined_passes = snapShot.displayAllPasses(filename, self.ax, self.texts, self.pass_info_page.logger)
-            self.definedPasses_forSnapShot.extend(all_defined_passes)
-
-            self.current_time_display.SetLabel("Time = %s.%s.%s" %("--", "--", "--"))
-
-            self.canvas.draw()
-
-
     def draw_figure(self):
         self.canvas.draw()
 
 
     ##### handling menu events #####
     def on_save_plot(self, event):
-        file_choices = "PNG (*.png)|*.png"
+        file_choices = "PNG (*.png)|*.png|CSV (*.csv)|*.csv"
 
         dlg = wx.FileDialog(
             self,
             message="Save plot as...",
-            defaultDir=os.getcwd(),
-            defaultFile="plot.png",
+            defaultDir="../../SampleScenarios",
+            defaultFile="plot",
             wildcard=file_choices,
             style=wx.SAVE)
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            self.canvas.print_figure(path, dpi=self.dpi)
+            if ".png" in dlg.GetFilename():
+                self.canvas.print_figure(path, dpi=self.dpi)
+            else:
+                current_time = self.current_time
+                defined_passes = self.definePasses.definedPasses
+                directions = self.getDirectionOfObjects_forGivenTime(current_time)
+                speeds = self.getSpeedOfObjects_forGivenTime(current_time)
+
+                snapShot = SnapShot(path)
+                snapShot.saveSnapShot(self.team_names, self.texts, defined_passes, directions, speeds)
             self.flash_status_message("Saved to %s" % path)
 
 
     def on_open_plot(self, event):
-        """ Open a file"""
-        dlg = wx.FileDialog(self, "Choose a file", self.dirname, "", "*.*", wx.OPEN)
+        dlg = wx.FileDialog(self, "Choose a file", self.dirname, "", "*.csv", wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
-            self.filename = dlg.GetFilename()
-            self.dirname = dlg.GetDirectory()
-            f = open(os.path.join(self.dirname, self.filename), 'r')
-            #self.control.SetValue(f.read())
-            f.close()
+            path = dlg.GetPath()
+
+            self.remove_directionSpeedOfObjects()
+            self.remove_allDefinedPassesForSnapShot()
+            self.remove_eventAnnotation()
+            self.remove_passAnnotation()
+            self.remove_trailAnnotation()
+            self.remove_passEffectivenessAnnotation()
+            self.pass_info_page.logger.Clear()
+
+            snapShot = SnapShot(path)
+            teams, list_of_directions = snapShot.loadSnapShot(self.ax)
+
+            self.directions_of_objects.extend(list_of_directions)
+            self.reposition_objects(teams)
+
+            all_defined_passes = snapShot.displayAllPasses(path, self.ax, self.texts, self.pass_info_page.logger)
+            self.definedPasses_forSnapShot.extend(all_defined_passes)
+
+            self.current_time_display.SetLabel("Time = %s.%s.%s" %("--", "--", "--"))
+            self.canvas.draw()
+            self.flash_status_message("Opened file %s" % path)
         dlg.Destroy()
 
 
+    def on_flash_status_off(self, event):
+        self.statusbar.SetStatusText('')
+
+
     def on_exit(self, event):
-        self.Close()
+        self.Destroy()
 
 
     def on_about(self, event):
         msg = """ Sport Analytics Project
-        UI Designer: dktry_ (Emrullah Delibaş)
+        UI Designer: Emrullah Delibaş (dktry_)
 
          we are still working on it!!! ;)
         """
@@ -453,7 +452,7 @@ class wxVisualization(wx.Frame):
         self.remove_allDefinedPassesForSnapShot()
         self.remove_directionSpeedOfObjects()
 
-        self.pass_info_page.logger.Clear()
+        #self.pass_info_page.logger.Clear()
         self.definePasses.heatMap.clear()
 
 
@@ -728,12 +727,6 @@ class wxVisualization(wx.Frame):
                 draggableText.set_passDisplayer(self.pass_info_page.logger)
                 draggableText.set_definedPasses(self.definePasses.definedPasses)
                 draggableText.set_coordinatesOfObjects(self.texts)
-
-
-    def remove_previousJerseyNumbers(self):
-        for player_js in self.texts:
-            player_js.point.remove()
-        del self.texts[:]
 
 
     def remove_defined_passes(self):
