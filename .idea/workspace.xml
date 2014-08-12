@@ -2,9 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="05dcd7b0-3d91-4a06-8512-aceba7f912a9" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/plot.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/qqq.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/DraggablePass.py" afterPath="$PROJECT_DIR$/src/sentio/DraggablePass.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/DraggableText.py" afterPath="$PROJECT_DIR$/src/sentio/DraggableText.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/HeatMap.py" afterPath="$PROJECT_DIR$/src/sentio/HeatMap.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/Pass.py" afterPath="$PROJECT_DIR$/src/sentio/Pass.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/SentioProject.iml" afterPath="$PROJECT_DIR$/.idea/SentioProject.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/Time.py" afterPath="$PROJECT_DIR$/src/sentio/Time.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/wxVisualization.py" afterPath="$PROJECT_DIR$/src/sentio/wxVisualization.py" />
     </list>
     <ignored path="SentioProject.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -16,9 +25,27 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/futbol-data-analysis$Main.coverage" NAME="Main Coverage Results" MODIFIED="1404382321536" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
-    <SUITE FILE_PATH="coverage/SentioProject$Main.coverage" NAME="Main Coverage Results" MODIFIED="1404377301104" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
-    <SUITE FILE_PATH="coverage/futbol-data-analysis$test11.coverage" NAME="test11 Coverage Results" MODIFIED="1404380735721" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$notebook_tab.coverage" NAME="notebook_tab Coverage Results" MODIFIED="1407675963025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$player_skeleton.coverage" NAME="player_skeleton Coverage Results" MODIFIED="1405501455190" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Desktop/Music_Player/music_player_v1" />
+    <SUITE FILE_PATH="coverage/SentioProject$wxVisua.coverage" NAME="wxVisua Coverage Results" MODIFIED="1405436892970" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$visua.coverage" NAME="visua Coverage Results" MODIFIED="1404656086501" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$test_wxSample1.coverage" NAME="test_wxSample1 Coverage Results" MODIFIED="1406215684150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$Visualization.coverage" NAME="Visualization Coverage Results" MODIFIED="1405327497552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
+    <SUITE FILE_PATH="coverage/SentioProject$player_skeleton2.coverage" NAME="player_skeleton2 Coverage Results" MODIFIED="1404925293930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Desktop/Music_Player/music_player_v2" />
+    <SUITE FILE_PATH="coverage/SentioProject$Main.coverage" NAME="Main Coverage Results" MODIFIED="1407835074983" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
+    <SUITE FILE_PATH="coverage/SentioProject$wxVisualization.coverage" NAME="wxVisualization Coverage Results" MODIFIED="1407675973408" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
+    <SUITE FILE_PATH="coverage/SentioProject$Unittests_in_test_text.coverage" NAME="Unittests in test_text Coverage Results" MODIFIED="1405434160116" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$test_wxSample2.coverage" NAME="test_wxSample2 Coverage Results" MODIFIED="1405507332865" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$size.coverage" NAME="size Coverage Results" MODIFIED="1405279288684" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$Unittests_in_size.coverage" NAME="Unittests in size Coverage Results" MODIFIED="1405283095188" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$Match.coverage" NAME="Match Coverage Results" MODIFIED="1405330616968" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
+    <SUITE FILE_PATH="coverage/SentioProject$dialog.coverage" NAME="dialog Coverage Results" MODIFIED="1406027703068" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$Unittests_in_tool.coverage" NAME="Unittests in tool Coverage Results" MODIFIED="1405001786949" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$tool.coverage" NAME="tool Coverage Results" MODIFIED="1405003667964" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$sets.coverage" NAME="sets Coverage Results" MODIFIED="1405591261038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$colorbar.coverage" NAME="colorbar Coverage Results" MODIFIED="1404920049406" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$test_text.coverage" NAME="test_text Coverage Results" MODIFIED="1405424080281" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$tutorial.coverage" NAME="tutorial Coverage Results" MODIFIED="1405928958058" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -32,43 +59,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Main.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
+      <file leaf-file-name="wxVisualization.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/sentio/wxVisualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="1020">
-              <caret line="14" column="25" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Visualization.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sentio/Visualization.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2790" max-vertical-offset="7995">
-              <caret line="186" column="9" selection-start-line="186" selection-start-column="9" selection-end-line="186" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Pass.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/sentio/Pass.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.4179103" vertical-offset="0" max-vertical-offset="4455">
-              <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.05836576" vertical-offset="8145" max-vertical-offset="10800">
+              <caret line="545" column="0" selection-start-line="545" selection-start-column="0" selection-end-line="545" selection-end-column="0" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#23542#24519#0" expanded="false" />
+                <element signature="e#24608#25818#0" expanded="false" />
+                <element signature="e#25903#27630#0" expanded="false" />
+                <element signature="e#27692#28421#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test11.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/test11.py">
+      <file leaf-file-name="DraggableText.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sentio/DraggableText.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="878" max-vertical-offset="1440">
-              <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1393" max-vertical-offset="1935">
+              <caret line="117" column="25" selection-start-line="117" selection-start-column="25" selection-end-line="117" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Pass.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sentio/Pass.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="345" max-vertical-offset="4665">
+              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DraggablePass.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sentio/DraggablePass.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="341" max-vertical-offset="2565">
+              <caret line="53" column="16" selection-start-line="53" selection-start-column="16" selection-end-line="53" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -77,8 +107,18 @@
       <file leaf-file-name="HeatMap.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sentio/HeatMap.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="2190">
-              <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3270">
+              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1050">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -98,23 +138,42 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/src/sentio/Main.py" />
-        <option value="$PROJECT_DIR$/src/sentio/SnapShot.py" />
-        <option value="$PROJECT_DIR$/src/sentio/DraggablePass.py" />
-        <option value="$PROJECT_DIR$/src/sentio/Visualization.py" />
-        <option value="$PROJECT_DIR$/src/sentio/DraggableText.py" />
         <option value="$PROJECT_DIR$/src/sentio/source/Parameters.py" />
-        <option value="$PROJECT_DIR$/src/sentio/HeatMap.py" />
+        <option value="$PROJECT_DIR$/src/test/wxVisualization.py" />
+        <option value="$PROJECT_DIR$/src/test/visua.py" />
+        <option value="$PROJECT_DIR$/src/test/tool.py" />
+        <option value="$PROJECT_DIR$/src/test/notebook_tab.py" />
+        <option value="$PROJECT_DIR$/src/test/colorbar.py" />
+        <option value="$PROJECT_DIR$/src/test/size.py" />
+        <option value="$PROJECT_DIR$/src/sentio/Visualization.py" />
+        <option value="$PROJECT_DIR$/src/sentio/Threads.py" />
+        <option value="$PROJECT_DIR$/src/test/test_text.py" />
+        <option value="$PROJECT_DIR$/src/test/tutorial.py" />
+        <option value="$PROJECT_DIR$/src/sentio/Sentio.py" />
+        <option value="$USER_HOME$/Desktop/Music_Player/music_player_v1/player_skeleton.py" />
+        <option value="$PROJECT_DIR$/src/test/sets.py" />
         <option value="$PROJECT_DIR$/src/sentio/Parameters.py" />
-        <option value="$PROJECT_DIR$/src/test/test11.py" />
+        <option value="$PROJECT_DIR$/src/sentio/Player_base.py" />
+        <option value="$PROJECT_DIR$/src/test/dialog.py" />
+        <option value="$PROJECT_DIR$/src/sentio/Dialogs.py" />
+        <option value="$PROJECT_DIR$/src/test/test_wxSample1.py" />
+        <option value="$PROJECT_DIR$/src/test/test_wxSample2.py" />
+        <option value="$PROJECT_DIR$/src/test/wxVisua.py" />
+        <option value="$PROJECT_DIR$/src/sentio/SnapShot.py" />
+        <option value="$PROJECT_DIR$/src/sentio/Match.py" />
+        <option value="$PROJECT_DIR$/src/sentio/Time.py" />
+        <option value="$PROJECT_DIR$/src/sentio/DraggableText.py" />
         <option value="$PROJECT_DIR$/src/sentio/Pass.py" />
+        <option value="$PROJECT_DIR$/src/sentio/DraggablePass.py" />
+        <option value="$PROJECT_DIR$/src/sentio/HeatMap.py" />
+        <option value="$PROJECT_DIR$/src/sentio/wxVisualization.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="89" />
-    <option name="y" value="39" />
-    <option name="width" value="1222" />
-    <option name="height" value="710" />
+    <option name="y" value="22" />
+    <option name="width" value="1237" />
+    <option name="height" value="778" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -142,32 +201,31 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemId" value="SentioProject" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemId" value="SentioProject" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemId" value="SentioProject" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemId" value="SentioProject" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemId" value="SentioProject" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -177,11 +235,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemId" value="SentioProject" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemId" value="SentioProject" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -195,11 +253,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemId" value="SentioProject" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemId" value="SentioProject" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -211,18 +269,35 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SentioProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SentioProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SampleScenarios" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="options.lastSelected" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="options.lastSelected" value="settings.bitbucket" />
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="recentsLimit" value="5" />
     <property name="FullScreen" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Music_Player/music_player_v2" />
+    <property name="SearchEverywhereHistoryKey" value="convertTextsToPlayers&#9;null&#9;null" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -230,6 +305,9 @@
     </option>
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/sentio/source/bitmaps" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/sentio" />
     </key>
@@ -250,13 +328,11 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sentio/Main.py" />
       <option name="PARAMETERS" value="" />
-      <RunnerSettings RunnerId="PyDebugRunner" />
       <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PyDebugRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="test11" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="dialog" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -269,7 +345,64 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="SentioProject" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/test/test11.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/test/dialog.py" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="test_wxSample1" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="SentioProject" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/test/test_wxSample1.py" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="notebook_tab" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="SentioProject" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/test/notebook_tab.py" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="wxVisualization" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/sentio" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="SentioProject" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sentio/wxVisualization.py" />
       <option name="PARAMETERS" value="" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
@@ -359,9 +492,6 @@
       <option name="PARAMETERS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
-      <method />
-    </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -383,6 +513,9 @@
       <option name="PUREUNITTEST" value="true" />
       <option name="PARAMS" value="" />
       <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Doctests">
@@ -425,14 +558,20 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
-    <list size="2">
+    <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.Main" />
-      <item index="1" class="java.lang.String" itemvalue="Python.test11" />
+      <item index="1" class="java.lang.String" itemvalue="Python.dialog" />
+      <item index="2" class="java.lang.String" itemvalue="Python.test_wxSample1" />
+      <item index="3" class="java.lang.String" itemvalue="Python.notebook_tab" />
+      <item index="4" class="java.lang.String" itemvalue="Python.wxVisualization" />
     </list>
     <recent_temporary>
-      <list size="2">
+      <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.Main" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test11" />
+        <item index="1" class="java.lang.String" itemvalue="Python.wxVisualization" />
+        <item index="2" class="java.lang.String" itemvalue="Python.notebook_tab" />
+        <item index="3" class="java.lang.String" itemvalue="Python.test_wxSample1" />
+        <item index="4" class="java.lang.String" itemvalue="Python.dialog" />
       </list>
     </recent_temporary>
   </component>
@@ -446,10 +585,27 @@
       <created>1388180896792</created>
       <updated>1388180896792</updated>
     </task>
+    <task id="LOCAL-00001" summary="-SnapShot is implemented&#10;-heatMap'lerdeki define position taking'deki bug düzeltildi&#10;-heatMap presentation'daki terslik giderildi&#10;-a new approach to compute the goalChance is implemented">
+      <created>1404377842226</created>
+      <updated>1404377842226</updated>
+    </task>
+    <task id="LOCAL-00002" summary=".">
+      <created>1406045019534</created>
+      <updated>1406045019534</updated>
+    </task>
+    <task id="LOCAL-00003" summary=".">
+      <created>1406216904854</created>
+      <updated>1406216904854</updated>
+    </task>
+    <task id="LOCAL-00004" summary=".">
+      <created>1406216951137</created>
+      <updated>1406216951137</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="89" y="39" width="1222" height="710" extended-state="0" />
+    <frame x="0" y="22" width="1237" height="778" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -457,16 +613,17 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24959083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24737267" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39970717" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.38861787" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18740849" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3235725" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -487,6 +644,9 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="-SnapShot is implemented&#10;-heatMap'lerdeki define position taking'deki bug düzeltildi&#10;-heatMap presentation'daki terslik giderildi&#10;-a new approach to compute the goalChance is implemented" />
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -496,263 +656,374 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="1050">
-          <caret line="14" column="25" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1050">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Visualization.py">
+    <entry file="file://$PROJECT_DIR$/src/sentio/wxVisualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2790" max-vertical-offset="7995">
-          <caret line="186" column="9" selection-start-line="186" selection-start-column="9" selection-end-line="186" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/DraggableText.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1575" max-vertical-offset="1785">
-          <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="255">
-          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/HeatMap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="2190">
-          <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/DraggablePass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2220" max-vertical-offset="2685">
-          <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="1050">
-          <caret line="14" column="25" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Visualization.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2790" max-vertical-offset="7995">
-          <caret line="186" column="9" selection-start-line="186" selection-start-column="9" selection-end-line="186" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/DraggableText.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1575" max-vertical-offset="1785">
-          <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="255">
-          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/HeatMap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="2190">
-          <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/DraggablePass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2220" max-vertical-offset="2685">
-          <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1050">
-          <caret line="14" column="25" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Visualization.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7995">
-          <caret line="186" column="9" selection-start-line="186" selection-start-column="9" selection-end-line="186" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/DraggableText.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1575" max-vertical-offset="1785">
-          <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="255">
-          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/HeatMap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="2190">
-          <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/DraggablePass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2220" max-vertical-offset="2685">
-          <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="1050">
-          <caret line="14" column="25" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Visualization.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7980">
-          <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Player_base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="645" max-vertical-offset="1275">
-          <caret line="20" column="55" selection-start-line="20" selection-start-column="55" selection-end-line="20" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/HeatMap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1265" max-vertical-offset="2190">
-          <caret line="84" column="0" selection-start-line="84" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/DraggablePass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="2685">
-          <caret line="23" column="58" selection-start-line="23" selection-start-column="35" selection-end-line="23" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Player_base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.65340906" vertical-offset="645" max-vertical-offset="1275">
-          <caret line="20" column="55" selection-start-line="20" selection-start-column="55" selection-end-line="20" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/SnapShot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.45454547" vertical-offset="105" max-vertical-offset="2145">
-          <caret line="26" column="31" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/DraggablePass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1977" max-vertical-offset="2580">
-          <caret line="148" column="0" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/DraggableText.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1042" max-vertical-offset="1755">
-          <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Visualization.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1456" max-vertical-offset="7785">
-          <caret line="186" column="9" selection-start-line="186" selection-start-column="9" selection-end-line="186" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/HeatMap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="690" max-vertical-offset="2190">
-          <caret line="55" column="23" selection-start-line="55" selection-start-column="23" selection-end-line="55" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Parameters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36105034" vertical-offset="0" max-vertical-offset="457">
-          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/test11.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="878" max-vertical-offset="1440">
-          <caret line="71" column="0" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1020">
-          <caret line="14" column="25" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-          <folding />
+        <state vertical-scroll-proportion="0.0" vertical-offset="6495" max-vertical-offset="8595">
+          <caret line="455" column="41" selection-start-line="455" selection-start-column="41" selection-end-line="455" selection-end-column="41" />
+          <folding>
+            <element signature="e#23542#24519#0" expanded="false" />
+            <element signature="e#24608#25818#0" expanded="false" />
+            <element signature="e#25903#27630#0" expanded="false" />
+            <element signature="e#27692#28421#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sentio/Pass.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.4179103" vertical-offset="0" max-vertical-offset="4455">
-          <caret line="54" column="0" selection-start-line="54" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="420" max-vertical-offset="4455">
+          <caret line="28" column="51" selection-start-line="28" selection-start-column="51" selection-end-line="28" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Match.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3900" max-vertical-offset="4065">
+          <caret line="260" column="22" selection-start-line="260" selection-start-column="22" selection-end-line="260" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/DraggableText.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1380" max-vertical-offset="1950">
+          <caret line="92" column="33" selection-start-line="92" selection-start-column="13" selection-end-line="92" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1050">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/DraggablePass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1154" max-vertical-offset="2790">
+          <caret line="139" column="0" selection-start-line="139" selection-start-column="0" selection-end-line="139" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/source/bitmaps/stop.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/source/bitmaps/record.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/source/bitmaps/play.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/matplotlib/widgets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="8697" max-vertical-offset="24810">
+          <caret line="600" column="41" selection-start-line="600" selection-start-column="41" selection-end-line="600" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/wxPython-3.0.0.0/lib/python2.7/site-packages/wx-3.0-osx_cocoa/wx/_controls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33206832" vertical-offset="4220" max-vertical-offset="118845">
+          <caret line="294" column="8" selection-start-line="294" selection-start-column="8" selection-end-line="294" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/wxPython-3.0.0.0/lib/python2.7/site-packages/wx-3.0-osx_cocoa/wx/lib/expando.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.38909775" vertical-offset="1293" max-vertical-offset="3450">
+          <caret line="101" column="8" selection-start-line="101" selection-start-column="8" selection-end-line="101" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/wxPython-3.0.0.0/lib/python2.7/site-packages/wx-3.0-osx_cocoa/wx/_core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.45015576" vertical-offset="196076" max-vertical-offset="254085">
+          <caret line="13092" column="54" selection-start-line="13092" selection-start-column="54" selection-end-line="13092" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/source/bitmaps/pause.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/source/bitmaps/pause_disabled.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/wxPython-3.0.0.0/lib/python2.7/site-packages/wx-3.0-osx_cocoa/wx/lib/agw/shapedbutton.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33271027" vertical-offset="15902" max-vertical-offset="26775">
+          <caret line="1072" column="49" selection-start-line="1072" selection-start-column="37" selection-end-line="1072" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/matplotlib/image.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.81106" vertical-offset="6741" max-vertical-offset="21375">
+          <caret line="410" column="8" selection-start-line="410" selection-start-column="8" selection-end-line="410" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16030534" vertical-offset="0" max-vertical-offset="655">
+          <caret line="7" column="20" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/matplotlib/figure.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.092369474" vertical-offset="9929" max-vertical-offset="24690">
+          <caret line="696" column="11" selection-start-line="696" selection-start-column="11" selection-end-line="696" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/wxPython-3.0.0.0/lib/python2.7/site-packages/wx-3.0-osx_cocoa/wx/_windows.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33188722" vertical-offset="50292" max-vertical-offset="87300">
+          <caret line="3364" column="8" selection-start-line="3364" selection-start-column="8" selection-end-line="3364" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/matplotlib/patches.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5232068" vertical-offset="43612" max-vertical-offset="64800">
+          <caret line="2936" column="0" selection-start-line="2936" selection-start-column="0" selection-end-line="2936" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/test_draggablePoint.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1215">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/visua.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.5665399" vertical-offset="2521" max-vertical-offset="7575">
+          <caret line="235" column="25" selection-start-line="235" selection-start-column="19" selection-end-line="235" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Dialogs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.41512915" vertical-offset="0" max-vertical-offset="542">
+          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/test_wxSample2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="7.578125" vertical-offset="0" max-vertical-offset="5055">
+          <caret line="295" column="29" selection-start-line="295" selection-start-column="29" selection-end-line="295" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/wxVisua.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.27328244" vertical-offset="4606" max-vertical-offset="5970">
+          <caret line="319" column="29" selection-start-line="319" selection-start-column="29" selection-end-line="319" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/matplotlib/backends/backend_wxagg.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="945" max-vertical-offset="2775">
+          <caret line="82" column="8" selection-start-line="82" selection-start-column="8" selection-end-line="82" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm30/python_stubs/-1698384448/__builtin__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.2229581" vertical-offset="6764" max-vertical-offset="76485">
+          <caret line="414" column="19" selection-start-line="414" selection-start-column="15" selection-end-line="414" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/wxPython-3.0.0.0/lib/python2.7/site-packages/wx-3.0-osx_cocoa/wx/_misc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.4522727" vertical-offset="19999" max-vertical-offset="105285">
+          <caret line="1321" column="8" selection-start-line="1321" selection-start-column="8" selection-end-line="1321" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/SnapShot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.6335878" vertical-offset="0" max-vertical-offset="2100">
+          <caret line="115" column="48" selection-start-line="115" selection-start-column="48" selection-end-line="115" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/test_wxSample1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6357616" vertical-offset="3387" max-vertical-offset="3840">
+          <caret line="248" column="24" selection-start-line="248" selection-start-column="13" selection-end-line="248" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/tutorial.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.39772728" vertical-offset="925" max-vertical-offset="1365">
+          <caret line="50" column="33" selection-start-line="50" selection-start-column="21" selection-end-line="50" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/notebook_tab.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.56953645" vertical-offset="402" max-vertical-offset="855">
+          <caret line="44" column="35" selection-start-line="44" selection-start-column="35" selection-end-line="44" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SampleScenarios/plot.csv">
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="com.intellij.persistence.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SampleScenarios/plot.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Sentio.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="951" max-vertical-offset="1455">
+          <caret line="69" column="41" selection-start-line="69" selection-start-column="37" selection-end-line="69" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="1050">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Match.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.79571986" vertical-offset="3431" max-vertical-offset="4005">
+          <caret line="260" column="22" selection-start-line="260" selection-start-column="22" selection-end-line="260" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Time.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.4231499" vertical-offset="1048" max-vertical-offset="1575">
+          <caret line="55" column="0" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/matplotlib/axes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.0265656" vertical-offset="51005" max-vertical-offset="141075">
+          <caret line="3303" column="8" selection-start-line="3303" selection-start-column="8" selection-end-line="3303" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/CircleStyle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.028462999" vertical-offset="15" max-vertical-offset="585">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Pass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4635">
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Player_base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.68311197" vertical-offset="405" max-vertical-offset="1320">
+          <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/HeatMap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2" max-vertical-offset="3345">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/DraggablePass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="341" max-vertical-offset="2565">
+          <caret line="53" column="16" selection-start-line="53" selection-start-column="16" selection-end-line="53" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/wxPython-3.0.0.0/lib/python2.7/site-packages/wx-3.0-osx_cocoa/wx/_gdi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6401869" vertical-offset="31599" max-vertical-offset="125070">
+          <caret line="2135" column="23" selection-start-line="2135" selection-start-column="23" selection-end-line="2135" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/DraggableText.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1935">
+          <caret line="117" column="25" selection-start-line="117" selection-start-column="25" selection-end-line="117" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/matplotlib/text.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="6395" max-vertical-offset="30090">
+          <caret line="452" column="29" selection-start-line="452" selection-start-column="29" selection-end-line="452" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/matplotlib/artist.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="18296" max-vertical-offset="19635">
+          <caret line="1298" column="0" selection-start-line="1298" selection-start-column="0" selection-end-line="1298" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/wxVisualization.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.05836576" vertical-offset="8145" max-vertical-offset="10800">
+          <caret line="545" column="0" selection-start-line="545" selection-start-column="0" selection-end-line="545" selection-end-column="0" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#23542#24519#0" expanded="false" />
+            <element signature="e#24608#25818#0" expanded="false" />
+            <element signature="e#25903#27630#0" expanded="false" />
+            <element signature="e#27692#28421#0" expanded="false" />
           </folding>
         </state>
       </provider>

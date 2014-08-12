@@ -1,6 +1,7 @@
 import numpy
 from src.sentio import Dialogs
 from src.sentio.HeatMap import HeatMap
+from src.sentio.Parameters import *
 from src.sentio.Pass import Pass
 from matplotlib import pylab as p
 from matplotlib.text import Text
@@ -33,12 +34,8 @@ class DraggablePass(Pass):
         self.cidrelease = self.figure.canvas.mpl_connect('button_release_event', self.on_release_event)
 
 
-    def set_passDisplayer(self, passDisplayer):
-        self.passDisplayer = passDisplayer
-
-
-    def set_effectivenessWithComponentsLabel_forChosenPoint(self, v):
-        self.effect_withCompLabel_forChosenPoint = v
+    def set_passDisplayer(self, logger):
+        self.logger = logger
 
 
     def set_variables(self, heatMap, resolution, components):
@@ -51,7 +48,6 @@ class DraggablePass(Pass):
 
     def resolutionToNumberOfPoints(self):
         chosenResolution = self.chosenResolution.GetValue()
-        print chosenResolution
         q = {1:(11,7), 2:(21,13), 3:(35,22), 4:(105,65), 5:(210,130)}
         """
         5 ---> 0.5m
@@ -74,7 +70,6 @@ class DraggablePass(Pass):
 
 
     def draw_heatMapChosen(self):
-        self.heatMap.remove()
         chosenHeatMap = self.chosenHeatMap.GetSelection()
         self.chosenComponent.SetSelection(4)
 
@@ -86,6 +81,7 @@ class DraggablePass(Pass):
         p1 = Player_base([object_type1, object_id1,js1, x1, y1])
         p2 = Player_base([object_type2, object_id2,js2, x2, y2])
 
+        self.heatMap.totalEffectiveness_withComponents_byCoordinates = {}
         if chosenHeatMap == 1:
             chosenNumber = Dialogs.ask(message='Enter the jersey number of a player from the opponent team')
             print chosenNumber
@@ -145,23 +141,15 @@ class DraggablePass(Pass):
 
     def on_press_event(self, event):
         if event.button == 3:
-            x_points, y_points = self.resolutionToNumberOfPoints()
-            x_coords = numpy.linspace(0, 105, x_points)
-            y_coords = numpy.linspace(0, 65, y_points)
-            givenCoordinate_x, givenCoordinate_y = event.xdata, event.ydata
-            coord_x = min(x_coords, key=lambda x:abs(x-givenCoordinate_x))
-            coord_y = min(y_coords, key=lambda y:abs(y-givenCoordinate_y))
-            effectiveness, gain, passAdvantage, goalChance, overallRisk = \
-                self.heatMap.get_totalEffectiveness_withComponents_byCoordinates(coord_x, coord_y)
-            print coord_x, coord_y
-            q = ""
-            q += ("overall_risk = %.2f\n" %overallRisk)
-            q += ("gain = %.2f\n" %gain)
-            q += ("pass_advantage = %.2f\n" %passAdvantage)
-            q += ("goal_chance = %.2f\n" %goalChance)
-            q += ("effectiveness = %.2f\n" %effectiveness)
-
-            self.effect_withCompLabel_forChosenPoint.set(q)
+            if self.heatMap.totalEffectiveness_withComponents_byCoordinates != {}:
+                x_points, y_points = self.resolutionToNumberOfPoints()
+                x_coords = numpy.linspace(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X, x_points)
+                y_coords = numpy.linspace(FOOTBALL_FIELD_MIN_Y, FOOTBALL_FIELD_MAX_Y, y_points)
+                givenCoordinate_x, givenCoordinate_y = event.xdata, event.ydata
+                coord_x = min(x_coords, key=lambda x:abs(x-givenCoordinate_x))
+                coord_y = min(y_coords, key=lambda y:abs(y-givenCoordinate_y))
+                components = self.heatMap.get_totalEffectiveness_withComponents_byCoordinates(coord_x, coord_y)
+                Pass.display_effectiveness((coord_x, coord_y), components, self.logger)
 
 
     def on_release_event(self, event):
@@ -170,15 +158,16 @@ class DraggablePass(Pass):
 
 
     def displayDefinedPasses(self):
-        self.passDisplayer.Clear()
+        self.logger.Clear()
         for dPass in self.definedPasses:
-            self.displayDefinedPass(dPass, self.passDisplayer)
+            self.displayDefinedPass(dPass, self.logger)
 
 
     def disconnect(self):
         try:
             self.figure.canvas.mpl_disconnect(self.cidpick)
             #self.figure.canvas.mpl_disconnect(self.cidmotion)
+            self.figure.canvas.mpl_disconnect(self.cidpress)
         except AttributeError:
             pass
 

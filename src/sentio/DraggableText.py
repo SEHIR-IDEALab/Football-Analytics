@@ -109,7 +109,7 @@ class DraggableText:
             self.passDisplayer.WriteText("overall_risk = %.2f\n" %(passes.overallRisk(p1, p2)))
             self.passDisplayer.WriteText("gain = %.2f\n" %passes.gain(p1, p2))
             self.passDisplayer.WriteText("pass_advantage = %.2f (%s)\n" %passes.passAdvantage(p2))
-            self.passDisplayer.WriteText("goal_chance = %.2f (%s)\n" %(passes.goalChance(p2), p2.getJerseyNumber()))
+            self.passDisplayer.WriteText("goal_chance = %.2f\n" %(passes.goalChance(p2)))
             self.passDisplayer.WriteText("effectiveness = %.2f\n" %passes.effectiveness(p1, p2))
 
             self.passDisplayer.SetInsertionPoint(0)

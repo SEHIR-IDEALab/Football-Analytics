@@ -8,35 +8,25 @@ class Time(object):
         self.second = second
         self.millisecond = millisecond
 
-        self.minMaxOfHalf = {1:[[0,0,0],[44,59,8]], 2:[[45,0,0],[89,59,8]]}
+        self.minMaxOfHalf = {1: ((0,0,0), (44,59,8)), 2: ((45,0,0), (89,59,8))}
+        self.minMaxOfHalf_inMilliseconds = {1: (0, 26998), 2: (27000, 53998)}
 
 
-    def __sub__(self, other):
-        first = self.time_to_milliseconds(self)
-        second = self.time_to_milliseconds(other)
-        result = abs(first-second)
-        return self.int_to_time(result)
-
-
-    def __add__(self, other):
-        first = self.time_to_milliseconds(self)
-        second = self.time_to_milliseconds(other)
-        total = first + second
-        return self.milliseconds_to_time_self(total)
+    @staticmethod
+    def compute_minMaxOfHalf_inMilliseconds(minMaxOfHalf):
+        minMaxOfHalf_inMilliseconds = {}
+        for half in minMaxOfHalf:
+            min_minute, min_second, min_millisecond = minMaxOfHalf[half][0]
+            max_minute, max_second, max_millisecond = minMaxOfHalf[half][1]
+            half_min_milliseconds = (min_minute * 60 + min_second) * 10 + min_millisecond
+            half_max_milliseconds = (max_minute * 60 + max_second) * 10 + max_millisecond
+            minMaxOfHalf_inMilliseconds[half] = (half_min_milliseconds, half_max_milliseconds)
+        return minMaxOfHalf_inMilliseconds
 
 
     def set_minMaxOfHalf(self, minMaxOfHalf):
         self.minMaxOfHalf = minMaxOfHalf
-        self.compute_minMaxOfHalf_inMilliseconds()
-
-
-    @staticmethod
-    def milliseconds_to_time(milliseconds):
-        milliseconds = milliseconds * 2
-
-        seconds, milliseconds = divmod(milliseconds, 10)
-        minutes, seconds = divmod(seconds, 60)
-        return Time(minute=minutes, second=seconds, millisecond=milliseconds)
+        self.minMaxOfHalf_inMilliseconds = self.compute_minMaxOfHalf_inMilliseconds(minMaxOfHalf)
 
 
     @staticmethod
@@ -48,71 +38,57 @@ class Time(object):
 
     @staticmethod
     def time_display(time):
-        return "Time = %02d.%02d.%02d" % (time.minute, time.second, time.millisecond*10)
+        return "Time = %d_%02d:%02d:%02d" % (time.half, time.minute, time.second, time.millisecond*10)
 
 
-    def milliseconds_to_time_self(self, milliseconds):
-        milliseconds = milliseconds *2
+    @staticmethod
+    def milliseconds_to_time_base(milliseconds):
+        seconds, millisecond = divmod(milliseconds, 10)
+        minute, second = divmod(seconds, 60)
+        return minute, second, millisecond
 
+
+    def milliseconds_to_time(self, milliseconds):
         seconds, self.millisecond = divmod(milliseconds, 10)
         self.minute, self.second = divmod(seconds, 60)
 
-        if milliseconds < self.time_min:
+        half_min_milliseconds, half_max_milliseconds = self.minMaxOfHalf_inMilliseconds[self.half]
+        if milliseconds < half_min_milliseconds:
             if self.half != 1:
                 self.half -= 1
-                self.minute, self.second, self.millisecond = self.minMaxOfHalf[self.half][1]
-            else:
-                self.minute, self.second, self.millisecond = self.minMaxOfHalf[self.half][0]
-            time = Time(self.half, self.minute, self.second, self.millisecond)
-            return time
-        elif milliseconds > self.time_max:
-            additional_milliseconds = milliseconds - self.time_max
-            print additional_milliseconds
-            self.half += 1
-            self.minute, self.second, self.millisecond = self.minMaxOfHalf[self.half][0]
-            time = Time(self.half, self.minute, self.second, self.millisecond) + self.milliseconds_to_time_self(additional_milliseconds)
-            print time
-            return time
-        time = Time(self.half, self.minute, self.second, self.millisecond*2)
-        return time
-
-
-    def int_to_time(self, milliseconds):
-        seconds, self.millisecond = divmod(milliseconds, 10)
-        self.minute, self.second = divmod(seconds, 60)
-
-        if milliseconds < self.time_min:
-            if self.half != 1:
-                self.half -= 1
-                self.minute, self.second, self.millisecond = self.minMaxOfHalf[self.half][1]
-            else:
-                self.minute, self.second, self.millisecond = self.minMaxOfHalf[self.half][0]
-        elif milliseconds > self.time_max:
-            self.half += 1
-            self.minute, self.second, self.millisecond = self.minMaxOfHalf[self.half][0]
+        elif milliseconds > half_max_milliseconds:
+            if (self.half+1) in self.minMaxOfHalf:
+                self.half += 1
+                temp_half_min_milliseconds = self.minMaxOfHalf_inMilliseconds[self.half][0]
+                final_milliseconds = milliseconds - (half_max_milliseconds - temp_half_min_milliseconds) - 2
+                self.minute, self.second, self.millisecond = self.milliseconds_to_time_base(final_milliseconds)
         time = Time(self.half, self.minute, self.second, self.millisecond)
         time.set_minMaxOfHalf(self.minMaxOfHalf)
         return time
 
 
-    def compute_minMaxOfHalf_inMilliseconds(self):
-        max_minute, max_second, max_millisecond = self.minMaxOfHalf[self.half][1]
-        min_minute, min_second, min_millisecond = self.minMaxOfHalf[self.half][0]
-        time_max = Time(minute=max_minute, second=max_second, millisecond=max_millisecond)
-        time_min = Time(minute=min_minute, second=min_second, millisecond=min_millisecond)
-        self.time_min, self.time_max = self.time_to_milliseconds(time_min), self.time_to_milliseconds(time_max)
+    def get_in_milliseconds(self):
+        initial_time_in_milliseconds = {1: (0, 26998), 2: (27000, 53998)}
+        milliseconds = 0
+        for half in range(1, self.half):
+            init_min_milliseconds, init_max_milliseconds = initial_time_in_milliseconds[half]
+            min_milliseconds, max_milliseconds = self.minMaxOfHalf_inMilliseconds[half]
+            final_init_difference = init_max_milliseconds - init_min_milliseconds
+            final_temp_difference = max_milliseconds - min_milliseconds
+            milliseconds = final_temp_difference - final_init_difference
+        return self.time_to_milliseconds(self) + milliseconds
 
 
     def next(self):
-        time = Time(half=self.half, minute=self.minute, second=self.second, millisecond=self.millisecond)
-        total_milliseconds = self.time_to_milliseconds(time)
-        return self.int_to_time(total_milliseconds+2)
+        total_milliseconds = self.time_to_milliseconds(self)
+        return self.milliseconds_to_time(total_milliseconds+2)
 
 
     def back(self):
-        time = Time(half=self.half, minute=self.minute, second=self.second, millisecond=self.millisecond)
-        total_milliseconds = self.time_to_milliseconds(time)
-        return self.int_to_time(total_milliseconds-2)
+        total_milliseconds = self.time_to_milliseconds(self)
+        if total_milliseconds <= 0:
+            return Time()
+        return self.milliseconds_to_time(total_milliseconds-2)
 
 
     def __str__(self):

@@ -41,7 +41,7 @@ class PageOne(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         self.logger = wx.TextCtrl(self, size=(150,530), style=wx.TE_MULTILINE | wx.TE_READONLY)
-        font1 = wx.Font(9, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'New Times')
+        font1 = wx.Font(9, wx.MODERN, wx.NORMAL, wx.FONTWEIGHT_BOLD, False, u'Tahoma')
         self.logger.SetFont(font1)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
@@ -166,7 +166,9 @@ class wxVisualization(wx.Frame):
 
         self.paused = True
         self.directions_of_objects = list()
+
         self.current_time = Time(1,0,0,0)
+        self.current_time.set_minMaxOfHalf(self.sentio.minMaxOfHalf)
 
         self.create_menu()
         self.create_status_bar()
@@ -245,14 +247,14 @@ class wxVisualization(wx.Frame):
                                    'Unknown Objects'], numpoints=1, fontsize=6, bbox_to_anchor=(0., 1.0, 1., .102),
                        loc=3, ncol=4, mode="expand", borderaxespad=0.5)
 
-        self.current_time_display = wx.StaticText(self.panel, -1, "Time = 00.00.00")
+        self.current_time_display = wx.StaticText(self.panel, -1, "Time = 1_00:00:00")
 
         radioList = ['New Pass', 'Drag Object']
         self.rb = wx.RadioBox(self.panel,label="Mouse Action",choices=radioList, majorDimension=1,
                               style=wx.RA_SPECIFY_COLS)
 
         self.play_speed_slider = wx.Slider(self.panel, -1, value=2, minValue=1, maxValue=5)
-        self.slider = wx.Slider(self.panel, -1, value=0, minValue=0, maxValue=(5*60*90))
+        self.slider = wx.Slider(self.panel, -1, value=0, minValue=0, maxValue=self.get_milliseconds_for_slider())
 
         self.upbmp = wx.Bitmap(os.path.join(bitmapDir, "play.png"), wx.BITMAP_TYPE_PNG)
         self.disbmp = wx.Bitmap(os.path.join(bitmapDir, "pause.png"), wx.BITMAP_TYPE_PNG)
@@ -264,6 +266,15 @@ class wxVisualization(wx.Frame):
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_slider_release, self.slider)
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBTRACK, self.on_slider_shift, self.slider)
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_play_speed_slider, self.play_speed_slider)
+
+
+    def get_milliseconds_for_slider(self):
+        total = 0
+        q = Time.compute_minMaxOfHalf_inMilliseconds(self.sentio.minMaxOfHalf)
+        for half in q:
+            half_min_milliseconds, half_max_milliseconds = q[half]
+            total += (half_max_milliseconds - half_min_milliseconds)/2. + 1
+        return total - 1
 
 
     def layout_controls(self):
@@ -281,7 +292,7 @@ class wxVisualization(wx.Frame):
 
         # add the pages to the notebook with the label to show on the tab
         nb.AddPage(self.pass_info_page, "Info")
-        nb.AddPage(self.heatmap_setup_page, "Setup")
+        nb.AddPage(self.heatmap_setup_page, "HeatMaps")
 
         # finally, put the notebook in a sizer for the panel to manage
         # the layout
@@ -399,17 +410,17 @@ class wxVisualization(wx.Frame):
     ##### handling slider events #####
     def on_slider_release(self, event):
         milliseconds = self.slider.GetValue()
-        time = Time(self.current_time.half, self.current_time.minute,
-                    self.current_time.second, self.current_time.millisecond)
+        time = Time()
         time.set_minMaxOfHalf(self.sentio.minMaxOfHalf)
-        time_adjust = time.milliseconds_to_time_self(milliseconds)
-        print time_adjust
+        time_adjust = time.milliseconds_to_time(milliseconds*2)
         self.visualizeCurrentPosition(time_adjust, skip_times=0)
 
 
     def on_slider_shift(self, event):
         milliseconds = self.slider.GetValue()
-        time = Time.milliseconds_to_time(milliseconds)
+        time = Time()
+        time.set_minMaxOfHalf(self.sentio.minMaxOfHalf)
+        time = time.milliseconds_to_time(milliseconds*2)
 
         formatted_time = Time.time_display(time)
         self.current_time_display.SetLabel(formatted_time)
@@ -467,7 +478,6 @@ class wxVisualization(wx.Frame):
         self.remove_defined_passes()
 
         while not self.paused:
-            next_time = current_time
             chosenSkip = 0
             if self.play_speed == 1: tm.sleep(0.1)
             elif self.play_speed == 2: chosenSkip = 0
@@ -476,15 +486,15 @@ class wxVisualization(wx.Frame):
             elif self.play_speed == 5: chosenSkip = 4
 
             for skipTimes in range(chosenSkip+1):
-                next_time = current_time.next()
-                if next_time.half not in self.sentio.minMaxOfHalf:
-                    break
+                self.current_time  = current_time.next()
 
-            self.visualizeCurrentPosition(next_time, chosenSkip)
-            self.current_time = next_time
+            print self.current_time
 
             self.current_time_display.SetLabel(Time.time_display(self.current_time))
-            self.slider.SetValue(Time.time_to_milliseconds(self.current_time))
+            self.slider.SetValue(self.current_time.get_in_milliseconds() / 2.)
+
+            self.visualizeCurrentPosition(self.current_time, chosenSkip)
+            self.current_time.next()
 
             wx.Yield()
 
@@ -534,8 +544,10 @@ class wxVisualization(wx.Frame):
             if player_current == None or player_previous == None:
                 return
 
-            if player_previous != player_current:
+            if player_current != player_previous:
                 self.remove_trailAnnotation()
+                player_previous.set_bbox(dict(boxstyle="circle,pad=0.3", fc=self.assign_color(player_previous),
+                                              ec="none", alpha=0.5))
                 self.passAnnotation = self.ax.annotate('', xy=(.5, .5), xycoords=(player_current), xytext=(.5, .5),
                     textcoords=(player_previous), size=20, arrowprops=dict(arrowstyle="fancy", fc="0.6", ec="none",
                                                                            connectionstyle="arc3"))
@@ -550,12 +562,22 @@ class wxVisualization(wx.Frame):
                                                                    ec=(1., .5, .5), alpha=0.5))
                 self.passEffectiveness_count = 1
             else:
+                player_current.set_bbox(dict(boxstyle="circle,pad=0.3", fc=self.assign_color(player_current),
+                                             ec="yellow", linewidth=2))
                 if self.trailAnnotation == None:
                     self.entire_trailX, self.entire_trailY = [player_current.get_position()[0]],[player_current.get_position()[1]]
-                    self.trailAnnotation, = self.ax.plot(self.entire_trailX, self.entire_trailY, "--", color="yellow")
+                    self.trailAnnotation, = self.ax.plot(self.entire_trailX, self.entire_trailY, linestyle="--",
+                                                         linewidth=2, color="yellow")
                 else:
                     self.entire_trailX.append(player_current.get_position()[0]), self.entire_trailY.append(player_current.get_position()[1])
                     self.trailAnnotation.set_data(self.entire_trailX, self.entire_trailY)
+
+
+    def assign_color(self, player):
+        if player.object_type in [0,3]: return "blue"
+        elif player.object_type in [1,4]: return "red"
+        elif player.object_type in [2,6,7,8,9]: return "yellow"
+        else: return "black"
 
 
     def annotateDirectionSpeedOfObjects_forGivenTime(self, time):
@@ -708,7 +730,6 @@ class wxVisualization(wx.Frame):
                 dr = DraggableText(player_js)
                 current_team[player.getJerseyNumber()] = dr
         self.definePasses = DraggablePass(self.ax, self.texts, self.fig)
-        #self.definePasses.set_effectivenessWithComponentsLabel_forChosenPoint(self.effec_withCompVariable_forChosenPoint)
         self.definePasses.set_passDisplayer(self.pass_info_page.logger)
         self.definePasses.set_variables(self.heatmap_setup_page.heat_map, self.heatmap_setup_page.resolution,
                                         self.heatmap_setup_page.effectiveness)

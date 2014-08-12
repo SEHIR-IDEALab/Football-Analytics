@@ -11,6 +11,20 @@ class Pass:
         self.allObjects = Player_base.convertTextsToPlayers(coordinateDataOfObjects)
 
 
+    @staticmethod
+    def display_effectiveness(coordinates, components, logger):
+        overall_risk, gain, pass_advantage, goal_chance, effectiveness = components
+
+        logger.WriteText("\n(%.2f, %.2f)\n" %coordinates)
+        logger.WriteText("overall_risk = %.2f\n" %overall_risk)
+        logger.WriteText("gain = %.2f\n" %gain)
+        logger.WriteText("pass_advantage = %.2f\n" %pass_advantage)
+        logger.WriteText("goal_chance = %.2f\n" %goal_chance)
+        logger.WriteText("effectiveness = %.2f\n" %effectiveness)
+
+        logger.SetInsertionPoint(0)
+
+
     def displayDefinedPass(self, definedPass, passDisplayer):
         p1 = definedPass.textcoords
         p2 = definedPass.xycoords
@@ -25,8 +39,8 @@ class Pass:
         passDisplayer.WriteText("\n%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
         passDisplayer.WriteText("overall_risk = %.2f\n" %(self.overallRisk(p1, p2)))
         passDisplayer.WriteText("gain = %.2f\n" %self.gain(p1, p2))
-        passDisplayer.WriteText("pass_advantage = %.2f(%s)\n" %self.passAdvantage(p2))
-        passDisplayer.WriteText("goal_chance = %.2f(%s)\n" %(self.goalChance(p2), p2.getJerseyNumber()))
+        passDisplayer.WriteText("pass_advantage = %.2f (%s)\n" %self.passAdvantage(p2))
+        passDisplayer.WriteText("goal_chance = %.2f\n" %(self.goalChance(p2)))
         passDisplayer.WriteText("effectiveness = %.2f\n" %effectiveness)
 
         passDisplayer.SetInsertionPoint(0)

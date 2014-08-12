@@ -24,10 +24,6 @@ class HeatMap:
         return self.totalEffectiveness_withComponents_byCoordinates[(x, y)]
 
 
-    def remove(self):
-        self.totalEffectiveness_withComponents_byCoordinates = {}
-
-
     def clear(self):
         if self.hm is not None:
             self.hm.remove(); self.hm = None
