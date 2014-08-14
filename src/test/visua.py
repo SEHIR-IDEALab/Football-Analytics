@@ -114,7 +114,7 @@ class Visua(object):
         self.canvas._tkcanvas.pack(side='top', fill='both', expand=1)
 
         self.ax = fig.add_subplot(111)
-        im = plt.imread('source/background.png')
+        im = plt.imread('source/background_pre.png')
         self.ax.imshow(im, zorder=0, extent=[-6.5, 111.5, -1.5, 66.5])
         self.ax.grid()
         self.ax.axes.invert_yaxis()

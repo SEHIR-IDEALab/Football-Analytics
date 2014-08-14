@@ -1,5 +1,6 @@
 # coding=utf-8
 import matplotlib
+from src.sentio.Parameters import *
 
 matplotlib.use('WXAgg')
 
@@ -45,7 +46,7 @@ class PageOne(wx.Panel):
         self.logger.SetFont(font1)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
-        vbox.Add(self.logger)
+        vbox.Add(self.logger, 1, wx.EXPAND)
 
         self.SetSizer(vbox)
         #vbox.Fit(self)
@@ -107,7 +108,9 @@ class PageTwo(wx.Panel):
         vbox.Add(wx.StaticLine(self, style=wx.HORIZONTAL, size=(150,2)), 0, wx.ALIGN_CENTER)
         vbox.AddSpacer(10)
 
-        self.hbox_colorbar = wx.BoxSizer(wx.HORIZONTAL)
+        color_logend_box = wx.StaticBox(self, wx.ID_ANY, "Color Legend")
+        color_logend_box_sizer = wx.StaticBoxSizer(color_logend_box, wx.HORIZONTAL)
+
         self.vbox_colorbar_options = wx.BoxSizer(wx.VERTICAL)
 
         colorbar_vmax_box = wx.StaticBox(self, wx.ID_ANY, "max")
@@ -130,10 +133,10 @@ class PageTwo(wx.Panel):
         colorbar_vmin_box_sizer.Add(hbox_min_custom)
         self.vbox_colorbar_options.Add(colorbar_vmin_box_sizer, 0, wx.ALIGN_BOTTOM|wx.ALIGN_CENTER)
 
-        self.hbox_colorbar.Add(self.vbox_colorbar_options, 1, wx.EXPAND)
-        self.hbox_colorbar.Add(self.colorbar_canvas, 0, wx.EXPAND)
+        color_logend_box_sizer.Add(self.vbox_colorbar_options, 1, wx.EXPAND)
+        color_logend_box_sizer.Add(self.colorbar_canvas, 0, wx.EXPAND)
 
-        vbox.Add(self.hbox_colorbar, 1, wx.EXPAND)
+        vbox.Add(color_logend_box_sizer, 1, wx.EXPAND)
         self.SetSizer(vbox)
         #vbox.Fit(self)
 
@@ -178,14 +181,14 @@ class wxVisualization(wx.Frame):
         self.definePasses = None
         self.definedPasses_forSnapShot = list()
 
-        teams = self.getObjectsCoords_forGivenTime(Time(1,0,0,0))
-        self.set_positions_of_objects(teams)
-
-        self.trailAnnotation, self.eventAnnotation, self.passAnnotation, self.passEffectivenessAnnotation = \
-            None, None, None, None
+        self.trailAnnotations, self.eventAnnotation, self.passAnnotations, self.passEffectivenessAnnotation = \
+            [], None, [], None
 
         self.passEffectiveness_count = 0
         self.play_speed = 2
+
+        teams = self.getObjectsCoords_forGivenTime(Time(1,0,0,0))
+        self.set_positions_of_objects(teams)
 
         self.draw_figure()
 
@@ -235,11 +238,12 @@ class wxVisualization(wx.Frame):
         self.ax = self.fig.add_axes([0.015, 0.03, 0.980, 0.925])
 
         im = plt.imread('source/background.png')
-        self.ax.imshow(im, zorder=0, extent=[-6.5, 111.5, -1.5, 66.5])
+        self.ax.imshow(im, zorder=0, extent=[FOOTBALL_FIELD_MIN_X-4.5, FOOTBALL_FIELD_MAX_X+4.5,
+                                             FOOTBALL_FIELD_MIN_Y-1.5, FOOTBALL_FIELD_MAX_Y+1.5])
         self.ax.grid()
         self.ax.axes.invert_yaxis()
-        self.ax.set_xticks(numpy.arange(0, 110, 5))
-        self.ax.set_yticks(numpy.arange(0, 70, 5))
+        self.ax.set_xticks(numpy.arange(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X+5, 5))
+        self.ax.set_yticks(numpy.arange(FOOTBALL_FIELD_MIN_Y, FOOTBALL_FIELD_MAX_Y+5, 5))
         self.ax.tick_params(axis="both", labelsize=6)
 
         a,b,c,d, = plt.plot([],[],"bo",[],[],"ro",[],[],"yo",[],[],"ko", markersize=6)
@@ -368,8 +372,8 @@ class wxVisualization(wx.Frame):
             self.remove_directionSpeedOfObjects()
             self.remove_allDefinedPassesForSnapShot()
             self.remove_eventAnnotation()
-            self.remove_passAnnotation()
-            self.remove_trailAnnotation()
+            self.remove_passAnnotations()
+            self.remove_trailAnnotations()
             self.remove_passEffectivenessAnnotation()
             self.pass_info_page.logger.Clear()
 
@@ -488,8 +492,6 @@ class wxVisualization(wx.Frame):
             for skipTimes in range(chosenSkip+1):
                 self.current_time  = current_time.next()
 
-            print self.current_time
-
             self.current_time_display.SetLabel(Time.time_display(self.current_time))
             self.slider.SetValue(self.current_time.get_in_milliseconds() / 2.)
 
@@ -529,14 +531,15 @@ class wxVisualization(wx.Frame):
         if self.passEffectiveness_count != 0:
             self.passEffectiveness_count += 1
             if self.passEffectiveness_count == 5: self.remove_passEffectivenessAnnotation()
-        self.remove_passAnnotation()
         self.remove_eventAnnotation()
 
         if eventID_current != 1:
-            self.remove_trailAnnotation()
+            self.remove_ball_owner_annotation()
             self.eventAnnotation = self.ax.annotate(self.event_id_explanation[eventID_current], xy=(52.5,32.5),  xycoords='data',
                                                     va="center", ha="center", xytext=(0, 0), textcoords='offset points', size=20,
                                                     bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7), ec=(1., .5, .5), alpha=0.5))
+            self.remove_passAnnotations()
+            self.remove_trailAnnotations()
         else:
             eventData_previous = self.sentio.get_previousEventData(time, skip_times)
             player_previous, eventID_previous = self.annotate_currentEvent_base(eventData_previous,
@@ -545,39 +548,58 @@ class wxVisualization(wx.Frame):
                 return
 
             if player_current != player_previous:
-                self.remove_trailAnnotation()
-                player_previous.set_bbox(dict(boxstyle="circle,pad=0.3", fc=self.assign_color(player_previous),
-                                              ec="none", alpha=0.5))
-                self.passAnnotation = self.ax.annotate('', xy=(.5, .5), xycoords=(player_current), xytext=(.5, .5),
-                    textcoords=(player_previous), size=20, arrowprops=dict(arrowstyle="fancy", fc="0.6", ec="none",
-                                                                           connectionstyle="arc3"))
-                effectiveness = self.definePasses.displayDefinedPass(self.passAnnotation, self.pass_info_page.logger)
-
-                ultX = ((player_current.get_position()[0] + player_previous.get_position()[0]) / 2.)
-                ultY = ((player_current.get_position()[1] + player_previous.get_position()[1]) / 2.)
-                self.remove_passEffectivenessAnnotation()
-                self.passEffectivenessAnnotation = self.ax.annotate(("effectiveness %.2f"%(effectiveness)),
-                    xy=(ultX-10, ultY), xycoords="data", va="center", ha="center", xytext=(ultX-10, ultY),
-                    textcoords="offset points", size=10, bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7),
-                                                                   ec=(1., .5, .5), alpha=0.5))
-                self.passEffectiveness_count = 1
-            else:
-                player_current.set_bbox(dict(boxstyle="circle,pad=0.3", fc=self.assign_color(player_current),
+                if eventID_previous not in [2, 12]:
+                    player_current.set_bbox(dict(boxstyle="circle,pad=0.3", fc=player_current.object_color,
                                              ec="yellow", linewidth=2))
-                if self.trailAnnotation == None:
+                    player_previous.set_bbox(dict(boxstyle="circle,pad=0.3", fc=player_previous.object_color,
+                                                  ec=player_previous.object_type_color, alpha=0.5, linewidth=1))
+
+                    passAnnotation = self.ax.annotate('', xy=player_current.get_position(), xycoords=(player_current),
+                                                      xytext=player_previous.get_position(), textcoords=(player_previous),
+                                                      arrowprops=dict(fc=player_previous.object_color,
+                                                                      ec=player_previous.object_color))
+
+                    effectiveness = self.definePasses.displayDefinedPass(passAnnotation, self.pass_info_page.logger)
+                    self.passAnnotations.append(passAnnotation)
+                    self.adjust_passAnnotations()
+
+                    ultX = ((player_current.get_position()[0] + player_previous.get_position()[0]) / 2.)
+                    ultY = ((player_current.get_position()[1] + player_previous.get_position()[1]) / 2.)
+                    self.remove_passEffectivenessAnnotation()
+                    self.passEffectivenessAnnotation = self.ax.annotate(("effectiveness %.2f"%(effectiveness)),
+                        xy=(ultX-10, ultY), xycoords="data", va="center", ha="center", xytext=(ultX-10, ultY),
+                        textcoords="offset points", size=10, bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7),
+                                                                       ec=(1., .5, .5), alpha=0.5))
+                    self.passEffectiveness_count = 1
+
+
                     self.entire_trailX, self.entire_trailY = [player_current.get_position()[0]],[player_current.get_position()[1]]
-                    self.trailAnnotation, = self.ax.plot(self.entire_trailX, self.entire_trailY, linestyle="--",
+                    trailAnnotation, = self.ax.plot(self.entire_trailX, self.entire_trailY, linestyle="--",
                                                          linewidth=2, color="yellow")
-                else:
+                    trailAnnotation.player = player_current
+                    self.trailAnnotations.append(trailAnnotation)
+                    self.adjust_trailAnnotations()
+            else:
+                if self.trailAnnotations != []:
                     self.entire_trailX.append(player_current.get_position()[0]), self.entire_trailY.append(player_current.get_position()[1])
-                    self.trailAnnotation.set_data(self.entire_trailX, self.entire_trailY)
+                    c_trailAnnotation = self.trailAnnotations[-1]
+                    c_trailAnnotation.set_data(self.entire_trailX, self.entire_trailY)
+                else:
+                    self.entire_trailX, self.entire_trailY = [player_current.get_position()[0]],[player_current.get_position()[1]]
+                    trailAnnotation, = self.ax.plot(self.entire_trailX, self.entire_trailY, linestyle="--",
+                                                         linewidth=2, color="yellow")
+                    trailAnnotation.player = player_current
+                    self.trailAnnotations.append(trailAnnotation)
+                    self.adjust_trailAnnotations()
 
 
-    def assign_color(self, player):
-        if player.object_type in [0,3]: return "blue"
-        elif player.object_type in [1,4]: return "red"
-        elif player.object_type in [2,6,7,8,9]: return "yellow"
-        else: return "black"
+    def remove_ball_owner_annotation(self):
+        teams = self.texts
+        for team in teams:
+            for js in team:
+                player = team[js].point
+                player.set_bbox(dict(boxstyle="circle,pad=0.3", fc=player.object_color,
+                                              ec=player.object_type_color, alpha=0.5, linewidth=1))
 
 
     def annotateDirectionSpeedOfObjects_forGivenTime(self, time):
@@ -675,7 +697,6 @@ class wxVisualization(wx.Frame):
 
 
     def reposition_objects(self, teams):
-        colors = ["blue", "red", "yellow", "black"]
         pre_teams = self.texts
         current_teams = teams
         for index, current_team in enumerate(current_teams):
@@ -700,10 +721,13 @@ class wxVisualization(wx.Frame):
                         player = current_team[current_js]
                         temp_player = self.ax.text(player.getPositionX(),player.getPositionY(),player.getJerseyNumber(),
                             zorder=1, color="w", fontsize=(9 if len(str(player.getJerseyNumber()))==1 else 7),
-                            picker=True, bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index], ec=colors[index], alpha=0.5))
+                            picker=True, bbox=dict(boxstyle="circle,pad=0.3", fc=player.getObjectColor(),
+                                                   ec=player.getObjectTypeColor(), alpha=0.5, linewidth=1))
                         temp_player.object_type = player.getObjectType()
                         temp_player.object_id = player.getObjectID()
                         temp_player.jersey_number = player.getJerseyNumber()
+                        temp_player.object_color = player.getObjectColor()
+                        temp_player.object_type_color = player.getObjectTypeColor()
                         dr = DraggableText(temp_player)
                         pre_team[current_js] = dr
 
@@ -716,17 +740,19 @@ class wxVisualization(wx.Frame):
     def set_positions_of_objects(self, teams):
         self.texts = ( {}, {}, {}, {} )
         BoxStyle._style_list["circle"] = CircleStyle
-        colors = ["blue", "red", "yellow", "black"]
         for index, team in enumerate(teams):
             current_team = self.texts[index]
             for js in team:
                 player = team[js]
                 player_js = self.ax.text(player.getPositionX(),player.getPositionY(),player.getJerseyNumber(), zorder=1,
                                 color="w", fontsize=(9 if len(str(player.getJerseyNumber()))==1 else 7), picker=True,
-                                bbox=dict(boxstyle="circle,pad=0.3", fc=colors[index], ec=colors[index], alpha=0.5))
+                                bbox=dict(boxstyle="circle,pad=0.3", fc=player.getObjectColor(),
+                                          ec=player.getObjectTypeColor(), alpha=0.5, linewidth=1))
                 player_js.object_type = player.getObjectType()
                 player_js.object_id = player.getObjectID()
                 player_js.jersey_number = player.getJerseyNumber()
+                player_js.object_color = player.getObjectColor()
+                player_js.object_type_color = player.getObjectTypeColor()
                 dr = DraggableText(player_js)
                 current_team[player.getJerseyNumber()] = dr
         self.definePasses = DraggablePass(self.ax, self.texts, self.fig)
@@ -777,9 +803,48 @@ class wxVisualization(wx.Frame):
             self.eventAnnotation.remove(); del self.eventAnnotation; self.eventAnnotation = None
 
 
-    def remove_passAnnotation(self):
-        if self.passAnnotation != None:
-            self.passAnnotation.remove(); del self.passAnnotation; self.passAnnotation = None
+    def remove_passAnnotations(self):
+        if self.passAnnotations != []:
+            for passAnnotation in self.passAnnotations:
+                passAnnotation.remove()
+            del self.passAnnotations[:]
+
+
+    def adjust_passAnnotations(self):
+        if self.passAnnotations != []:
+            temp_passAnnotations = []
+            for passAnnotation in self.passAnnotations[-3:-1]:
+                temp_passAnnotation = self.ax.annotate('', xy=passAnnotation.xy, xytext=passAnnotation.xytext,
+                         size=20, arrowprops=dict(arrowstyle="->", fc=passAnnotation.arrowprops["fc"],
+                                                  ec=passAnnotation.arrowprops["ec"], alpha=0.5))
+                temp_passAnnotations.append(temp_passAnnotation)
+
+            c_passAnnotation = self.passAnnotations[-1]
+            temp_passAnnotations.append(self.ax.annotate('', xy=c_passAnnotation.xy, xytext=c_passAnnotation.xytext,
+                         size=20, arrowprops=dict(arrowstyle="->", fc=c_passAnnotation.arrowprops["fc"],
+                                                  ec=c_passAnnotation.arrowprops["ec"], alpha=1.0)))
+
+            for passAnnotation in self.passAnnotations: passAnnotation.remove()
+            self.passAnnotations = temp_passAnnotations
+
+
+    def adjust_trailAnnotations(self):
+        if self.trailAnnotations != []:
+
+            while len(self.trailAnnotations) > 3:
+                self.trailAnnotations[0].remove()
+                del self.trailAnnotations[0]
+
+            for trailAnnotation in self.trailAnnotations[-3:-1]:
+                trailAnnotation.set_alpha(0.5)
+                trailAnnotation.set_color(trailAnnotation.player.object_color)
+
+
+    def remove_trailAnnotations(self):
+        if self.trailAnnotations !=[]:
+            for trailAnnotation in self.trailAnnotations:
+                trailAnnotation.remove()
+            del self.trailAnnotations[:]
 
 
     def remove_passEffectivenessAnnotation(self):
@@ -788,9 +853,7 @@ class wxVisualization(wx.Frame):
             self.passEffectivenessAnnotation = None
 
 
-    def remove_trailAnnotation(self):
-        if self.trailAnnotation!=None:
-            self.trailAnnotation.remove(); del self.trailAnnotation; self.trailAnnotation = None
+
 
 
 

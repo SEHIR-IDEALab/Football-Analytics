@@ -204,7 +204,7 @@ class wxVisualization(wx.Frame):
         #self.toolbar = NavigationToolbar(self.canvas)
 
         self.ax = self.fig.add_axes([0.015, 0.03, 0.990, 0.925])
-        im = plt.imread('../sentio/source/background.png')
+        im = plt.imread('../sentio/source/background_pre.png')
         self.ax.imshow(im, zorder=0, extent=[-6.5, 111.5, -1.5, 66.5])
         self.ax.grid()
         self.ax.axes.invert_yaxis()

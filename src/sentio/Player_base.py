@@ -47,6 +47,21 @@ class Player_base:
         else: return "unknown"
 
 
+    def getObjectColor(self):
+        if self.object_type in [0,3]: return "blue"
+        elif self.object_type in [1,4]: return "red"
+        elif self.object_type in [2,6,7,8,9]: return "yellow"
+        else: return "black"
+
+
+    def getObjectTypeColor(self):
+        if self.object_type == 0: return "blue"
+        elif self.object_type == 1: return "red"
+        elif self.object_type in [3,4]: return "black"
+        elif self.object_type in [2,6,7,8,9]: return "yellow"
+        else: return "black"
+
+
     def getObjectID(self):
         return self.object_id
 

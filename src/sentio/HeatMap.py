@@ -135,8 +135,9 @@ class HeatMap:
             self.hm.set_data(data)
             self.hm.set_clim(vmin=self.v_min, vmax=self.v_max)
         else:
-            self.hm = self.ax.imshow(data, interpolation='bilinear', extent=[0.0, 105.0, 65.0, 0.0],
-                                 vmin=self.v_min, vmax=self.v_max, alpha=0.8)
+            self.hm = self.ax.imshow(data, interpolation='bilinear', vmin=self.v_min, vmax=self.v_max, alpha=0.8,
+                                     extent=[FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X,
+                                             FOOTBALL_FIELD_MAX_Y, FOOTBALL_FIELD_MIN_Y])
 
         self.color_bar.set_clim(vmin=self.v_min, vmax=self.v_max)
         self.color_bar.draw_all()
@@ -147,8 +148,8 @@ class HeatMap:
 
 
     def draw(self, data):
-        self.ax.set_xlim(-6.5, 111.5)
-        self.ax.set_ylim(66.5, -1.5)
+        self.ax.set_xlim(FOOTBALL_FIELD_MIN_X-4.5, FOOTBALL_FIELD_MAX_X+4.5)
+        self.ax.set_ylim(FOOTBALL_FIELD_MAX_Y+1.5, FOOTBALL_FIELD_MIN_Y-1.5)
         self.adjust_heatMap(data)
 
 
