@@ -27,6 +27,10 @@ class DraggablePass(Pass):
         self.effectiveness_withComp_byTime = None
 
 
+    def set_defined_passes(self, passes):
+        self.definedPasses = passes
+
+
     def connect(self):
         self.cidpick = self.figure.canvas.mpl_connect("pick_event", self.on_pick_event)
         self.cidmotion = self.figure.canvas.mpl_connect("motion_notify_event", self.on_motion_event)
@@ -110,7 +114,6 @@ class DraggablePass(Pass):
                 if self.dragged != self.dragged2:
                     self.passAnnotation.xy = (.5,.5)
                     self.passAnnotation.xycoords = self.dragged2
-                    self.passAnnotation.arrowprops["patchB"] = self.dragged2.get_bbox_patch()
 
                     self.definedPasses.append(self.passAnnotation)
                     self.displayDefinedPasses()
@@ -122,11 +125,11 @@ class DraggablePass(Pass):
                 self.dragged = event.artist
                 xBall, yBall = (event.mouseevent.xdata, event.mouseevent.ydata)
 
-                self.passAnnotation = self.ax.annotate('', xy=(xBall, yBall), xycoords='data', xytext=(.5,.5), va="center",
-                    ha="center", picker=True, textcoords=(self.dragged), size=20, arrowprops=dict(
-                        patchA=self.dragged.get_bbox_patch(), arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
+                self.passAnnotation = self.ax.annotate('', xy=(xBall, yBall), xytext=(.5,.5), picker=True,
+                        textcoords=(self.dragged), size=20, arrowprops=dict(patchA=self.dragged.get_bbox_patch(),
+                        arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
 
-                self.figure.canvas.draw()
+            self.figure.canvas.draw()
 
 
     def on_motion_event(self, event):

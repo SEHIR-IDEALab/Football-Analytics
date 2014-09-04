@@ -122,9 +122,9 @@ class SnapShot:
                         if player.jersey_number==int(jsTo):
                             p2_s.append(player)
             for p2 in p2_s:
-                passAnnotation = ax.annotate('', xy=(.5, .5), xycoords=(p2), ha="center", va="center",
-                    xytext=(.5, .5), textcoords=(p1), size=20, arrowprops=dict(patchA=p1.get_bbox_patch(),
-                    patchB=p2.get_bbox_patch(), arrowstyle="fancy", fc="0.6", ec="none", connectionstyle="arc3"))
+                passAnnotation = ax.annotate('', xy=(.5, .5), xytext=(.5, .5), xycoords=(p2), textcoords=(p1), size=20,
+                                    picker = True, arrowprops=dict(patchA=p1.get_bbox_patch(), arrowstyle="fancy",
+                                    fc="0.6", ec="none", connectionstyle="arc3"))
                 defined_passes.append(passAnnotation)
                 drag_pass.displayDefinedPass(passAnnotation, pass_display)
         return defined_passes

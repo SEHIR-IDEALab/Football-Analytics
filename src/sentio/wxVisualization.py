@@ -359,6 +359,9 @@ class wxVisualization(wx.Frame):
                 directions = self.getDirectionOfObjects_forGivenTime(current_time)
                 speeds = self.getSpeedOfObjects_forGivenTime(current_time)
 
+                print directions
+                print speeds
+
                 snapShot = SnapShot(path)
                 snapShot.saveSnapShot(self.team_names, self.texts, defined_passes, directions, speeds)
             self.flash_status_message("Saved to %s" % path)
@@ -381,10 +384,18 @@ class wxVisualization(wx.Frame):
             teams, list_of_directions = snapShot.loadSnapShot(self.ax)
 
             self.directions_of_objects.extend(list_of_directions)
-            self.reposition_objects(teams)
+
+            self.remove_all_objects()
+            self.set_positions_of_objects(teams)
 
             all_defined_passes = snapShot.displayAllPasses(path, self.ax, self.texts, self.pass_info_page.logger)
             self.definedPasses_forSnapShot.extend(all_defined_passes)
+
+            for team in self.texts:
+                for js in team:
+                    draggableText = team[js]
+                    draggableText.set_definedPasses(self.definedPasses_forSnapShot)
+                    draggableText.set_coordinatesOfObjects(self.texts)
 
             self.current_time_display.SetLabel("Time = %s.%s.%s" %("--", "--", "--"))
             self.canvas.draw()
@@ -756,6 +767,7 @@ class wxVisualization(wx.Frame):
                 dr = DraggableText(player_js)
                 current_team[player.getJerseyNumber()] = dr
         self.definePasses = DraggablePass(self.ax, self.texts, self.fig)
+        self.definePasses.set_defined_passes(self.definedPasses_forSnapShot)
         self.definePasses.set_passDisplayer(self.pass_info_page.logger)
         self.definePasses.set_variables(self.heatmap_setup_page.heat_map, self.heatmap_setup_page.resolution,
                                         self.heatmap_setup_page.effectiveness)
@@ -780,6 +792,16 @@ class wxVisualization(wx.Frame):
         if self.definePasses.definedPasses:
             for i in self.definePasses.definedPasses: i.remove()
             del self.definePasses.definedPasses[:]
+
+
+    def remove_all_objects(self):
+        teams = self.texts
+        if teams:
+            for team in teams:
+                for player in team.values():
+                    player = player.point
+                    player.remove()
+        self.texts = ({},{},{},{})
 
 
     def remove_directionSpeedOfObjects(self):

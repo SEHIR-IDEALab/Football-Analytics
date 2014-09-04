@@ -1,7 +1,7 @@
 __author__ = 'aliuzun'
 
 import time as tm
-from HasBallC import *
+from WhoHasBall import *
 from src.sentio.Sentio import Sentio
 
 
