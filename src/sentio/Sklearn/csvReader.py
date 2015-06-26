@@ -27,7 +27,7 @@ for i in range(100):
                         pass
                 except ValueError:
                     pass
-    print data0[0]
+
     #print len(own0),len(own1)
     length_own1=len(own1)
     length_own0=len(own0)

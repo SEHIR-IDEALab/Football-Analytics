@@ -1,7 +1,8 @@
 # coding=utf-8
 import time as tm
-from src.sentio.Match import Match
-from src.sentio.Sentio import Sentio
+from src.sentio.object.Match import Match
+from src.sentio.parser.Parser import Parser
+
 
 __author__ = 'emrullah'
 
@@ -9,10 +10,25 @@ def main():
     start = tm.time()
 
 
-    sentio = Sentio()
-    sentio.parseSentioData()
+    parser = Parser()
+    parser.parseSentioData()
 
-    match = Match(sentio)
+    # game_events = parser.getGameEvents()
+    # for event_time in sorted(game_events.keys()):
+    #     temp_game_event = game_events.get(event_time)
+    #     print temp_game_event.isPassEvent()
+
+
+    #q = parser.getCoordinateData()
+    #parser.getCombinedEventData()
+    # parser.getCoordinateData()
+
+    #for definedPass in sentio.getEventData():
+    # #    print definedPass
+    #
+
+
+    match = Match(parser)
     match.visualizeMatch()
 
 

@@ -15,10 +15,11 @@ def main():
 
     hasball = WhoHasBall(sentio)
 
-    #print hasball.Run_Test()
-    print hasball.getCorrelatedPlayer_byTime(1,1,1,0)
+    print hasball.Run_Test()
+    # print hasball.getCorrelatedPlayer_byTime(1,1,1,0)
 
     end = tm.time()
+    print
 
     print end - start
 

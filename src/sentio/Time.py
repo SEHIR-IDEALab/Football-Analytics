@@ -91,6 +91,16 @@ class Time(object):
         return self.milliseconds_to_time(total_milliseconds-2)
 
 
+    def __eq__(self, other):
+        return (self.half, self.minute, self.second, self.millisecond) == \
+               (other.half, other.minute, other.second, other.millisecond)
+
+
+    def __ne__(self, other):
+        return not (self.half, self.minute, self.second, self.millisecond) == \
+               (other.half, other.minute, other.second, other.millisecond)
+
+
     def __str__(self):
         return "half = %s\n" \
                "minute = %s\n" \

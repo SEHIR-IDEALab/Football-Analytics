@@ -1,0 +1,1339 @@
+1	0	0	Fenerbahçe	9	1	Hasball
+1	0	1	Fenerbahçe	16	1	Hasball
+1	0	5	Fenerbahçe	11	1	Hasball
+1	0	9	Fenerbahçe	22	1	Hasball
+1	0	13	Fenerbahçe	11	1	Hasball
+1	0	14	Fenerbahçe	16	1	Hasball
+1	0	20	Fenerbahçe	2	1	Hasball
+1	0	25	Fenerbahçe	25	1	Hasball
+1	0	27	Fenerbahçe	2	1	Hasball
+1	0	30	Fenerbahçe	1	1	Hasball
+1	0	34	Fenerbahçe	22	1	Hasball
+1	0	40	Fenerbahçe	25	1	Hasball
+1	0	45	Fenerbahçe	7	1	Hasball
+1	0	46	Fenerbahçe	22	1	Hasball
+1	0	50	Fenerbahçe	5	1	Hasball
+1	0	52	Fenerbahçe	16	1	Hasball
+1	0	59		0	2	GameStop
+1	1	3	Fenerbahçe	16	12	Out
+1	1	25	Galatasaray	67	1	Hasball
+1	1	27	Galatasaray	13	1	Hasball
+1	1	29	Galatasaray	17	1	Hasball
+1	1	33		0	2	GameStop
+1	1	47	Galatasaray	13	4	ThrowIn
+1	1	47	Galatasaray	13	1	Hasball
+1	1	52	Fenerbahçe	5	1	Hasball
+1	1	55	Fenerbahçe	1	1	Hasball
+1	1	59	Fenerbahçe	2	1	Hasball
+1	2	4	Fenerbahçe	22	1	Hasball
+1	2	10	Fenerbahçe	7	1	Hasball
+1	2	13	Fenerbahçe	22	1	Hasball
+1	2	20	Galatasaray	26	1	Hasball
+1	2	21	Galatasaray	13	1	Hasball
+1	2	23	Galatasaray	6	1	Hasball
+1	2	26	Galatasaray	67	1	Hasball
+1	2	29	Fenerbahçe	88	1	Hasball
+1	2	30	Fenerbahçe	16	1	Hasball
+1	2	34	Fenerbahçe	9	8	Offside
+1	2	34		0	2	GameStop
+1	2	58	Galatasaray	67	1	Hasball
+1	3	2	Fenerbahçe	22	1	Hasball
+1	3	9	Galatasaray	13	1	Hasball
+1	3	10		0	2	GameStop
+1	3	17	Fenerbahçe	77	4	ThrowIn
+1	3	17	Fenerbahçe	77	1	Hasball
+1	3	18	Fenerbahçe	22	1	Hasball
+1	3	19	Fenerbahçe	2	1	Hasball
+1	3	22	Fenerbahçe	25	1	Hasball
+1	3	23	Fenerbahçe	2	1	Hasball
+1	3	26	Fenerbahçe	22	1	Hasball
+1	3	33	Fenerbahçe	9	1	Hasball
+1	3	34	Fenerbahçe	11	1	Hasball
+1	3	36	Fenerbahçe	25	1	Hasball
+1	3	39	Fenerbahçe	88	1	Hasball
+1	3	42	Fenerbahçe	25	1	Hasball
+1	3	48		0	2	GameStop
+1	3	49	Fenerbahçe	25	12	Out
+1	3	57	Galatasaray	67	1	Hasball
+1	4	0	Fenerbahçe	22	1	Hasball
+1	4	2		0	2	GameStop
+1	4	15	Galatasaray	13	4	ThrowIn
+1	4	19	Galatasaray	13	1	Hasball
+1	4	24	Fenerbahçe	2	1	Hasball
+1	4	28	Fenerbahçe	25	1	Hasball
+1	4	30	Fenerbahçe	5	1	Hasball
+1	4	33	Fenerbahçe	2	1	Hasball
+1	4	39	Fenerbahçe	16	1	Hasball
+1	4	44	Galatasaray	13	1	Hasball
+1	4	45	Galatasaray	17	1	Hasball
+1	4	48	Galatasaray	6	1	Hasball
+1	4	51	Galatasaray	20	1	Hasball
+1	4	55	Galatasaray	8	1	Hasball
+1	4	59	Galatasaray	27	1	Hasball
+1	5	1	Galatasaray	6	1	Hasball
+1	5	2	Galatasaray	3	1	Hasball
+1	5	6	Fenerbahçe	5	1	Hasball
+1	5	6	Fenerbahçe	25	1	Hasball
+1	5	8	Fenerbahçe	5	218	Steal
+1	5	10	Fenerbahçe	7	1	Hasball
+1	5	15	Fenerbahçe	9	1	Hasball
+1	5	18	Fenerbahçe	7	1	Hasball
+1	5	22	Fenerbahçe	7	29	CrossNotSuccess
+1	5	23		0	2	GameStop
+1	5	24	Fenerbahçe	7	12	Out
+1	5	47	Galatasaray	67	1	Hasball
+1	5	51	Fenerbahçe	2	16	FaulCommitted
+1	5	52		0	2	GameStop
+1	5	54	Galatasaray	11	7	FaulSuffered
+1	7	18	Galatasaray	11	20	Freekick
+1	7	20	Galatasaray	11	69	ShotSuccess - RightFoot - Center - Out
+1	7	20	Galatasaray	11	1	Hasball
+1	7	22	Fenerbahçe	1	1	Hasball
+1	7	27	Fenerbahçe	7	1	Hasball
+1	7	33	Fenerbahçe	9	1	Hasball
+1	7	36	Galatasaray	26	22	Clearence
+1	7	37		0	2	GameStop
+1	7	44	Fenerbahçe	16	1	Hasball
+1	7	45	Fenerbahçe	22	1	Hasball
+1	7	46	Fenerbahçe	16	4	ThrowIn
+1	7	47	Fenerbahçe	2	1	Hasball
+1	7	50	Fenerbahçe	5	1	Hasball
+1	7	53	Fenerbahçe	2	1	Hasball
+1	7	58	Fenerbahçe	22	1	Hasball
+1	8	3	Fenerbahçe	77	1	Hasball
+1	8	7	Galatasaray	26	22	Clearence
+1	8	8		0	2	GameStop
+1	8	25	Fenerbahçe	77	4	ThrowIn
+1	8	27	Fenerbahçe	77	1	Hasball
+1	8	30	Galatasaray	6	22	Clearence
+1	8	31	Fenerbahçe	25	1	Hasball
+1	8	33	Fenerbahçe	77	1	Hasball
+1	8	35	Fenerbahçe	77	29	CrossNotSuccess
+1	8	35	Galatasaray	21	22	Clearence
+1	8	39	Galatasaray	13	22	Clearence
+1	8	43	Fenerbahçe	22	1	Hasball
+1	8	45	Fenerbahçe	22	96	TacleSuccess - Air
+1	8	47		0	2	GameStop
+1	8	50	Galatasaray	11	99	TacleNotSuccess - Air
+1	9	12	Galatasaray	6	1	Hasball
+1	9	14	Fenerbahçe	22	22	Clearence
+1	9	15		0	2	GameStop
+1	9	17	Galatasaray	13	4	ThrowIn
+1	9	31	Galatasaray	13	4	ThrowIn
+1	9	31	Galatasaray	13	1	Hasball
+1	9	32	Galatasaray	17	1	Hasball
+1	9	33	Galatasaray	11	1	Hasball
+1	9	34	Galatasaray	8	1	Hasball
+1	9	36	Fenerbahçe	16	1	Hasball
+1	9	37	Fenerbahçe	25	1	Hasball
+1	9	40	Fenerbahçe	7	1	Hasball
+1	9	42	Fenerbahçe	88	1	Hasball
+1	9	44	Fenerbahçe	7	1	Hasball
+1	9	53	Galatasaray	27	1	Hasball
+1	9	55	Galatasaray	27	218	Steal
+1	10	3		0	2	GameStop
+1	10	4	Fenerbahçe	2	7	FaulSuffered
+1	10	6	Galatasaray	11	16	FaulCommitted
+1	10	18	Fenerbahçe	5	1	Hasball
+1	10	19	Fenerbahçe	22	1	Hasball
+1	10	25	Galatasaray	20	22	Clearence
+1	10	29		0	2	GameStop
+1	10	30	Fenerbahçe	88	4	ThrowIn
+1	10	33	Fenerbahçe	88	1	Hasball
+1	10	35	Fenerbahçe	2	1	Hasball
+1	10	37	Fenerbahçe	25	1	Hasball
+1	10	41	Fenerbahçe	7	1	Hasball
+1	10	47	Fenerbahçe	11	1	Hasball
+1	10	49	Fenerbahçe	77	1	Hasball
+1	10	54	Fenerbahçe	77	29	CrossNotSuccess
+1	10	54	Galatasaray	21	22	Clearence
+1	10	57	Galatasaray	20	1	Hasball
+1	11	0	Galatasaray	11	1	Hasball
+1	11	2	Galatasaray	8	1	Hasball
+1	11	4	Galatasaray	20	1	Hasball
+1	11	10	Galatasaray	11	1	Hasball
+1	11	12	Fenerbahçe	1	1	Hasball
+1	11	13	Galatasaray	11	68	ShotSuccess - RightFoot - LeftDown - Out
+1	11	19		0	2	GameStop
+1	11	21	Galatasaray	17	8	Offside
+1	11	42	Fenerbahçe	22	1	Hasball
+1	11	42	Fenerbahçe	5	1	Hasball
+1	11	44	Fenerbahçe	25	1	Hasball
+1	11	46	Fenerbahçe	7	1	Hasball
+1	11	47	Fenerbahçe	2	1	Hasball
+1	11	51	Fenerbahçe	22	1	Hasball
+1	11	55	Fenerbahçe	11	1	Hasball
+1	11	57	Fenerbahçe	9	1	Hasball
+1	12	0	Galatasaray	3	1	Hasball
+1	12	1	Galatasaray	3	218	Steal
+1	12	1	Galatasaray	11	1	Hasball
+1	12	2	Galatasaray	3	1	Hasball
+1	12	5	Galatasaray	8	1	Hasball
+1	12	7	Galatasaray	13	1	Hasball
+1	12	9	Fenerbahçe	77	1	Hasball
+1	12	11	Galatasaray	26	22	Clearence
+1	12	13	Galatasaray	17	1	Hasball
+1	12	14	Galatasaray	8	1	Hasball
+1	12	15	Galatasaray	13	1	Hasball
+1	12	16	Galatasaray	17	1	Hasball
+1	12	17	Galatasaray	8	1	Hasball
+1	12	20	Galatasaray	6	1	Hasball
+1	12	21	Galatasaray	21	1	Hasball
+1	12	24	Galatasaray	11	1	Hasball
+1	12	29	Fenerbahçe	1	1	Hasball
+1	12	32	Fenerbahçe	2	1	Hasball
+1	12	34	Fenerbahçe	25	1	Hasball
+1	12	38	Fenerbahçe	88	1	Hasball
+1	12	41		0	2	GameStop
+1	12	44	Fenerbahçe	88	4	ThrowIn
+1	12	45	Fenerbahçe	88	1	Hasball
+1	12	49	Fenerbahçe	9	1	Hasball
+1	12	52	Galatasaray	21	218	Steal
+1	12	52	Galatasaray	21	1	Hasball
+1	12	55	Galatasaray	6	22	Clearence
+1	12	57		0	2	GameStop
+1	13	2	Galatasaray	21	4	ThrowIn
+1	13	9	Galatasaray	27	1	Hasball
+1	13	9	Galatasaray	27	4	ThrowIn
+1	13	10	Galatasaray	6	1	Hasball
+1	13	14	Galatasaray	13	1	Hasball
+1	13	16	Galatasaray	17	1	Hasball
+1	13	21	Galatasaray	6	1	Hasball
+1	13	24	Galatasaray	11	1	Hasball
+1	13	26	Galatasaray	6	1	Hasball
+1	13	28	Galatasaray	17	1	Hasball
+1	13	34	Fenerbahçe	2	22	Clearence
+1	13	36	Fenerbahçe	9	1	Hasball
+1	13	39		0	2	GameStop
+1	13	48	Galatasaray	27	1	Hasball
+1	13	49	Galatasaray	21	1	Hasball
+1	13	52	Galatasaray	26	1	Hasball
+1	13	54	Galatasaray	13	1	Hasball
+1	13	56	Galatasaray	26	1	Hasball
+1	14	0	Galatasaray	21	1	Hasball
+1	14	1	Galatasaray	8	1	Hasball
+1	14	2	Galatasaray	21	1	Hasball
+1	14	11	Galatasaray	11	1	Hasball
+1	14	12		0	2	GameStop
+1	14	20	Fenerbahçe	88	4	ThrowIn
+1	14	20	Fenerbahçe	88	1	Hasball
+1	14	22	Fenerbahçe	22	1	Hasball
+1	14	29	Fenerbahçe	16	1	Hasball
+1	14	33	Fenerbahçe	5	1	Hasball
+1	14	37	Fenerbahçe	88	1	Hasball
+1	14	41	Fenerbahçe	2	1	Hasball
+1	14	44	Fenerbahçe	16	1	Hasball
+1	14	48	Fenerbahçe	22	1	Hasball
+1	14	57	Fenerbahçe	16	1	Hasball
+1	14	59	Fenerbahçe	25	1	Hasball
+1	15	0	Fenerbahçe	16	1	Hasball
+1	15	4	Fenerbahçe	5	1	Hasball
+1	15	12	Galatasaray	26	22	Clearence
+1	15	14	Fenerbahçe	7	1	Hasball
+1	15	17	Fenerbahçe	25	1	Hasball
+1	15	19	Galatasaray	13	1	Hasball
+1	15	20	Galatasaray	13	218	Steal
+1	15	21	Galatasaray	17	1	Hasball
+1	15	24	Fenerbahçe	5	1	Hasball
+1	15	25	Fenerbahçe	25	1	Hasball
+1	15	27	Fenerbahçe	16	1	Hasball
+1	15	32	Fenerbahçe	9	8	Offside
+1	15	33		0	2	GameStop
+1	15	42	Fenerbahçe	7	41	ShotNotSuccess - LeftFoot - Left - Out
+1	15	42	Fenerbahçe	7	1	Hasball
+1	15	44		0	2	GameStop
+1	17	19	Galatasaray	67	1	Hasball
+1	17	23	Fenerbahçe	5	1	Hasball
+1	17	24	Fenerbahçe	5	96	TacleSuccess - Air
+1	17	26	Fenerbahçe	22	1	Hasball
+1	17	28	Fenerbahçe	5	1	Hasball
+1	17	29	Galatasaray	11	99	TacleNotSuccess - Air
+1	17	39	Fenerbahçe	77	8	Offside
+1	17	39		0	2	GameStop
+1	17	54	Galatasaray	67	1	Hasball
+1	17	55	Galatasaray	6	1	Hasball
+1	17	56	Galatasaray	21	1	Hasball
+1	17	58	Galatasaray	67	1	Hasball
+1	18	3	Fenerbahçe	25	1	Hasball
+1	18	6	Fenerbahçe	25	12	Out
+1	18	6		0	2	GameStop
+1	18	12	Galatasaray	67	1	Hasball
+1	18	13	Galatasaray	26	1	Hasball
+1	18	16	Galatasaray	13	1	Hasball
+1	18	16	Fenerbahçe	13	1	Hasball
+1	18	21	Galatasaray	17	1	Hasball
+1	18	22	Galatasaray	6	1	Hasball
+1	18	25	Galatasaray	3	1	Hasball
+1	18	26	Galatasaray	21	1	Hasball
+1	18	28	Galatasaray	27	1	Hasball
+1	18	30	Galatasaray	20	1	Hasball
+1	18	34	Fenerbahçe	88	1	Hasball
+1	18	34	Fenerbahçe	9	1	Hasball
+1	18	39		0	2	GameStop
+1	18	41	Galatasaray	21	16	FaulCommitted
+1	18	44	Fenerbahçe	9	7	FaulSuffered
+1	19	6	Galatasaray	21	22	Clearence
+1	19	8	Fenerbahçe	25	1	Hasball
+1	19	11	Fenerbahçe	11	1	Hasball
+1	19	16	Fenerbahçe	77	1	Hasball
+1	19	17	Fenerbahçe	77	47	ShotNotSuccess - RightFoot - Up - In
+1	19	18		0	2	GameStop
+1	19	35	Galatasaray	6	1	Hasball
+1	19	37	Fenerbahçe	22	1	Hasball
+1	19	38	Fenerbahçe	77	1	Hasball
+1	19	43		0	2	GameStop
+1	19	57	Galatasaray	13	4	ThrowIn
+1	20	0	Galatasaray	13	1	Hasball
+1	20	3	Fenerbahçe	77	1	Hasball
+1	20	4	Galatasaray	6	22	Clearence
+1	20	6		0	2	GameStop
+1	20	9	Fenerbahçe	77	4	ThrowIn
+1	20	11	Fenerbahçe	77	1	Hasball
+1	20	14	Fenerbahçe	11	1	Hasball
+1	20	16	Fenerbahçe	77	1	Hasball
+1	20	17	Fenerbahçe	5	1	Hasball
+1	20	19	Galatasaray	8	1	Hasball
+1	20	21	Galatasaray	17	1	Hasball
+1	20	22	Galatasaray	8	218	Steal
+1	20	24		0	2	GameStop
+1	20	37	Galatasaray	13	4	ThrowIn
+1	20	41	Galatasaray	13	1	Hasball
+1	20	42	Galatasaray	6	1	Hasball
+1	20	43	Galatasaray	13	1	Hasball
+1	20	45	Galatasaray	8	1	Hasball
+1	20	46		0	2	GameStop
+1	20	48	Galatasaray	8	7	FaulSuffered
+1	20	49	Fenerbahçe	5	16	FaulCommitted
+1	21	1	Galatasaray	8	1	Hasball
+1	21	2	Galatasaray	21	1	Hasball
+1	21	6	Fenerbahçe	88	1	Hasball
+1	21	8	Galatasaray	6	1	Hasball
+1	21	9	Galatasaray	8	1	Hasball
+1	21	9	Galatasaray	6	1	Hasball
+1	21	12	Fenerbahçe	88	218	Steal
+1	21	12	Fenerbahçe	88	1	Hasball
+1	21	15	Fenerbahçe	7	1	Hasball
+1	21	21	Fenerbahçe	7	29	CrossNotSuccess
+1	21	21	Galatasaray	6	22	Clearence
+1	21	23		0	2	GameStop
+1	21	27	Fenerbahçe	88	1	Hasball
+1	21	29	Fenerbahçe	88	4	ThrowIn
+1	21	29	Fenerbahçe	25	1	Hasball
+1	21	36	Galatasaray	20	16	FaulCommitted
+1	21	36		0	2	GameStop
+1	21	40	Fenerbahçe	25	7	FaulSuffered
+1	21	42	Fenerbahçe	88	1	Hasball
+1	21	43	Fenerbahçe	88	29	CrossNotSuccess
+1	21	47	Galatasaray	21	109	Penalty - Caused
+1	21	48		0	2	GameStop
+1	21	55	Galatasaray	21	18	HandBall
+1	22	3	Galatasaray	21	9	YellowCard
+1	22	56	Fenerbahçe	25	198	GoalScored - Penalty - LeftFoot - RightDown
+1	22	56	Fenerbahçe	25	1	Hasball
+1	22	59		0	2	GameStop
+1	23	11	Fenerbahçe	25	14	Degaj
+1	24	6	Galatasaray	8	1	Hasball
+1	24	7	Galatasaray	11	1	Hasball
+1	24	8	Galatasaray	6	1	Hasball
+1	24	9	Galatasaray	13	1	Hasball
+1	24	11	Galatasaray	17	1	Hasball
+1	24	16	Galatasaray	8	1	Hasball
+1	24	19	Galatasaray	8	8	Offside
+1	24	19		0	2	GameStop
+1	24	42	Fenerbahçe	22	1	Hasball
+1	24	43	Fenerbahçe	2	1	Hasball
+1	24	47	Fenerbahçe	5	1	Hasball
+1	24	52	Fenerbahçe	2	1	Hasball
+1	24	55	Fenerbahçe	7	1	Hasball
+1	24	58	Fenerbahçe	2	1	Hasball
+1	25	4	Galatasaray	21	1	Hasball
+1	25	7	Fenerbahçe	88	1	Hasball
+1	25	9	Galatasaray	67	1	Hasball
+1	25	13	Galatasaray	13	1	Hasball
+1	25	15	Galatasaray	17	1	Hasball
+1	25	16	Galatasaray	13	1	Hasball
+1	25	19	Galatasaray	17	1	Hasball
+1	25	20	Fenerbahçe	77	16	FaulCommitted
+1	25	20		0	2	GameStop
+1	25	23	Galatasaray	13	7	FaulSuffered
+1	25	24	Galatasaray	8	1	Hasball
+1	25	25	Galatasaray	3	1	Hasball
+1	25	29	Fenerbahçe	88	15	SlidingTackle
+1	25	30	Fenerbahçe	9	1	Hasball
+1	25	31	Fenerbahçe	25	1	Hasball
+1	25	33	Fenerbahçe	11	1	Hasball
+1	25	34	Fenerbahçe	88	1	Hasball
+1	25	38	Galatasaray	27	1	Hasball
+1	25	40	Galatasaray	27	218	Steal
+1	25	43	Galatasaray	27	7	FaulSuffered
+1	25	44		0	2	GameStop
+1	25	47	Fenerbahçe	88	16	FaulCommitted
+1	26	41	Galatasaray	21	1	Hasball
+1	26	44	Fenerbahçe	5	1	Hasball
+1	26	45	Fenerbahçe	1	1	Hasball
+1	26	55	Galatasaray	26	1	Hasball
+1	26	58	Galatasaray	3	1	Hasball
+1	26	59	Galatasaray	8	1	Hasball
+1	27	2	Fenerbahçe	1	1	Hasball
+1	27	10	Fenerbahçe	77	1	Hasball
+1	27	11	Fenerbahçe	22	1	Hasball
+1	27	13	Fenerbahçe	5	1	Hasball
+1	27	14	Fenerbahçe	11	1	Hasball
+1	27	15	Fenerbahçe	5	1	Hasball
+1	27	21	Fenerbahçe	5	29	CrossNotSuccess
+1	27	22	Galatasaray	27	1	Hasball
+1	27	24	Galatasaray	8	1	Hasball
+1	27	33	Fenerbahçe	22	1	Hasball
+1	27	34	Fenerbahçe	77	1	Hasball
+1	27	36	Fenerbahçe	25	1	Hasball
+1	27	37	Fenerbahçe	7	1	Hasball
+1	27	40	Galatasaray	27	16	FaulCommitted
+1	27	41		0	2	GameStop
+1	27	42	Fenerbahçe	7	7	FaulSuffered
+1	27	54	Fenerbahçe	2	1	Hasball
+1	27	56	Fenerbahçe	16	1	Hasball
+1	28	1	Fenerbahçe	77	1	Hasball
+1	28	4	Galatasaray	13	218	Steal
+1	28	5	Galatasaray	13	1	Hasball
+1	28	15	Galatasaray	8	1	Hasball
+1	28	18	Fenerbahçe	22	1	Hasball
+1	28	19	Fenerbahçe	11	1	Hasball
+1	28	20	Fenerbahçe	9	1	Hasball
+1	28	22	Galatasaray	3	1	Hasball
+1	28	23	Galatasaray	8	1	Hasball
+1	28	27	Galatasaray	3	218	Steal
+1	28	28		0	2	GameStop
+1	28	29	Galatasaray	8	7	FaulSuffered
+1	28	43	Fenerbahçe	9	16	FaulCommitted
+1	29	8	Galatasaray	13	1	Hasball
+1	29	9	Galatasaray	26	1	Hasball
+1	29	12	Galatasaray	21	1	Hasball
+1	29	16	Galatasaray	6	1	Hasball
+1	29	18	Galatasaray	3	1	Hasball
+1	29	19	Galatasaray	8	1	Hasball
+1	29	23	Galatasaray	27	1	Hasball
+1	29	24	Galatasaray	21	1	Hasball
+1	29	26	Galatasaray	6	1	Hasball
+1	29	27	Galatasaray	3	1	Hasball
+1	29	32	Fenerbahçe	5	16	FaulCommitted
+1	29	32		0	2	GameStop
+1	29	35	Galatasaray	3	7	FaulSuffered
+1	29	50	Galatasaray	21	1	Hasball
+1	29	51	Galatasaray	11	1	Hasball
+1	29	57		0	2	GameStop
+1	29	58	Galatasaray	11	7	FaulSuffered
+1	30	2	Fenerbahçe	25	16	FaulCommitted
+1	30	51	Galatasaray	11	20	Freekick
+1	30	54	Galatasaray	11	37	ShotNotSuccess - RightFoot - Up - Out
+1	30	54	Galatasaray	11	1	Hasball
+1	30	54	Fenerbahçe	11	1	Hasball
+1	30	57		0	2	GameStop
+1	31	28	Galatasaray	21	1	Hasball
+1	31	31	Galatasaray	21	96	TacleSuccess - Air
+1	31	32	Fenerbahçe	2	1	Hasball
+1	31	34	Fenerbahçe	9	99	TacleNotSuccess - Air
+1	31	34	Fenerbahçe	11	1	Hasball
+1	31	36	Fenerbahçe	7	1	Hasball
+1	31	42	Galatasaray	3	15	SlidingTackle
+1	31	44	Fenerbahçe	25	1	Hasball
+1	31	45	Fenerbahçe	77	1	Hasball
+1	31	49	Fenerbahçe	77	28	CrossSuccess
+1	31	49	Fenerbahçe	9	1	Hasball
+1	31	50		0	2	GameStop
+1	31	51	Fenerbahçe	9	60	ShotNotSuccess - Head - Right - In
+1	32	18	Galatasaray	67	1	Hasball
+1	32	20	Galatasaray	11	1	Hasball
+1	32	21	Fenerbahçe	22	1	Hasball
+1	32	23		0	2	GameStop
+1	32	32	Galatasaray	13	1	Hasball
+1	32	35	Fenerbahçe	22	22	Clearence
+1	32	37		0	2	GameStop
+1	32	39	Galatasaray	11	16	FaulCommitted
+1	32	40	Fenerbahçe	22	7	FaulSuffered
+1	33	13	Fenerbahçe	1	1	Hasball
+1	33	16	Fenerbahçe	9	1	Hasball
+1	33	18	Fenerbahçe	9	96	TacleSuccess - Air
+1	33	18	Fenerbahçe	16	1	Hasball
+1	33	20	Galatasaray	6	1	Hasball
+1	33	22	Galatasaray	26	99	TacleNotSuccess - Air
+1	33	22	Galatasaray	20	1	Hasball
+1	33	27	Galatasaray	6	1	Hasball
+1	33	29	Galatasaray	26	1	Hasball
+1	33	31	Galatasaray	13	1	Hasball
+1	33	33	Galatasaray	6	1	Hasball
+1	33	36	Galatasaray	3	1	Hasball
+1	33	39	Galatasaray	21	1	Hasball
+1	33	41	Galatasaray	6	1	Hasball
+1	33	43	Galatasaray	26	1	Hasball
+1	33	47	Galatasaray	20	1	Hasball
+1	33	50	Galatasaray	21	1	Hasball
+1	33	51	Galatasaray	8	1	Hasball
+1	33	57	Galatasaray	27	1	Hasball
+1	34	1	Fenerbahçe	88	1	Hasball
+1	34	2	Fenerbahçe	25	1	Hasball
+1	34	3	Fenerbahçe	88	218	Steal
+1	34	5	Galatasaray	27	16	FaulCommitted
+1	34	5		0	2	GameStop
+1	34	8	Fenerbahçe	25	7	FaulSuffered
+1	34	34	Fenerbahçe	2	1	Hasball
+1	34	36	Fenerbahçe	1	1	Hasball
+1	34	46	Galatasaray	27	1	Hasball
+1	34	47	Galatasaray	6	1	Hasball
+1	34	49	Fenerbahçe	16	1	Hasball
+1	34	52		0	2	GameStop
+1	34	55	Fenerbahçe	5	16	FaulCommitted
+1	34	56	Galatasaray	6	7	FaulSuffered
+1	36	23	Galatasaray	26	1	Hasball
+1	36	26	Fenerbahçe	2	22	Clearence
+1	36	28	Fenerbahçe	9	1	Hasball
+1	36	30	Galatasaray	21	1	Hasball
+1	36	32	Galatasaray	26	1	Hasball
+1	36	34	Galatasaray	21	1	Hasball
+1	36	39	Galatasaray	26	1	Hasball
+1	36	42	Fenerbahçe	2	22	Clearence
+1	36	45	Fenerbahçe	5	1	Hasball
+1	36	47	Fenerbahçe	16	1	Hasball
+1	36	50	Fenerbahçe	11	1	Hasball
+1	36	53	Fenerbahçe	16	1	Hasball
+1	36	59	Fenerbahçe	88	1	Hasball
+1	37	2	Fenerbahçe	7	1	Hasball
+1	37	5	Fenerbahçe	88	1	Hasball
+1	37	6	Fenerbahçe	5	1	Hasball
+1	37	10	Fenerbahçe	7	1	Hasball
+1	37	16	Galatasaray	11	1	Hasball
+1	37	20	Fenerbahçe	5	218	Steal
+1	37	21	Fenerbahçe	88	1	Hasball
+1	37	25	Galatasaray	67	1	Hasball
+1	37	27	Fenerbahçe	88	29	CrossNotSuccess
+1	37	37	Galatasaray	11	1	Hasball
+1	37	38	Galatasaray	20	1	Hasball
+1	37	41	Fenerbahçe	25	1	Hasball
+1	37	43	Fenerbahçe	88	1	Hasball
+1	37	45	Galatasaray	26	1	Hasball
+1	37	48	Galatasaray	8	1	Hasball
+1	37	51	Fenerbahçe	25	16	FaulCommitted
+1	37	51		0	2	GameStop
+1	37	52	Galatasaray	8	7	FaulSuffered
+1	38	23	Galatasaray	21	20	Freekick
+1	38	25	Galatasaray	21	29	CrossNotSuccess
+1	38	25	Galatasaray	21	1	Hasball
+1	38	28	Fenerbahçe	5	22	Clearence
+1	38	31	Galatasaray	6	1	Hasball
+1	38	32	Fenerbahçe	22	22	Clearence
+1	38	36	Galatasaray	26	1	Hasball
+1	38	36		0	2	GameStop
+1	38	37	Galatasaray	26	16	FaulCommitted
+1	38	39	Fenerbahçe	9	7	FaulSuffered
+1	40	2	Fenerbahçe	1	1	Hasball
+1	40	3	Galatasaray	21	1	Hasball
+1	40	6	Galatasaray	20	1	Hasball
+1	40	8	Galatasaray	67	1	Hasball
+1	40	10	Fenerbahçe	88	1	Hasball
+1	40	13	Galatasaray	27	1	Hasball
+1	40	15	Galatasaray	8	1	Hasball
+1	40	17	Galatasaray	11	1	Hasball
+1	40	20	Galatasaray	8	1	Hasball
+1	40	22	Galatasaray	13	1	Hasball
+1	40	29	Galatasaray	3	1	Hasball
+1	40	31	Fenerbahçe	25	1	Hasball
+1	40	32	Fenerbahçe	22	1	Hasball
+1	40	33	Fenerbahçe	25	218	Steal
+1	40	34	Fenerbahçe	88	1	Hasball
+1	40	36	Fenerbahçe	1	1	Hasball
+1	40	45		0	2	GameStop
+1	40	54	Fenerbahçe	7	1	Hasball
+1	40	55	Galatasaray	27	4	ThrowIn
+1	40	55	Galatasaray	17	1	Hasball
+1	40	56	Galatasaray	13	1	Hasball
+1	41	3	Fenerbahçe	5	15	SlidingTackle
+1	41	4		0	2	GameStop
+1	41	8	Galatasaray	13	4	ThrowIn
+1	41	9	Galatasaray	13	1	Hasball
+1	41	11	Galatasaray	26	1	Hasball
+1	41	13	Galatasaray	3	1	Hasball
+1	41	16	Galatasaray	27	1	Hasball
+1	41	19	Galatasaray	20	1	Hasball
+1	41	23		0	2	GameStop
+1	41	24	Galatasaray	20	4	ThrowIn
+1	41	26	Galatasaray	20	1	Hasball
+1	41	27	Galatasaray	8	1	Hasball
+1	41	30	Galatasaray	11	1	Hasball
+1	41	32	Galatasaray	27	1	Hasball
+1	41	33	Galatasaray	20	1	Hasball
+1	41	37	Galatasaray	11	1	Hasball
+1	41	41	Galatasaray	11	29	CrossNotSuccess
+1	41	42	Fenerbahçe	77	22	Clearence
+1	41	44	Fenerbahçe	11	1	Hasball
+1	41	49	Fenerbahçe	9	16	FaulCommitted
+1	41	50		0	2	GameStop
+1	41	51	Galatasaray	26	7	FaulSuffered
+1	42	0	Galatasaray	20	1	Hasball
+1	42	1	Galatasaray	27	1	Hasball
+1	42	3	Galatasaray	6	1	Hasball
+1	42	5	Galatasaray	8	1	Hasball
+1	42	7	Galatasaray	6	1	Hasball
+1	42	11	Galatasaray	3	1	Hasball
+1	42	15	Galatasaray	8	1	Hasball
+1	42	17	Galatasaray	26	1	Hasball
+1	42	21	Galatasaray	17	1	Hasball
+1	42	23	Galatasaray	8	1	Hasball
+1	42	28	Fenerbahçe	2	22	Clearence
+1	42	29	Galatasaray	27	1	Hasball
+1	42	30	Fenerbahçe	2	96	TacleSuccess - Air
+1	42	32	Galatasaray	3	1	Hasball
+1	42	33	Fenerbahçe	88	1	Hasball
+1	42	36	Galatasaray	11	99	TacleNotSuccess - Air
+1	42	36	Galatasaray	3	15	SlidingTackle
+1	42	39	Galatasaray	13	1	Hasball
+1	42	40	Fenerbahçe	88	218	Steal
+1	42	40	Galatasaray	8	1	Hasball
+1	42	44	Fenerbahçe	16	1	Hasball
+1	42	46	Fenerbahçe	16	218	Steal
+1	42	46	Fenerbahçe	7	1	Hasball
+1	42	52	Fenerbahçe	16	1	Hasball
+1	42	55	Fenerbahçe	9	8	Offside
+1	42	55		0	2	GameStop
+1	43	18	Galatasaray	67	1	Hasball
+1	43	22		0	2	GameStop
+1	43	31	Fenerbahçe	77	4	ThrowIn
+1	43	35	Fenerbahçe	77	1	Hasball
+1	43	38	Galatasaray	13	1	Hasball
+1	43	39	Galatasaray	17	1	Hasball
+1	43	40	Galatasaray	8	1	Hasball
+1	43	41	Fenerbahçe	16	1	Hasball
+1	43	42	Fenerbahçe	11	1	Hasball
+1	43	43	Fenerbahçe	9	1	Hasball
+1	43	45	Fenerbahçe	16	1	Hasball
+1	43	46	Fenerbahçe	11	1	Hasball
+1	43	50	Fenerbahçe	7	1	Hasball
+1	43	52	Galatasaray	21	1	Hasball
+1	43	58		0	2	GameStop
+1	44	44	Galatasaray	21	1	Hasball
+1	44	46	Galatasaray	3	1	Hasball
+1	44	51	Galatasaray	6	1	Hasball
+1	44	52	Galatasaray	17	1	Hasball
+1	44	55		0	2	GameStop
+1	44	56	Galatasaray	17	16	FaulCommitted
+1	45	2	Fenerbahçe	77	7	FaulSuffered
+1	45	37	Fenerbahçe	16	1	Hasball
+1	45	39	Fenerbahçe	22	1	Hasball
+1	45	42	Fenerbahçe	1	1	Hasball
+1	45	44	Fenerbahçe	25	1	Hasball
+1	45	45	Fenerbahçe	16	1	Hasball
+1	45	52	Fenerbahçe	25	1	Hasball
+1	45	55	Fenerbahçe	77	1	Hasball
+1	46	0	Fenerbahçe	11	1	Hasball
+1	46	3	Fenerbahçe	1	1	Hasball
+1	46	7		0	2	GameStop
+1	47	22	Fenerbahçe	22	1	Hasball
+1	47	23	Fenerbahçe	9	1	Hasball
+1	47	26	Fenerbahçe	1	1	Hasball
+1	47	27	Galatasaray	13	4	ThrowIn
+1	47	31	Galatasaray	6	1	Hasball
+1	47	33	Fenerbahçe	77	1	Hasball
+1	47	34	Fenerbahçe	11	1	Hasball
+1	47	36	Galatasaray	26	22	Clearence
+1	47	38		0	2	GameStop
+1	47	46	Galatasaray	26	1	Hasball
+1	47	48	Fenerbahçe	77	4	ThrowIn
+1	47	48	Fenerbahçe	77	1	Hasball
+1	47	49	Fenerbahçe	11	1	Hasball
+1	47	51	Fenerbahçe	25	1	Hasball
+1	47	54	Fenerbahçe	77	1	Hasball
+1	47	56	Galatasaray	13	218	Steal
+1	47	57	Galatasaray	13	1	Hasball
+1	47	58		0	2	GameStop
+2	45	0	Fenerbahçe	9	8	Offside
+2	45	1	Galatasaray	8	1	Hasball
+2	45	1	Galatasaray	11	1	Hasball
+2	45	3	Galatasaray	6	1	Hasball
+2	45	32	Fenerbahçe	77	1	Hasball
+2	45	36		0	2	GameStop
+2	45	42	Galatasaray	8	1	Hasball
+2	45	47	Galatasaray	17	1	Hasball
+2	45	50	Fenerbahçe	25	1	Hasball
+2	45	51	Fenerbahçe	25	218	Steal
+2	45	52	Fenerbahçe	77	1	Hasball
+2	45	53	Fenerbahçe	29	1	Hasball
+2	46	1	Galatasaray	13	1	Hasball
+2	46	3	Galatasaray	13	218	Steal
+2	46	3	Galatasaray	21	1	Hasball
+2	46	5	Fenerbahçe	25	1	Hasball
+2	46	7	Fenerbahçe	7	1	Hasball
+2	46	8	Fenerbahçe	25	1	Hasball
+2	46	11	Fenerbahçe	2	1	Hasball
+2	46	13	Fenerbahçe	7	1	Hasball
+2	46	18	Galatasaray	20	218	Steal
+2	46	18	Galatasaray	20	1	Hasball
+2	46	20	Galatasaray	3	1	Hasball
+2	46	22	Galatasaray	11	1	Hasball
+2	46	25	Fenerbahçe	22	1	Hasball
+2	46	30	Fenerbahçe	88	1	Hasball
+2	46	40	Fenerbahçe	7	1	Hasball
+2	46	45	Fenerbahçe	7	29	CrossNotSuccess
+2	46	46	Galatasaray	26	1	Hasball
+2	46	47	Galatasaray	27	1	Hasball
+2	46	50	Galatasaray	20	1	Hasball
+2	46	52	Galatasaray	8	1	Hasball
+2	46	57	Fenerbahçe	16	16	FaulCommitted
+2	46	57		0	2	GameStop
+2	46	59	Galatasaray	8	7	FaulSuffered
+2	47	18	Galatasaray	3	1	Hasball
+2	47	23	Galatasaray	21	1	Hasball
+2	47	25	Galatasaray	26	1	Hasball
+2	47	29	Galatasaray	11	1	Hasball
+2	47	31	Galatasaray	26	1	Hasball
+2	47	36	Galatasaray	6	1	Hasball
+2	47	37	Fenerbahçe	16	1	Hasball
+2	47	38	Fenerbahçe	29	1	Hasball
+2	47	43	Galatasaray	13	16	FaulCommitted
+2	47	43		0	2	GameStop
+2	47	46	Fenerbahçe	29	7	FaulSuffered
+2	48	1	Fenerbahçe	16	1	Hasball
+2	48	3	Fenerbahçe	5	1	Hasball
+2	48	4	Fenerbahçe	2	1	Hasball
+2	48	6	Fenerbahçe	88	1	Hasball
+2	48	8	Fenerbahçe	7	1	Hasball
+2	48	9	Fenerbahçe	2	1	Hasball
+2	48	12	Fenerbahçe	22	1	Hasball
+2	48	18	Galatasaray	13	1	Hasball
+2	48	21	Galatasaray	8	1	Hasball
+2	48	22	Galatasaray	17	1	Hasball
+2	48	30	Fenerbahçe	29	1	Hasball
+2	48	31	Fenerbahçe	22	1	Hasball
+2	48	35	Fenerbahçe	29	218	Steal
+2	48	35	Fenerbahçe	29	1	Hasball
+2	48	37	Fenerbahçe	25	1	Hasball
+2	48	39	Fenerbahçe	2	1	Hasball
+2	48	40	Fenerbahçe	5	1	Hasball
+2	48	43	Fenerbahçe	77	1	Hasball
+2	48	47	Fenerbahçe	29	1	Hasball
+2	48	55	Galatasaray	13	1	Hasball
+2	48	56	Galatasaray	8	1	Hasball
+2	48	57	Galatasaray	13	218	Steal
+2	48	58	Galatasaray	3	1	Hasball
+2	49	0	Galatasaray	13	1	Hasball
+2	49	11	Fenerbahçe	2	1	Hasball
+2	49	17	Fenerbahçe	16	1	Hasball
+2	49	18	Fenerbahçe	88	1	Hasball
+2	49	22	Fenerbahçe	5	1	Hasball
+2	49	30	Galatasaray	21	1	Hasball
+2	49	36	Galatasaray	67	1	Hasball
+2	49	37	Galatasaray	26	1	Hasball
+2	49	39	Galatasaray	6	1	Hasball
+2	49	40	Galatasaray	8	1	Hasball
+2	49	41	Galatasaray	26	1	Hasball
+2	49	43	Galatasaray	8	1	Hasball
+2	49	45	Galatasaray	27	1	Hasball
+2	49	50	Galatasaray	26	1	Hasball
+2	49	53	Galatasaray	8	1	Hasball
+2	49	57	Galatasaray	11	1	Hasball
+2	50	1	Fenerbahçe	7	1	Hasball
+2	50	4	Fenerbahçe	25	1	Hasball
+2	50	5	Galatasaray	11	1	Hasball
+2	50	6	Galatasaray	8	1	Hasball
+2	50	10	Galatasaray	20	1	Hasball
+2	50	13	Fenerbahçe	88	218	Steal
+2	50	13	Fenerbahçe	88	1	Hasball
+2	50	16	Fenerbahçe	25	1	Hasball
+2	50	18	Fenerbahçe	88	1	Hasball
+2	50	20	Fenerbahçe	16	1	Hasball
+2	50	26	Fenerbahçe	7	1	Hasball
+2	50	30	Galatasaray	13	218	Steal
+2	50	30	Galatasaray	13	1	Hasball
+2	50	36	Galatasaray	3	1	Hasball
+2	50	38	Galatasaray	13	1	Hasball
+2	50	41	Galatasaray	8	1	Hasball
+2	50	46	Galatasaray	11	1	Hasball
+2	50	48		0	2	GameStop
+2	50	50	Fenerbahçe	2	16	FaulCommitted
+2	50	52	Galatasaray	11	7	FaulSuffered
+2	50	58	Fenerbahçe	2	9	YellowCard
+2	51	46	Galatasaray	8	20	Freekick
+2	51	58	Galatasaray	8	29	CrossNotSuccess
+2	51	58	Galatasaray	8	1	Hasball
+2	52	1	Fenerbahçe	1	22	Clearence
+2	52	2	Fenerbahçe	9	22	Clearence
+2	52	5	Fenerbahçe	1	34	GoalKeeperJumping - BallPunch
+2	52	7	Galatasaray	13	1	Hasball
+2	52	11	Fenerbahçe	25	1	Hasball
+2	52	13	Fenerbahçe	29	1	Hasball
+2	52	20		0	2	GameStop
+2	52	26	Galatasaray	13	4	ThrowIn
+2	52	27	Galatasaray	13	1	Hasball
+2	52	28	Galatasaray	8	1	Hasball
+2	52	31	Galatasaray	26	1	Hasball
+2	52	37	Galatasaray	21	1	Hasball
+2	52	39	Galatasaray	6	1	Hasball
+2	52	45	Fenerbahçe	77	1	Hasball
+2	52	46	Galatasaray	13	1	Hasball
+2	52	48		0	2	GameStop
+2	52	58	Fenerbahçe	77	4	ThrowIn
+2	52	58	Fenerbahçe	77	1	Hasball
+2	53	0	Fenerbahçe	22	1	Hasball
+2	53	4	Galatasaray	13	1	Hasball
+2	53	5	Galatasaray	8	1	Hasball
+2	53	7	Galatasaray	17	1	Hasball
+2	53	8	Fenerbahçe	22	1	Hasball
+2	53	8	Fenerbahçe	25	1	Hasball
+2	53	10	Fenerbahçe	5	1	Hasball
+2	53	12	Fenerbahçe	88	1	Hasball
+2	53	21		0	2	GameStop
+2	53	22	Fenerbahçe	7	8	Offside
+2	53	48	Galatasaray	67	1	Hasball
+2	53	50	Fenerbahçe	2	1	Hasball
+2	53	52	Fenerbahçe	9	1	Hasball
+2	53	56	Fenerbahçe	9	96	TacleSuccess - Air
+2	53	56	Galatasaray	21	1	Hasball
+2	53	57	Galatasaray	67	1	Hasball
+2	54	2	Galatasaray	26	99	TacleNotSuccess - Air
+2	54	7	Fenerbahçe	22	1	Hasball
+2	54	9	Galatasaray	26	1	Hasball
+2	54	10	Fenerbahçe	22	96	TacleSuccess - Air
+2	54	14	Galatasaray	11	99	TacleNotSuccess - Air
+2	54	14		0	2	GameStop
+2	54	19	Galatasaray	26	17	DangereousMove
+2	54	26	Fenerbahçe	25	1	Hasball
+2	54	30		0	2	GameStop
+2	54	32	Fenerbahçe	25	20	Freekick
+2	54	38	Fenerbahçe	9	8	Offside
+2	54	48	Galatasaray	26	1	Hasball
+2	54	50	Galatasaray	67	1	Hasball
+2	54	54	Fenerbahçe	22	1	Hasball
+2	54	56	Fenerbahçe	22	96	TacleSuccess - Air
+2	54	56	Galatasaray	6	1	Hasball
+2	54	57	Galatasaray	11	1	Hasball
+2	54	59	Fenerbahçe	88	1	Hasball
+2	55	0	Fenerbahçe	22	1	Hasball
+2	55	3	Galatasaray	11	99	TacleNotSuccess - Air
+2	55	3	Galatasaray	6	1	Hasball
+2	55	5	Galatasaray	27	1	Hasball
+2	55	6	Galatasaray	11	1	Hasball
+2	55	9	Fenerbahçe	5	1	Hasball
+2	55	12	Fenerbahçe	2	1	Hasball
+2	55	14	Fenerbahçe	1	1	Hasball
+2	55	18		0	2	GameStop
+2	55	40	Galatasaray	3	1	Hasball
+2	55	41	Fenerbahçe	22	1	Hasball
+2	55	44	Fenerbahçe	9	1	Hasball
+2	55	47	Galatasaray	27	1	Hasball
+2	55	50	Galatasaray	20	1	Hasball
+2	56	0	Fenerbahçe	7	15	SlidingTackle
+2	56	2	Fenerbahçe	88	1	Hasball
+2	56	3	Fenerbahçe	16	1	Hasball
+2	56	5	Fenerbahçe	5	1	Hasball
+2	56	9		0	2	GameStop
+2	56	10	Galatasaray	21	16	FaulCommitted
+2	56	12	Fenerbahçe	9	7	FaulSuffered
+2	56	28	Fenerbahçe	16	1	Hasball
+2	56	30	Fenerbahçe	77	1	Hasball
+2	56	34	Fenerbahçe	29	1	Hasball
+2	56	37		0	2	GameStop
+2	57	6	Fenerbahçe	88	3	CornerKick
+2	57	9	Fenerbahçe	88	29	CrossNotSuccess
+2	57	9	Fenerbahçe	88	1	Hasball
+2	57	11	Galatasaray	3	22	Clearence
+2	57	14	Fenerbahçe	25	1	Hasball
+2	57	17	Fenerbahçe	5	1	Hasball
+2	57	20	Fenerbahçe	22	1	Hasball
+2	57	23		0	2	GameStop
+2	57	42	Fenerbahçe	88	4	ThrowIn
+2	57	42	Fenerbahçe	88	1	Hasball
+2	57	46	Fenerbahçe	5	1	Hasball
+2	57	47	Fenerbahçe	22	1	Hasball
+2	57	50	Fenerbahçe	1	1	Hasball
+2	57	55	Galatasaray	21	1	Hasball
+2	57	55	Fenerbahçe	25	1	Hasball
+2	57	58	Galatasaray	26	1	Hasball
+2	57	58	Fenerbahçe	25	1	Hasball
+2	58	1	Fenerbahçe	9	1	Hasball
+2	58	4	Fenerbahçe	7	1	Hasball
+2	58	9	Fenerbahçe	7	29	CrossNotSuccess
+2	58	11	Fenerbahçe	7	12	Out
+2	58	11		0	2	GameStop
+2	58	34	Galatasaray	67	1	Hasball
+2	58	36	Fenerbahçe	22	1	Hasball
+2	58	37	Fenerbahçe	9	1	Hasball
+2	58	38	Fenerbahçe	22	96	TacleSuccess - Air
+2	58	39	Galatasaray	13	1	Hasball
+2	58	41	Fenerbahçe	77	1	Hasball
+2	58	42	Galatasaray	11	99	TacleNotSuccess - Air
+2	58	43		0	2	GameStop
+2	58	49	Galatasaray	13	4	ThrowIn
+2	58	50	Galatasaray	13	1	Hasball
+2	58	51	Galatasaray	21	1	Hasball
+2	58	55	Fenerbahçe	22	1	Hasball
+2	58	56	Galatasaray	11	99	TacleNotSuccess - Air
+2	58	56	Fenerbahçe	25	1	Hasball
+2	58	58	Fenerbahçe	5	1	Hasball
+2	59	1		0	2	GameStop
+2	59	2	Galatasaray	3	17	DangereousMove
+2	59	7	Fenerbahçe	22	96	TacleSuccess - Air
+2	59	21	Fenerbahçe	2	1	Hasball
+2	59	23	Fenerbahçe	25	1	Hasball
+2	59	24	Galatasaray	8	1	Hasball
+2	59	25	Galatasaray	8	218	Steal
+2	59	25	Galatasaray	3	1	Hasball
+2	59	27	Galatasaray	11	1	Hasball
+2	59	30	Fenerbahçe	5	218	Steal
+2	59	30	Fenerbahçe	5	1	Hasball
+2	59	31	Fenerbahçe	1	1	Hasball
+2	59	33	Fenerbahçe	2	1	Hasball
+2	59	36	Fenerbahçe	5	1	Hasball
+2	59	38	Fenerbahçe	2	1	Hasball
+2	59	48	Fenerbahçe	5	22	Clearence
+2	59	50	Fenerbahçe	88	1	Hasball
+2	59	52	Fenerbahçe	88	96	TacleSuccess - Air
+2	59	52	Galatasaray	21	1	Hasball
+2	59	53	Galatasaray	3	1	Hasball
+2	59	54	Galatasaray	6	1	Hasball
+2	59	57	Galatasaray	27	99	TacleNotSuccess - Air
+2	59	57	Galatasaray	17	1	Hasball
+2	59	59	Galatasaray	13	1	Hasball
+2	60	2	Galatasaray	3	1	Hasball
+2	60	7	Galatasaray	8	1	Hasball
+2	60	9	Galatasaray	20	1	Hasball
+2	60	11	Galatasaray	27	1	Hasball
+2	60	13	Galatasaray	8	1	Hasball
+2	60	16	Galatasaray	20	1	Hasball
+2	60	18	Galatasaray	27	1	Hasball
+2	60	20	Galatasaray	3	1	Hasball
+2	60	23	Fenerbahçe	88	22	Clearence
+2	60	26	Fenerbahçe	16	1	Hasball
+2	60	28	Fenerbahçe	9	1	Hasball
+2	60	30	Fenerbahçe	29	1	Hasball
+2	60	36	Fenerbahçe	77	1	Hasball
+2	60	38	Fenerbahçe	5	1	Hasball
+2	60	39	Fenerbahçe	77	1	Hasball
+2	60	42	Fenerbahçe	5	1	Hasball
+2	60	42	Fenerbahçe	77	1	Hasball
+2	60	44	Fenerbahçe	22	1	Hasball
+2	60	46	Fenerbahçe	16	1	Hasball
+2	60	50	Fenerbahçe	2	1	Hasball
+2	60	55	Fenerbahçe	25	1	Hasball
+2	60	57	Fenerbahçe	16	1	Hasball
+2	60	58	Fenerbahçe	5	1	Hasball
+2	61	1	Fenerbahçe	22	1	Hasball
+2	61	8	Galatasaray	26	1	Hasball
+2	61	12	Galatasaray	67	1	Hasball
+2	61	17	Galatasaray	3	1	Hasball
+2	61	19	Galatasaray	8	1	Hasball
+2	61	22	Galatasaray	20	1	Hasball
+2	61	25	Galatasaray	8	1	Hasball
+2	61	28		0	2	GameStop
+2	62	2	Fenerbahçe	88	4	ThrowIn
+2	62	2	Fenerbahçe	88	1	Hasball
+2	62	5	Galatasaray	27	1	Hasball
+2	62	6	Galatasaray	8	1	Hasball
+2	62	7	Galatasaray	3	1	Hasball
+2	62	8	Galatasaray	50	1	Hasball
+2	62	12	Galatasaray	26	1	Hasball
+2	62	13	Galatasaray	67	1	Hasball
+2	62	20	Fenerbahçe	77	1	Hasball
+2	62	24	Galatasaray	26	1	Hasball
+2	62	25	Fenerbahçe	77	1	Hasball
+2	62	29	Galatasaray	26	1	Hasball
+2	62	33	Galatasaray	67	1	Hasball
+2	62	36	Galatasaray	21	1	Hasball
+2	62	39	Galatasaray	3	1	Hasball
+2	62	42	Galatasaray	13	1	Hasball
+2	62	47	Galatasaray	26	1	Hasball
+2	62	50	Galatasaray	11	1	Hasball
+2	62	52	Galatasaray	13	1	Hasball
+2	62	58	Galatasaray	3	1	Hasball
+2	63	1	Galatasaray	8	1	Hasball
+2	63	7	Fenerbahçe	7	1	Hasball
+2	63	9	Fenerbahçe	88	1	Hasball
+2	63	11	Fenerbahçe	2	1	Hasball
+2	63	12	Galatasaray	21	1	Hasball
+2	63	16	Fenerbahçe	9	1	Hasball
+2	63	18		0	2	GameStop
+2	63	24	Galatasaray	8	1	Hasball
+2	63	25	Galatasaray	3	1	Hasball
+2	63	26	Galatasaray	50	1	Hasball
+2	63	28	Galatasaray	8	4	ThrowIn
+2	63	29	Fenerbahçe	25	1	Hasball
+2	63	32	Fenerbahçe	29	1	Hasball
+2	63	34	Fenerbahçe	5	1	Hasball
+2	63	36	Fenerbahçe	77	1	Hasball
+2	63	42		0	2	GameStop
+2	63	50	Galatasaray	13	1	Hasball
+2	63	51	Galatasaray	13	4	ThrowIn
+2	63	51	Galatasaray	3	1	Hasball
+2	63	56	Galatasaray	8	1	Hasball
+2	63	59		0	2	GameStop
+2	64	24	Fenerbahçe	77	4	ThrowIn
+2	64	25	Fenerbahçe	77	1	Hasball
+2	64	27	Galatasaray	13	1	Hasball
+2	64	29	Fenerbahçe	29	1	Hasball
+2	64	34		0	2	GameStop
+2	64	35	Galatasaray	13	16	FaulCommitted
+2	64	37	Fenerbahçe	29	7	FaulSuffered
+2	64	51	Fenerbahçe	77	1	Hasball
+2	64	52	Fenerbahçe	29	1	Hasball
+2	64	54	Galatasaray	50	15	SlidingTackle
+2	64	57	Galatasaray	26	1	Hasball
+2	64	58	Galatasaray	3	1	Hasball
+2	64	59	Galatasaray	17	1	Hasball
+2	64	59	Galatasaray	13	1	Hasball
+2	65	1	Fenerbahçe	25	1	Hasball
+2	65	3	Fenerbahçe	25	218	Steal
+2	65	3	Fenerbahçe	7	1	Hasball
+2	65	6	Fenerbahçe	9	1	Hasball
+2	65	8	Fenerbahçe	16	115	GoalScored - RightFoot - RightDown - In
+2	65	8	Fenerbahçe	16	1	Hasball
+2	65	11		0	2	GameStop
+2	65	28	Fenerbahçe	9	21	Assist
+2	65	31	Fenerbahçe	16	14	Degaj
+2	66	51	Galatasaray	11	1	Hasball
+2	66	51	Galatasaray	8	1	Hasball
+2	66	53	Galatasaray	21	1	Hasball
+2	66	57	Galatasaray	3	1	Hasball
+2	67	0	Galatasaray	17	1	Hasball
+2	67	1	Galatasaray	11	1	Hasball
+2	67	3	Fenerbahçe	29	1	Hasball
+2	67	6	Fenerbahçe	22	1	Hasball
+2	67	10	Galatasaray	26	1	Hasball
+2	67	11	Galatasaray	67	1	Hasball
+2	67	15	Galatasaray	21	1	Hasball
+2	67	17	Galatasaray	3	1	Hasball
+2	67	22	Galatasaray	8	1	Hasball
+2	67	30	Galatasaray	17	1	Hasball
+2	67	31	Fenerbahçe	1	1	Hasball
+2	67	33	Galatasaray	8	107	KeyPass
+2	67	38	Galatasaray	21	1	Hasball
+2	67	39	Galatasaray	3	1	Hasball
+2	67	42	Galatasaray	26	1	Hasball
+2	67	46	Galatasaray	11	1	Hasball
+2	67	51		0	2	GameStop
+2	67	53	Galatasaray	11	16	FaulCommitted
+2	67	55	Fenerbahçe	22	7	FaulSuffered
+2	68	31	Fenerbahçe	25	1	Hasball
+2	68	31	Fenerbahçe	9	1	Hasball
+2	68	34	Galatasaray	27	1	Hasball
+2	68	38	Galatasaray	21	1	Hasball
+2	68	40	Galatasaray	50	1	Hasball
+2	68	43	Galatasaray	27	1	Hasball
+2	68	46		0	2	GameStop
+2	68	47	Galatasaray	27	7	FaulSuffered
+2	68	48	Fenerbahçe	88	16	FaulCommitted
+2	68	52	Fenerbahçe	88	9	YellowCard
+2	69	54	Galatasaray	8	20	Freekick
+2	69	55	Galatasaray	8	29	CrossNotSuccess
+2	69	55	Galatasaray	8	1	Hasball
+2	69	57	Fenerbahçe	9	22	Clearence
+2	69	59	Fenerbahçe	88	1	Hasball
+2	70	2	Galatasaray	13	1	Hasball
+2	70	5	Fenerbahçe	9	1	Hasball
+2	70	7	Fenerbahçe	48	1	Hasball
+2	70	11		0	2	GameStop
+2	70	18	Galatasaray	27	4	ThrowIn
+2	70	20	Galatasaray	27	1	Hasball
+2	70	22	Galatasaray	3	1	Hasball
+2	70	27	Galatasaray	8	1	Hasball
+2	70	30	Galatasaray	27	1	Hasball
+2	70	32	Galatasaray	20	1	Hasball
+2	70	36	Fenerbahçe	1	1	Hasball
+2	70	38	Galatasaray	20	29	CrossNotSuccess
+2	70	40	Fenerbahçe	1	33	GoalKeeperJumping - BallCatch
+2	70	51	Galatasaray	13	1	Hasball
+2	70	53	Galatasaray	3	1	Hasball
+2	70	54	Galatasaray	67	1	Hasball
+2	70	58	Galatasaray	21	1	Hasball
+2	71	0	Galatasaray	3	1	Hasball
+2	71	6	Galatasaray	8	1	Hasball
+2	71	9	Galatasaray	50	1	Hasball
+2	71	11	Galatasaray	26	1	Hasball
+2	71	14	Galatasaray	8	1	Hasball
+2	71	21	Fenerbahçe	48	16	FaulCommitted
+2	71	21		0	2	GameStop
+2	71	23	Galatasaray	8	7	FaulSuffered
+2	71	32	Fenerbahçe	5	218	Steal
+2	71	53	Galatasaray	21	1	Hasball
+2	71	54	Galatasaray	26	1	Hasball
+2	72	0	Galatasaray	17	1	Hasball
+2	72	6	Fenerbahçe	5	1	Hasball
+2	72	7	Fenerbahçe	22	1	Hasball
+2	72	8	Galatasaray	13	1	Hasball
+2	72	9	Galatasaray	50	1	Hasball
+2	72	12	Galatasaray	8	1	Hasball
+2	72	14	Galatasaray	13	1	Hasball
+2	72	19	Fenerbahçe	2	22	Clearence
+2	72	22	Galatasaray	13	29	CrossNotSuccess
+2	72	22	Galatasaray	3	1	Hasball
+2	72	26	Galatasaray	26	1	Hasball
+2	72	31	Galatasaray	21	1	Hasball
+2	72	34	Galatasaray	50	1	Hasball
+2	72	42	Fenerbahçe	7	22	Clearence
+2	72	46	Fenerbahçe	16	1	Hasball
+2	72	47	Fenerbahçe	9	1	Hasball
+2	72	49	Fenerbahçe	88	1	Hasball
+2	72	55	Fenerbahçe	29	1	Hasball
+2	72	57	Fenerbahçe	29	96	TacleSuccess - Air
+2	72	57	Fenerbahçe	77	1	Hasball
+2	73	3		0	2	GameStop
+2	73	4	Galatasaray	13	99	TacleNotSuccess - Air
+2	73	10	Fenerbahçe	77	12	Out
+2	73	19	Galatasaray	8	1	Hasball
+2	73	26	Galatasaray	50	1	Hasball
+2	73	29		0	2	GameStop
+2	73	41	Fenerbahçe	88	4	ThrowIn
+2	73	44	Fenerbahçe	88	1	Hasball
+2	73	45	Fenerbahçe	16	1	Hasball
+2	73	47	Fenerbahçe	5	1	Hasball
+2	73	49	Fenerbahçe	16	1	Hasball
+2	73	52	Galatasaray	13	1	Hasball
+2	73	53	Galatasaray	17	1	Hasball
+2	73	56	Galatasaray	26	1	Hasball
+2	74	1	Galatasaray	8	1	Hasball
+2	74	2	Galatasaray	21	1	Hasball
+2	74	5	Galatasaray	8	1	Hasball
+2	74	7	Galatasaray	19	1	Hasball
+2	74	10	Galatasaray	27	1	Hasball
+2	74	11	Fenerbahçe	88	218	Steal
+2	74	11	Fenerbahçe	88	1	Hasball
+2	74	13	Fenerbahçe	7	1	Hasball
+2	74	16	Galatasaray	27	1	Hasball
+2	74	17	Galatasaray	27	218	Steal
+2	74	17	Galatasaray	21	1	Hasball
+2	74	22	Galatasaray	50	1	Hasball
+2	74	23	Galatasaray	3	1	Hasball
+2	74	27	Galatasaray	17	1	Hasball
+2	74	30	Fenerbahçe	22	22	Clearence
+2	74	32	Fenerbahçe	9	1	Hasball
+2	74	37		0	2	GameStop
+2	74	38	Galatasaray	50	16	FaulCommitted
+2	74	40	Fenerbahçe	9	7	FaulSuffered
+2	74	55	Fenerbahçe	9	1	Hasball
+2	74	55	Fenerbahçe	29	1	Hasball
+2	74	56		0	2	GameStop
+2	75	5	Fenerbahçe	77	4	ThrowIn
+2	75	6	Fenerbahçe	77	1	Hasball
+2	75	7	Fenerbahçe	16	1	Hasball
+2	75	13	Fenerbahçe	7	1	Hasball
+2	75	19	Fenerbahçe	48	1	Hasball
+2	75	28	Galatasaray	21	218	Steal
+2	75	29	Galatasaray	21	1	Hasball
+2	75	30	Galatasaray	50	1	Hasball
+2	75	36	Fenerbahçe	5	1	Hasball
+2	75	38	Fenerbahçe	5	218	Steal
+2	75	40	Fenerbahçe	88	1	Hasball
+2	75	42	Fenerbahçe	88	29	CrossNotSuccess
+2	75	46	Fenerbahçe	29	1	Hasball
+2	75	46		0	2	GameStop
+2	76	4	Galatasaray	13	4	ThrowIn
+2	76	4	Galatasaray	13	1	Hasball
+2	76	8		0	2	GameStop
+2	76	21	Fenerbahçe	77	4	ThrowIn
+2	76	21	Fenerbahçe	77	1	Hasball
+2	76	22	Fenerbahçe	5	1	Hasball
+2	76	25	Fenerbahçe	77	1	Hasball
+2	76	27	Galatasaray	13	1	Hasball
+2	76	30		0	2	GameStop
+2	76	31	Fenerbahçe	77	7	FaulSuffered
+2	76	34	Galatasaray	17	16	FaulCommitted
+2	76	35	Fenerbahçe	29	1	Hasball
+2	76	38		0	2	GameStop
+2	76	39	Fenerbahçe	9	8	Offside
+2	76	44	Galatasaray	3	1	Hasball
+2	76	45	Galatasaray	50	1	Hasball
+2	76	49	Galatasaray	3	1	Hasball
+2	76	51	Galatasaray	19	1	Hasball
+2	76	53	Galatasaray	3	1	Hasball
+2	77	0	Fenerbahçe	22	1	Hasball
+2	77	2	Galatasaray	8	1	Hasball
+2	77	4	Galatasaray	26	1	Hasball
+2	77	6	Galatasaray	21	1	Hasball
+2	77	14	Galatasaray	17	1	Hasball
+2	77	17	Galatasaray	27	1	Hasball
+2	77	21	Galatasaray	50	1	Hasball
+2	77	28	Fenerbahçe	88	22	Clearence
+2	77	38	Galatasaray	26	1	Hasball
+2	77	40	Galatasaray	8	1	Hasball
+2	77	44	Galatasaray	3	1	Hasball
+2	77	47	Galatasaray	50	1	Hasball
+2	77	50	Galatasaray	27	1	Hasball
+2	77	52	Galatasaray	11	1	Hasball
+2	77	58	Galatasaray	50	28	CrossSuccess
+2	77	58	Fenerbahçe	22	1	Hasball
+2	78	0	Fenerbahçe	29	1	Hasball
+2	78	4		0	2	GameStop
+2	78	18	Galatasaray	13	1	Hasball
+2	78	20	Galatasaray	13	4	ThrowIn
+2	78	20	Fenerbahçe	77	22	Clearence
+2	78	21		0	2	GameStop
+2	78	23	Galatasaray	13	4	ThrowIn
+2	78	25	Galatasaray	13	1	Hasball
+2	78	27	Fenerbahçe	22	1	Hasball
+2	78	29	Fenerbahçe	9	1	Hasball
+2	78	31	Galatasaray	26	1	Hasball
+2	78	36	Galatasaray	26	218	Steal
+2	78	38	Fenerbahçe	9	16	FaulCommitted
+2	78	43	Galatasaray	3	1	Hasball
+2	78	44	Galatasaray	21	1	Hasball
+2	78	45	Galatasaray	8	7	FaulSuffered
+2	78	45	Galatasaray	8	1	Hasball
+2	78	47	Galatasaray	3	1	Hasball
+2	78	50	Galatasaray	50	1	Hasball
+2	78	53	Fenerbahçe	2	22	Clearence
+2	78	54	Galatasaray	11	1	Hasball
+2	78	59	Galatasaray	11	29	CrossNotSuccess
+2	78	59		0	2	GameStop
+2	79	1	Galatasaray	11	12	Out
+2	80	8	Fenerbahçe	77	4	ThrowIn
+2	80	12	Fenerbahçe	77	1	Hasball
+2	80	13	Fenerbahçe	29	1	Hasball
+2	80	18	Galatasaray	17	1	Hasball
+2	80	21	Galatasaray	8	1	Hasball
+2	80	22	Galatasaray	13	1	Hasball
+2	80	24	Galatasaray	8	1	Hasball
+2	80	31	Fenerbahçe	5	1	Hasball
+2	80	34	Fenerbahçe	7	1	Hasball
+2	80	38		0	2	GameStop
+2	80	39	Fenerbahçe	7	36	ShotNotSuccess - RightFoot - Left - Out
+2	80	55	Fenerbahçe	29	9	YellowCard
+2	81	7	Galatasaray	3	1	Hasball
+2	81	8	Galatasaray	8	1	Hasball
+2	81	9	Galatasaray	26	1	Hasball
+2	81	10	Galatasaray	8	1	Hasball
+2	81	14	Galatasaray	26	1	Hasball
+2	81	20	Galatasaray	26	12	Out
+2	81	20		0	2	GameStop
+2	81	53	Fenerbahçe	1	1	Hasball
+2	81	55		0	2	GameStop
+2	82	0	Galatasaray	27	4	ThrowIn
+2	82	6	Galatasaray	27	1	Hasball
+2	82	10	Galatasaray	26	1	Hasball
+2	82	12	Galatasaray	13	1	Hasball
+2	82	15	Galatasaray	67	1	Hasball
+2	82	19	Galatasaray	21	1	Hasball
+2	82	22	Galatasaray	3	1	Hasball
+2	82	27	Galatasaray	11	1	Hasball
+2	82	28	Galatasaray	3	1	Hasball
+2	82	30	Fenerbahçe	77	22	Clearence
+2	82	33	Fenerbahçe	7	1	Hasball
+2	82	34	Fenerbahçe	5	1	Hasball
+2	82	36	Fenerbahçe	16	1	Hasball
+2	82	37	Fenerbahçe	2	1	Hasball
+2	82	40	Fenerbahçe	5	1	Hasball
+2	82	41	Fenerbahçe	88	1	Hasball
+2	82	44	Fenerbahçe	48	1	Hasball
+2	82	56		0	2	GameStop
+2	82	57	Galatasaray	17	16	FaulCommitted
+2	82	59	Fenerbahçe	77	7	FaulSuffered
+2	83	4	Galatasaray	17	9	YellowCard
+2	84	9	Fenerbahçe	29	99	TacleNotSuccess - Air
+2	84	41	Fenerbahçe	22	1	Hasball
+2	84	44	Galatasaray	13	1	Hasball
+2	84	46	Galatasaray	19	1	Hasball
+2	84	47	Galatasaray	13	1	Hasball
+2	84	48	Galatasaray	3	1	Hasball
+2	84	51	Galatasaray	50	1	Hasball
+2	84	52	Galatasaray	13	96	TacleSuccess - Air
+2	84	52		0	2	GameStop
+2	84	57	Galatasaray	50	7	FaulSuffered
+2	84	58	Fenerbahçe	5	16	FaulCommitted
+2	85	8	Galatasaray	8	1	Hasball
+2	85	9	Galatasaray	17	1	Hasball
+2	85	10	Fenerbahçe	22	22	Clearence
+2	85	11	Galatasaray	3	1	Hasball
+2	85	14	Fenerbahçe	77	1	Hasball
+2	85	15	Fenerbahçe	22	1	Hasball
+2	85	16	Fenerbahçe	29	1	Hasball
+2	85	17	Fenerbahçe	77	1	Hasball
+2	85	20	Galatasaray	50	1	Hasball
+2	85	21	Galatasaray	19	1	Hasball
+2	85	23	Fenerbahçe	22	16	FaulCommitted
+2	85	23		0	2	GameStop
+2	85	29	Galatasaray	19	7	FaulSuffered
+2	85	32	Fenerbahçe	22	9	YellowCard
+2	86	11	Galatasaray	8	20	Freekick
+2	86	16	Galatasaray	8	29	CrossNotSuccess
+2	86	16	Galatasaray	8	1	Hasball
+2	86	19	Fenerbahçe	5	22	Clearence
+2	86	22	Fenerbahçe	88	1	Hasball
+2	86	26	Fenerbahçe	7	1	Hasball
+2	86	29	Galatasaray	7	15	SlidingTackle
+2	86	30	Galatasaray	21	1	Hasball
+2	86	32	Galatasaray	8	1	Hasball
+2	86	33	Galatasaray	13	1	Hasball
+2	86	34	Galatasaray	8	1	Hasball
+2	86	36	Galatasaray	13	1	Hasball
+2	86	41	Galatasaray	13	29	CrossNotSuccess
+2	86	41	Fenerbahçe	1	1	Hasball
+2	86	44	Fenerbahçe	1	33	GoalKeeperJumping - BallCatch
+2	86	55	Galatasaray	3	22	Clearence
+2	86	57		0	2	GameStop
+2	87	6	Fenerbahçe	77	1	Hasball
+2	87	8	Fenerbahçe	5	1	Hasball
+2	87	10	Galatasaray	13	1	Hasball
+2	87	12	Galatasaray	13	218	Steal
+2	87	12	Galatasaray	19	1	Hasball
+2	87	14		0	2	GameStop
+2	87	15	Fenerbahçe	77	16	FaulCommitted
+2	87	18	Galatasaray	19	7	FaulSuffered
+2	87	23	Galatasaray	13	1	Hasball
+2	87	24	Galatasaray	17	1	Hasball
+2	87	26		0	2	GameStop
+2	87	28	Galatasaray	17	8	Offside
+2	87	41	Fenerbahçe	22	1	Hasball
+2	87	43	Fenerbahçe	16	1	Hasball
+2	87	44	Fenerbahçe	88	1	Hasball
+2	87	46	Fenerbahçe	2	1	Hasball
+2	87	50	Galatasaray	27	1	Hasball
+2	87	54	Galatasaray	50	1	Hasball
+2	87	55	Galatasaray	27	1	Hasball
+2	88	1	Galatasaray	7	1	Hasball
+2	88	5	Galatasaray	11	1	Hasball
+2	88	8		0	2	GameStop
+2	88	9	Galatasaray	7	29	CrossNotSuccess
+2	88	13	Galatasaray	11	8	Offside
+2	88	42	Fenerbahçe	22	1	Hasball
+2	88	43	Galatasaray	27	1	Hasball
+2	88	48	Galatasaray	50	1	Hasball
+2	88	50	Galatasaray	7	1	Hasball
+2	88	55	Galatasaray	8	1	Hasball
+2	88	58	Galatasaray	19	1	Hasball
+2	88	59	Galatasaray	8	1	Hasball
+2	89	2	Galatasaray	13	1	Hasball
+2	89	5	Galatasaray	3	1	Hasball
+2	89	9	Galatasaray	50	1	Hasball
+2	89	13	Galatasaray	11	1	Hasball
+2	89	15	Galatasaray	8	1	Hasball
+2	89	18	Galatasaray	50	1	Hasball
+2	89	20	Galatasaray	13	1	Hasball
+2	89	21	Galatasaray	13	29	CrossNotSuccess
+2	89	21	Fenerbahçe	22	22	Clearence
+2	89	22	Fenerbahçe	22	1	Hasball
+2	89	24	Galatasaray	3	1	Hasball
+2	89	29	Galatasaray	8	1	Hasball
+2	89	32	Galatasaray	7	1	Hasball
+2	89	41		0	2	GameStop
+2	89	57	Fenerbahçe	5	109	Penalty - Caused
+2	90	12	Fenerbahçe	5	18	HandBall
+2	92	1	Galatasaray	3	110	Penalty - Missed
+2	92	2	Galatasaray	3	1	Hasball
+2	92	2	Fenerbahçe	1	1	Hasball
+2	92	7	Fenerbahçe	1	220	Penalty - Saved
+2	92	11	Galatasaray	3	76	ShotSuccess - RightFoot - RightDown - In
+2	92	14	Galatasaray	13	1	Hasball
+2	92	15	Fenerbahçe	77	1	Hasball
+2	92	19	Fenerbahçe	48	1	Hasball
+2	92	24	Fenerbahçe	9	1	Hasball
+2	92	31	Fenerbahçe	77	1	Hasball
+2	92	34	Fenerbahçe	29	1	Hasball
+2	92	36	Fenerbahçe	77	29	CrossNotSuccess
+2	92	38	Galatasaray	13	1	Hasball
+2	92	43	Fenerbahçe	5	1	Hasball
+2	92	49	Fenerbahçe	16	1	Hasball
+2	92	52	Fenerbahçe	2	1	Hasball
+2	92	57	Fenerbahçe	1	1	Hasball
+2	93	12		0	2	GameStop
+2	93	57	Fenerbahçe	77	4	ThrowIn
+2	93	57	Galatasaray	8	1	Hasball
+2	93	58	Galatasaray	27	1	Hasball
+2	94	2	Galatasaray	17	1	Hasball
+2	94	4	Fenerbahçe	5	1	Hasball
+2	94	7	Galatasaray	3	1	Hasball
+2	94	9	Galatasaray	50	1	Hasball
+2	94	10	Galatasaray	17	1	Hasball
