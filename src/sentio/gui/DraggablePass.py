@@ -129,7 +129,7 @@ class DraggablePass(Pass):
                     self.displayDefinedPass(current_pass_event, self.logger, draggable=False, visual=True)
                     if self.isHeatMapChosen():
                         self.drawHeatMapFor(current_pass_event)
-                    self.passes_defined.append(self.pass_event)
+                    self.passes_defined.append(current_pass_event)
                 else:
                     self.pass_target = None
             else:

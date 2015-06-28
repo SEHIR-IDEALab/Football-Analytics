@@ -1,2 +1,4 @@
 # This is my README
-asd
+Sport Analytics Tool - IDEA Lab
+
+still under development!! ;)

@@ -1,186 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="05dcd7b0-3d91-4a06-8512-aceba7f912a9" name="Default" comment="initial -uzun bi aradan sonra- :)">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/background.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/background_pre.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/ffwd.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/ffwd_disabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/ffwddisabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/pass1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/pause.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/pause_disabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/pausedisabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/play.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/play_back.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/play_back_disabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/play_disabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/playdisabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/record.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/record_disabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/recorddisabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/rewind.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/rewind_disabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/rewinddisabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/stop.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/stop_disabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/source/bitmaps/stopdisabled.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/surveyresults.xlsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/00.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/88.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/99.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/&lt;&lt;&lt;.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/CircleStyle.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/Dialogs.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/DraggablePass.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/DraggablePlayer.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/Draw.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/FriedmanTest.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/parser/data/GS_FB_Event.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/parser/data/GS_FB_Sentio.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/object/GameEvent.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/HeatMap.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/object/Match.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/NoteBook.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/parser/Parser.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/pass_evaluate/Pass.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/object/PassEvent.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/object/Player.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/object/PlayerBase.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/PossitionsInfo.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/csv/PossitionsInfo.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/PossitionsInfo1.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/csv/PossitionsInfo1a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/csv/PossitionsInfo1b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/csv/PossitionsInfo2.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/csv/PossitionsInfoCh.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/csv/PossitionsInfoDnm.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/PossitionsInfo_2.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/pass_evaluate/Predict.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q01a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q01b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q01c.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q02a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q02b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q02c.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q03a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q03b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q03c.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q04a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q04b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q04c.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q05a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q05b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q05c.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q06a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q06b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q06c.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q07a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q07b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q07c.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q08a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q08b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q08c.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q09a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q09b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q09c.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q10a.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q10b.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Positions/Q10c.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Q1_info.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/Q1pass.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/RiskRange.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/SnapShot.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/SurveyScoreCalculation.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/Survey_Read.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/object/Team.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/object/Teams.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/object/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/parser/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/pass_evaluate/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/analyse.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/analyse_old.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/garbace/ar.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/garbace/data.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/garbace/data2.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/data_filter_speed.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/eeee.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/ew.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/new_data.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/player_speed 12.01.48.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/player_speed.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/plot1.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/plot123.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/plot5.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/plot55.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/plot888.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/qwe.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/results_Our1.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/rr.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/garbace/sr-csv-old.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/garbace/sr-csv2.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/test.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/test1.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SurveyAnalysis/test1.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/garbace/try.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/garbace/try2.csv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/sentio/gui/wxVisualization.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/SampleScenarios/qqq.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/GS_FB_Event.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/data/GS_FB_Sentio.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/CircleStyle.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/Dialogs.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/DraggablePass.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/DraggableText.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/HeatMap.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/Match.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/Pass.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/Player.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/Player_base.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/Sentio.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/old-result_test1.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/Sklearn/tests_result/result_test1.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/SnapShot.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/Team.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/background.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/background_pre.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/ffwd.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/ffwd_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/ffwddisabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/pause.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/pause_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/pausedisabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/play.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/play_back.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/play_back_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/play_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/playdisabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/record.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/record_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/recorddisabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/rewind.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/rewind_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/rewinddisabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/stop.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/stop_disabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/source/bitmaps/stopdisabled.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/wxVisualization.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/notebook_tab.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/visua.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/wxVisua.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SampleScenarios/plot.png" afterPath="$PROJECT_DIR$/SampleScenarios/plot.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/Main.py" afterPath="$PROJECT_DIR$/src/sentio/Main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/Parameters.py" afterPath="$PROJECT_DIR$/src/sentio/Parameters.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/SentioProject.iml" afterPath="$PROJECT_DIR$/.idea/SentioProject.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/Time.py" afterPath="$PROJECT_DIR$/src/sentio/Time.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/Sklearn/WhoHasBall.py" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/WhoHasBall.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/Sklearn/csvReader.py" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/csvReader.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/Sklearn/main2.py" afterPath="$PROJECT_DIR$/src/sentio/Sklearn/main2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SampleScenarios/plot.csv" afterPath="$PROJECT_DIR$/SampleScenarios/plot.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/tutorial.py" afterPath="$PROJECT_DIR$/src/test/tutorial.py" />
+    <list default="true" id="05dcd7b0-3d91-4a06-8512-aceba7f912a9" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleScenarios/qqq.csv" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/SampleScenarios/plot.csv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/data/GS_FB_Event.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/sentio/data/GS_FB_Sentio.txt" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sentio/gui/DraggablePass.py" afterPath="$PROJECT_DIR$/src/sentio/gui/DraggablePass.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="SentioProject.iws" />
@@ -196,18 +23,18 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/SentioProject$Visualization.coverage" NAME="Visualization Coverage Results" MODIFIED="1405327497552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
-    <SUITE FILE_PATH="coverage/SentioProject$Main.coverage" NAME="Main Coverage Results" MODIFIED="1408038802039" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
     <SUITE FILE_PATH="coverage/SentioProject$wxVisualization.coverage" NAME="wxVisualization Coverage Results" MODIFIED="1407675973408" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
+    <SUITE FILE_PATH="coverage/SentioProject$Main.coverage" NAME="Main Coverage Results" MODIFIED="1408038802039" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
     <SUITE FILE_PATH="coverage/SentioProject$dialog.coverage" NAME="dialog Coverage Results" MODIFIED="1406027703068" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$colorbar.coverage" NAME="colorbar Coverage Results" MODIFIED="1404920049406" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
-    <SUITE FILE_PATH="coverage/futbol-data-analysis$wxDeneme.coverage" NAME="wxDeneme Coverage Results" MODIFIED="1409133685611" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$Unittests_in_tool.coverage" NAME="Unittests in tool Coverage Results" MODIFIED="1405001786949" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/futbol-data-analysis$wxDeneme.coverage" NAME="wxDeneme Coverage Results" MODIFIED="1409133685611" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$player_skeleton.coverage" NAME="player_skeleton Coverage Results" MODIFIED="1405501455190" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../Music_Player/music_player_v1" />
-    <SUITE FILE_PATH="coverage/futbol-data-analysis$Main.coverage" NAME="Main Coverage Results" MODIFIED="1435331164214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
+    <SUITE FILE_PATH="coverage/futbol-data-analysis$Main.coverage" NAME="Main Coverage Results" MODIFIED="1435494380976" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
     <SUITE FILE_PATH="coverage/futbol-data-analysis$rangeTest.coverage" NAME="rangeTest Coverage Results" MODIFIED="1408716153084" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$Unittests_in_test_text.coverage" NAME="Unittests in test_text Coverage Results" MODIFIED="1405434160116" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
-    <SUITE FILE_PATH="coverage/SentioProject$test_wxSample2.coverage" NAME="test_wxSample2 Coverage Results" MODIFIED="1405507332865" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$notebook_tab.coverage" NAME="notebook_tab Coverage Results" MODIFIED="1407675963025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$test_wxSample2.coverage" NAME="test_wxSample2 Coverage Results" MODIFIED="1405507332865" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/futbol-data-analysis$tutorial.coverage" NAME="tutorial Coverage Results" MODIFIED="1409564649896" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$Match.coverage" NAME="Match Coverage Results" MODIFIED="1405330616968" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/sentio" />
     <SUITE FILE_PATH="coverage/SentioProject$player_skeleton2.coverage" NAME="player_skeleton2 Coverage Results" MODIFIED="1404925293930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../Music_Player/music_player_v2" />
@@ -219,11 +46,11 @@
     <SUITE FILE_PATH="coverage/futbol-data-analysis$wxCircle.coverage" NAME="wxCircle Coverage Results" MODIFIED="1409166538185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$size.coverage" NAME="size Coverage Results" MODIFIED="1405279288684" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$Unittests_in_size.coverage" NAME="Unittests in size Coverage Results" MODIFIED="1405283095188" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
-    <SUITE FILE_PATH="coverage/futbol-data-analysis$range.coverage" NAME="range Coverage Results" MODIFIED="1409044644038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$tool.coverage" NAME="tool Coverage Results" MODIFIED="1405003667964" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/futbol-data-analysis$range.coverage" NAME="range Coverage Results" MODIFIED="1409044644038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$visua.coverage" NAME="visua Coverage Results" MODIFIED="1404656086501" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
-    <SUITE FILE_PATH="coverage/SentioProject$sets.coverage" NAME="sets Coverage Results" MODIFIED="1405591261038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/SentioProject$tutorial.coverage" NAME="tutorial Coverage Results" MODIFIED="1405928958058" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/SentioProject$sets.coverage" NAME="sets Coverage Results" MODIFIED="1405591261038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -237,21 +64,70 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+      <file leaf-file-name="Main.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4362416" vertical-offset="0" max-vertical-offset="447">
-              <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1290">
+              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+              <folding>
+                <element signature="e#15#32#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SnapShot.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sentio/gui/SnapShot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="571" max-vertical-offset="2865">
+              <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DraggablePass.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sentio/gui/DraggablePass.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1710" max-vertical-offset="2805">
+              <caret line="131" column="52" selection-start-line="131" selection-start-column="52" selection-end-line="131" selection-end-column="52" />
+              <folding>
+                <element signature="e#0#12#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.098468274" vertical-offset="0" max-vertical-offset="457">
+              <caret line="3" column="7" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PassEvent.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sentio/object/PassEvent.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
+      <file leaf-file-name="wxVisualization.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/sentio/gui/wxVisualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1260">
-              <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+            <state vertical-scroll-proportion="-5.185185" vertical-offset="8800" max-vertical-offset="10740">
+              <caret line="598" column="26" selection-start-line="598" selection-start-column="13" selection-end-line="598" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -270,7 +146,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/sentio/gui/DraggablePass.py" />
+        <option value="$PROJECT_DIR$/src/sentio/gui/SnapShot.py" />
       </list>
     </option>
   </component>
@@ -280,7 +159,7 @@
   <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1280" />
-    <option name="height" value="733" />
+    <option name="height" value="773" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -308,6 +187,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -358,9 +238,66 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sentio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="object" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sentio" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="futbol-data-analysis" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SampleScenarios" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -371,7 +308,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="recentsLimit" value="5" />
     <property name="FullScreen" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SentioProject-2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="SearchEverywhereHistoryKey" value="convertTextsToPlayers&#9;null&#9;null" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -575,9 +512,6 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
-      <method />
-    </configuration>
     <configuration default="true" type="tests" factoryName="Unittests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -599,6 +533,9 @@
       <option name="PUREUNITTEST" value="true" />
       <option name="PARAMS" value="" />
       <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
       <method />
     </configuration>
     <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
@@ -636,20 +573,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
-      <method />
-    </configuration>
-    <configuration default="true" type="PyLettuceRunConfigurationType" factoryName="Lettuce">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
       <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="SentioProject" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="ADDITIONAL_ARGS" value="" />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Attests">
@@ -670,6 +599,20 @@
       <option name="TEST_TYPE" value="TEST_SCRIPT" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PyLettuceRunConfigurationType" factoryName="Lettuce">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="SentioProject" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
       <method />
     </configuration>
     <list size="5">
@@ -730,11 +673,17 @@
       <option name="project" value="LOCAL" />
       <updated>1407835302851</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="initial -uzun bi aradan sonra- :)">
+      <created>1435331760051</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1435331760051</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="733" extended-state="6" />
+    <frame x="0" y="23" width="1280" height="773" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -746,18 +695,18 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21015625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28463855" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18828125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2684659" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3235725" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -778,7 +727,8 @@
     <MESSAGE value="-SnapShot is implemented&#10;-heatMap'lerdeki define position taking'deki bug düzeltildi&#10;-heatMap presentation'daki terslik giderildi&#10;-a new approach to compute the goalChance is implemented" />
     <MESSAGE value="." />
     <MESSAGE value="-slider'daki bug düzeltildi (uzatmalar)&#10;-right click aktif hale getirildi&#10;-topa sahip olan oyuncu çevresine circle eklendi ve alpha'sı 1'lendi&#10;-logger font ayarları yapıldı" />
-    <option name="LAST_COMMIT_MESSAGE" value="-slider'daki bug düzeltildi (uzatmalar)&#10;-right click aktif hale getirildi&#10;-topa sahip olan oyuncu çevresine circle eklendi ve alpha'sı 1'lendi&#10;-logger font ayarları yapıldı" />
+    <MESSAGE value="initial -uzun bi aradan sonra- :)" />
+    <option name="LAST_COMMIT_MESSAGE" value="initial -uzun bi aradan sonra- :)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -787,11 +737,20 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1290">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#15#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/tutorial.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2475" max-vertical-offset="2640">
           <caret line="169" column="40" selection-start-line="169" selection-start-column="40" selection-end-line="169" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -799,7 +758,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="555" max-vertical-offset="1020">
           <caret line="39" column="25" selection-start-line="39" selection-start-column="25" selection-end-line="39" selection-end-column="25" />
-          <folding />
+          <folding>
+            <element signature="e#15#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -807,7 +768,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="585" max-vertical-offset="1050">
           <caret line="39" column="25" selection-start-line="39" selection-start-column="25" selection-end-line="39" selection-end-column="25" />
-          <folding />
+          <folding>
+            <element signature="e#15#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -921,26 +884,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/SampleScenarios/plot.csv">
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="435">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/tutorial.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6839623" vertical-offset="0" max-vertical-offset="930">
           <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1260">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -950,6 +897,74 @@
           <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1290">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding>
+            <element signature="e#15#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/object/PassEvent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="570">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/gui/wxVisualization.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.185185" vertical-offset="8800" max-vertical-offset="10740">
+          <caret line="598" column="26" selection-start-line="598" selection-start-column="13" selection-end-line="598" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SampleScenarios/qqq.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="457">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/gui/SnapShot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="571" max-vertical-offset="2865">
+          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sentio/gui/DraggablePass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1710" max-vertical-offset="2805">
+          <caret line="131" column="52" selection-start-line="131" selection-start-column="52" selection-end-line="131" selection-end-column="52" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.098468274" vertical-offset="0" max-vertical-offset="457">
+          <caret line="3" column="7" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
       </provider>
     </entry>
   </component>
