@@ -1,5 +1,17 @@
 # coding=utf-8
+import os
+
+
 __author__ = 'emrullah'
+
+
+
+#PATH
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+DATA_BASE_DIR = os.path.join(BASE_DIR, '../data')
+
+
+
 
 # team names
 HOME_TEAM_NAME = "Fenerbahçe"

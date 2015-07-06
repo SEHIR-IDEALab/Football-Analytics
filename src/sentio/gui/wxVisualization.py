@@ -1,8 +1,13 @@
 # coding=utf-8
 
+from collections import OrderedDict
+
+
 import numpy
 
 import matplotlib
+import operator
+
 matplotlib.use('WXAgg')   # The recommended way to use wx with mpl is with the WXAgg backend.
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
@@ -20,7 +25,7 @@ from src.sentio.gui.RiskRange import RiskRange
 from src.sentio.gui.NoteBook import PageOne, PageTwo
 from src.sentio.gui.SnapShot import SnapShot, adjust_arrow_size
 from src.sentio.Time import Time
-from src.sentio.parser.Parser import Parser
+from src.sentio.file_io.Parser import Parser
 
 import time as tm
 import math
@@ -43,18 +48,13 @@ class wxVisualization(wx.Frame):
     dirname=''
     title = "Sport Analytics Tool - IDEA Lab"
 
-    def __init__(self, sentio):
+    def __init__(self, game_instances):
         wx.Frame.__init__(self, None, -1, self.title, pos=(0,20), size=(1200,750))
 
-        self.sentio = sentio
-        self.coordinate_data = self.sentio.getRevisedCoordinateData()
-        self.game_events = self.sentio.getGameEvents()
+        self.game_instances = game_instances
 
         self.paused = True
         self.directions_of_objects = list()
-
-        self.current_time = Time(1,0,0,0)
-        self.current_time.set_minMaxOfHalf(HALF_MIN_MAX)
 
         self.create_menu()
         self.create_status_bar()
@@ -72,9 +72,11 @@ class wxVisualization(wx.Frame):
         self.effectiveness_count = 0
         self.play_speed = 2
 
-        #needed for now!!!!!! ^^^^^^^
-        q = (1,0,0,0)
-        teams = self.coordinate_data.get(q)
+        self.half_intervals = self.get_half_intervals()
+
+        self.current_time = Time()
+        game_instance = self.game_instances.get((self.current_time.half, self.current_time.milliseconds))
+        teams = Parser.divideIntoTeams(game_instance.players)
         self.set_positions_of_objects(teams)
 
         self.draw_figure()
@@ -166,12 +168,30 @@ class wxVisualization(wx.Frame):
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_play_speed_slider, self.play_speed_slider)
 
 
+    def get_half_intervals(self):
+        index = 0
+        m_milliseconds = []
+        halfs = list(set(map((lambda x: x[0]), self.game_instances.keys())))
+        while index < len(halfs):
+            q = filter((lambda x: x[0] == halfs[index]), self.game_instances.keys())
+            max_millisecond = max(q, key=operator.itemgetter(1))[1]
+            if index != 0:
+                m_milliseconds.append(max_millisecond + m_milliseconds[index-1] + 2)
+            else:
+                m_milliseconds.append(max_millisecond)
+            index += 1
+        return m_milliseconds
+
+
     def get_milliseconds_for_slider(self):
         total = 0
-        q = Time.compute_minMaxOfHalf_inMilliseconds(HALF_MIN_MAX)
+        q = OrderedDict()
+        for half, milliseconds in self.game_instances:
+            q[half] = milliseconds / 2.0
+
         for half in q:
-            half_min_milliseconds, half_max_milliseconds = q[half]
-            total += (half_max_milliseconds - half_min_milliseconds)/2. + 1
+            total += q[half]
+
         return total - 1
 
 
@@ -311,12 +331,18 @@ class wxVisualization(wx.Frame):
         dlg.Destroy()
 
 
+    def decideOnHalf(self, milliseconds):
+        index = 0
+        while index < len(self.half_intervals):
+            if milliseconds < self.half_intervals[index]:
+                return index+1
+            index += 1
+
+
     ##### handling slider events #####
     def on_slider_release(self, event):
         milliseconds = self.slider.GetValue()
-        time = Time()
-        time.set_minMaxOfHalf(HALF_MIN_MAX)
-        temp_time = time.milliseconds_to_time(milliseconds*2)
+        temp_time = Time(self.decideOnHalf(milliseconds*2), milliseconds*2)
 
         self.removeAllAnnotations()
         self.visualizePositionsFor(temp_time)
@@ -324,9 +350,7 @@ class wxVisualization(wx.Frame):
 
     def on_slider_shift(self, event):
         milliseconds = self.slider.GetValue()
-        time = Time()
-        time.set_minMaxOfHalf(HALF_MIN_MAX)
-        temp_time = time.milliseconds_to_time(milliseconds*2)
+        temp_time = Time(self.decideOnHalf(milliseconds*2), milliseconds*2)
 
         formatted_time = Time.time_display(temp_time)
         self.current_time_display.SetLabel(formatted_time)
@@ -390,7 +414,7 @@ class wxVisualization(wx.Frame):
                 self.current_time.next()
 
             self.current_time_display.SetLabel(Time.time_display(self.current_time))
-            self.slider.SetValue(self.current_time.get_in_milliseconds() / 2.)
+            self.slider.SetValue(self.current_time.milliseconds / 2.)
 
             self.visualizePositionsFor(self.current_time)
             wx.Yield()
@@ -403,12 +427,13 @@ class wxVisualization(wx.Frame):
 
 
     def annotateGameEventsFor(self, time):
-        current_teams = self.coordinate_data.get((time.half, time.minute, time.second, time.millisecond))
+        game_instance  = self.game_instances.get((time.half, time.milliseconds))
+        current_teams = Parser.divideIntoTeams(game_instance.players)
 
         if self.effectiveness_count < 5: self.effectiveness_count += 1
         if self.effectiveness_count == 5: self.removeEffectivenessAnnotation()
 
-        current_event = self.game_events.get((time.half, time.minute, time.second, time.millisecond))
+        current_event = game_instance.event
         if current_event:
             self.removeEventAnnotation()
 
@@ -422,6 +447,7 @@ class wxVisualization(wx.Frame):
             else:
                 if current_event.isPassEvent():
                     pass_event = current_event.getPassEvent()
+                    print pass_event
 
                     p_visual_ball_holder = self.convertCoordinatePlayerToVisualPlayerIn(pass_event.pass_source)
                     p_visual_ball_holder.set_bbox(dict(boxstyle="circle,pad=0.3", fc=pass_event.pass_source.getObjectColor(),
@@ -499,46 +525,46 @@ class wxVisualization(wx.Frame):
         self.canvas.draw()
 
 
-    def getDirectionsOfPlayersFor(self, time): # should be rewritten
-        current_time = Time(time.half, time.minute, time.second, time.millisecond)
-        current_time.set_minMaxOfHalf(HALF_MIN_MAX)
-        n_time = current_time.next()
-
-        temp_teams = ({},{},{},{})
-        n_teams = self.coordinate_data.get((n_time.half, n_time.minute, n_time.second, n_time.millisecond))
-        for index, team in enumerate((n_teams.home_team, n_teams.away_team, n_teams.referees, n_teams.unknowns)):
-            for temp_player in team.getTeamPlayers():
-                temp_teams[index][temp_player.getJerseyNumber()] = temp_player.get_position()
-        return temp_teams
-
-
-    def getSpeedsOfPlayersFor(self, time): # should be rewritten
-        current_time = Time(time.half, time.minute, time.second, time.millisecond)
-        current_time.set_minMaxOfHalf(HALF_MIN_MAX)
-
-        temp_teams = ({},{},{},{})
-
-        teams = self.coordinate_data.get((time.half, time.minute, time.second, time.millisecond))
-        for index, team in enumerate((teams.home_team, teams.away_team, teams.referees, teams.unknowns)):
-            for player in team.getTeamPlayers():
-                temp_teams[index][player.getJerseyNumber()] = [player.get_position()]
-        for i in range(5):
-            p_time = current_time.back()
-            p_teams = self.coordinate_data.get((p_time.half, p_time.minute, p_time.second, p_time.millisecond))
-            for index, team in enumerate((p_teams.home_team, p_teams.away_team, p_teams.referees, p_teams.unknowns)):
-                for temp_player in team.getTeamPlayers():
-                    temp_positions = temp_teams[index][temp_player.getJerseyNumber()]
-                    temp_positions.append(temp_player.get_position())
-        for index, team in enumerate(temp_teams):
-            for js in team:
-                positions = team[js]
-                total = 0.0
-                for i in range(5):
-                    x, y = positions[i]
-                    p_x, p_y = positions[i+1]
-                    total += math.sqrt(pow(x-p_x, 2) + pow(y-p_y, 2))
-                team[js] = total
-        return temp_teams
+    # def getDirectionsOfPlayersFor(self, time): # should be rewritten
+    #     current_time = Time(time.half, time.minute, time.second, time.millisecond)
+    #     current_time.set_minMaxOfHalf(HALF_MIN_MAX)
+    #     n_time = current_time.next()
+    #
+    #     temp_teams = ({},{},{},{})
+    #     n_teams = self.game_instances.get(n_time.get_in_milliseconds())
+    #     for index, team in enumerate((n_teams.home_team, n_teams.away_team, n_teams.referees, n_teams.unknowns)):
+    #         for temp_player in team.getTeamPlayers():
+    #             temp_teams[index][temp_player.getJerseyNumber()] = temp_player.get_position()
+    #     return temp_teams
+    #
+    #
+    # def getSpeedsOfPlayersFor(self, time): # should be rewritten
+    #     current_time = Time(time.half, time.minute, time.second, time.millisecond)
+    #     current_time.set_minMaxOfHalf(HALF_MIN_MAX)
+    #
+    #     temp_teams = ({},{},{},{})
+    #
+    #     teams = self.coordinate_data.get((time.half, time.minute, time.second, time.millisecond))
+    #     for index, team in enumerate((teams.home_team, teams.away_team, teams.referees, teams.unknowns)):
+    #         for player in team.getTeamPlayers():
+    #             temp_teams[index][player.getJerseyNumber()] = [player.get_position()]
+    #     for i in range(5):
+    #         p_time = current_time.back()
+    #         p_teams = self.coordinate_data.get((p_time.half, p_time.minute, p_time.second, p_time.millisecond))
+    #         for index, team in enumerate((p_teams.home_team, p_teams.away_team, p_teams.referees, p_teams.unknowns)):
+    #             for temp_player in team.getTeamPlayers():
+    #                 temp_positions = temp_teams[index][temp_player.getJerseyNumber()]
+    #                 temp_positions.append(temp_player.get_position())
+    #     for index, team in enumerate(temp_teams):
+    #         for js in team:
+    #             positions = team[js]
+    #             total = 0.0
+    #             for i in range(5):
+    #                 x, y = positions[i]
+    #                 p_x, p_y = positions[i+1]
+    #                 total += math.sqrt(pow(x-p_x, 2) + pow(y-p_y, 2))
+    #             team[js] = total
+    #     return temp_teams
 
 
     def remove_all_draggable_visual_players(self):
@@ -548,7 +574,8 @@ class wxVisualization(wx.Frame):
 
 
     def updatePositionsOfPlayersFor(self, time):
-        teams = self.coordinate_data.get((time.half, time.minute, time.second, time.millisecond))
+        game_instance = self.game_instances.get((time.half, time.milliseconds))
+        teams = Parser.divideIntoTeams(game_instance.players)
         pre_teams = self.draggable_visual_teams
         for index, current_team in enumerate((teams.home_team, teams.away_team, teams.referees, teams.unknowns)):
             pre_team = pre_teams[index]

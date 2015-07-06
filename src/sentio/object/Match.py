@@ -235,7 +235,7 @@ class Match(object):
 
     def visualizeMatch(self):
         app = wx.App()
-        app.frame = wxVisualization(self.sentio)
+        app.frame = wxVisualization(self.sentio.game_instances)
         app.frame.Show()
         app.MainLoop()
 

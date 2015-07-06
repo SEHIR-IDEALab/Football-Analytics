@@ -1,4 +1,4 @@
-from src.sentio.parser import Parser
+from src.sentio.file_io import Parser
 from src.sentio.pass_evaluate.Pass import Pass
 
 

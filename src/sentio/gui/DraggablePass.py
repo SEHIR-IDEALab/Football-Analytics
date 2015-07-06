@@ -9,7 +9,7 @@ from src.sentio.gui import Dialogs
 from src.sentio.gui.HeatMap import HeatMap
 from src.sentio.gui.RiskRange import RiskRange
 from src.sentio.object.PassEvent import PassEvent
-from src.sentio.parser import Parser
+from src.sentio.file_io import Parser
 from src.sentio.pass_evaluate.Pass import Pass
 
 

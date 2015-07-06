@@ -30,4 +30,4 @@ class PassEvent:
 
 
     def __str__(self):
-        return "%s\n%s\n%s" %(self.pass_source, self.pass_target, self.teams)
+        return "%s\n%s" %(self.pass_source, self.pass_target)
