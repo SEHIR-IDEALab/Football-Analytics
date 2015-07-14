@@ -7,6 +7,7 @@ import numpy
 
 import matplotlib
 import operator
+from src.sentio.file_io.reader.ReaderBase import ReaderBase
 
 matplotlib.use('WXAgg')   # The recommended way to use wx with mpl is with the WXAgg backend.
 import matplotlib.pyplot as plt
@@ -48,10 +49,10 @@ class wxVisualization(wx.Frame):
     dirname=''
     title = "Sport Analytics Tool - IDEA Lab"
 
-    def __init__(self, game_instances):
+    def __init__(self, sentio):
         wx.Frame.__init__(self, None, -1, self.title, pos=(0,20), size=(1200,750))
 
-        self.game_instances = game_instances
+        self.sentio = sentio
 
         self.paused = True
         self.directions_of_objects = list()
@@ -72,11 +73,9 @@ class wxVisualization(wx.Frame):
         self.effectiveness_count = 0
         self.play_speed = 2
 
-        self.half_intervals = self.get_half_intervals()
-
         self.current_time = Time()
-        game_instance = self.game_instances.get((self.current_time.half, self.current_time.milliseconds))
-        teams = Parser.divideIntoTeams(game_instance.players)
+        game_instance = self.sentio.game_instances.get((self.current_time.half, self.current_time.milliseconds))
+        teams = ReaderBase.divideIntoTeams(game_instance.players)
         self.set_positions_of_objects(teams)
 
         self.draw_figure()
@@ -154,7 +153,7 @@ class wxVisualization(wx.Frame):
                               style=wx.RA_SPECIFY_COLS)
 
         self.play_speed_slider = wx.Slider(self.panel, -1, value=2, minValue=1, maxValue=5)
-        self.slider = wx.Slider(self.panel, -1, value=0, minValue=0, maxValue=self.get_milliseconds_for_slider())
+        self.slider = wx.Slider(self.panel, -1, value=0, minValue=0, maxValue=len(self.sentio.game_instances)-1)
 
         self.upbmp = wx.Bitmap(os.path.join(bitmapDir, "play.png"), wx.BITMAP_TYPE_PNG)
         self.disbmp = wx.Bitmap(os.path.join(bitmapDir, "pause.png"), wx.BITMAP_TYPE_PNG)
@@ -166,33 +165,6 @@ class wxVisualization(wx.Frame):
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_slider_release, self.slider)
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBTRACK, self.on_slider_shift, self.slider)
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_play_speed_slider, self.play_speed_slider)
-
-
-    def get_half_intervals(self):
-        index = 0
-        m_milliseconds = []
-        halfs = list(set(map((lambda x: x[0]), self.game_instances.keys())))
-        while index < len(halfs):
-            q = filter((lambda x: x[0] == halfs[index]), self.game_instances.keys())
-            max_millisecond = max(q, key=operator.itemgetter(1))[1]
-            if index != 0:
-                m_milliseconds.append(max_millisecond + m_milliseconds[index-1] + 2)
-            else:
-                m_milliseconds.append(max_millisecond)
-            index += 1
-        return m_milliseconds
-
-
-    def get_milliseconds_for_slider(self):
-        total = 0
-        q = OrderedDict()
-        for half, milliseconds in self.game_instances:
-            q[half] = milliseconds / 2.0
-
-        for half in q:
-            total += q[half]
-
-        return total - 1
 
 
     def layout_controls(self):
@@ -331,26 +303,20 @@ class wxVisualization(wx.Frame):
         dlg.Destroy()
 
 
-    def decideOnHalf(self, milliseconds):
-        index = 0
-        while index < len(self.half_intervals):
-            if milliseconds < self.half_intervals[index]:
-                return index+1
-            index += 1
-
-
     ##### handling slider events #####
     def on_slider_release(self, event):
-        milliseconds = self.slider.GetValue()
-        temp_time = Time(self.decideOnHalf(milliseconds*2), milliseconds*2)
+        slider_index = self.slider.GetValue()
+        half, milliseconds = self.sentio.slider_mapping[slider_index]
+        temp_time = Time(half, milliseconds)
 
         self.removeAllAnnotations()
         self.visualizePositionsFor(temp_time)
 
 
     def on_slider_shift(self, event):
-        milliseconds = self.slider.GetValue()
-        temp_time = Time(self.decideOnHalf(milliseconds*2), milliseconds*2)
+        slider_index = self.slider.GetValue()
+        half, milliseconds = self.sentio.slider_mapping[slider_index]
+        temp_time = Time(half, milliseconds)
 
         formatted_time = Time.time_display(temp_time)
         self.current_time_display.SetLabel(formatted_time)
@@ -427,8 +393,8 @@ class wxVisualization(wx.Frame):
 
 
     def annotateGameEventsFor(self, time):
-        game_instance  = self.game_instances.get((time.half, time.milliseconds))
-        current_teams = Parser.divideIntoTeams(game_instance.players)
+        game_instance  = self.sentio.game_instances.get((time.half, time.milliseconds))
+        current_teams = ReaderBase.divideIntoTeams(game_instance.players)
 
         if self.effectiveness_count < 5: self.effectiveness_count += 1
         if self.effectiveness_count == 5: self.removeEffectivenessAnnotation()
@@ -487,7 +453,7 @@ class wxVisualization(wx.Frame):
         else:
             try:
                 if self.p_event.event_id == 1:
-                    c_player = Parser.getPlayerIn(self.p_event.player, current_teams)
+                    c_player = ReaderBase.getPlayerIn(self.p_event.player, current_teams)
                     self.entire_trailX.append(c_player.getX()), self.entire_trailY.append(c_player.getY())
                     c_trailAnnotation = self.trail_annotations[-1]
                     c_trailAnnotation.set_data(self.entire_trailX, self.entire_trailY)
@@ -531,7 +497,7 @@ class wxVisualization(wx.Frame):
     #     n_time = current_time.next()
     #
     #     temp_teams = ({},{},{},{})
-    #     n_teams = self.game_instances.get(n_time.get_in_milliseconds())
+    #     n_teams = self.sentio.game_instances.get(n_time.get_in_milliseconds())
     #     for index, team in enumerate((n_teams.home_team, n_teams.away_team, n_teams.referees, n_teams.unknowns)):
     #         for temp_player in team.getTeamPlayers():
     #             temp_teams[index][temp_player.getJerseyNumber()] = temp_player.get_position()
@@ -574,8 +540,8 @@ class wxVisualization(wx.Frame):
 
 
     def updatePositionsOfPlayersFor(self, time):
-        game_instance = self.game_instances.get((time.half, time.milliseconds))
-        teams = Parser.divideIntoTeams(game_instance.players)
+        game_instance = self.sentio.game_instances.get((time.half, time.milliseconds))
+        teams = ReaderBase.divideIntoTeams(game_instance.players)
         pre_teams = self.draggable_visual_teams
         for index, current_team in enumerate((teams.home_team, teams.away_team, teams.referees, teams.unknowns)):
             pre_team = pre_teams[index]

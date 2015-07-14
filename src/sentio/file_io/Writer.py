@@ -3,116 +3,146 @@ import os
 import xml.etree.cElementTree as ET
 from src.sentio.Parameters import DATA_BASE_DIR
 from src.sentio.Time import Time
+from src.sentio.object.PlayerBase import PlayerBase
 
 __author__ = 'emrullah'
 
 
 class Writer:
 
-    def __init__(self, coord_data, event_data):
-        self.coord_data = coord_data
-        self.event_data = event_data
+    def __init__(self, game_instances, slider_mapping):
+        self.game_instances = game_instances
+        self.slider_mapping = slider_mapping
+
+        self.sample_size = 2
 
 
     def createFileAsXML(self):
         root = ET.Element("data")
         ET.SubElement(root, "TimeUnit").text = "millisecond"
 
-        halfs = [1, 2]
-        limit = Time.toMilliseconds((45, 0, 0))
+        q = self.game_instances.items()
+        halfs = range(1, q[-1][0][0] - q[0][0][0] + 2)
 
         for temp_half in halfs:
+            range_index = 0  ###
+            
             half_root = ET.SubElement(root, "Half", number=str(temp_half))
-            ### coord_data
             position_data = ET.SubElement(half_root, "PositionData")
-            for coord_data in self.coord_data:
-                half, minute, second, millisecond = coord_data
-
+            for game_instance in self.game_instances:
+                half, milliseconds = game_instance
+                game_instance = self.game_instances.get((half, milliseconds))
                 if half == temp_half:
-                    time_in_mils = Time.toMilliseconds((minute, second, millisecond))
-                    if half == 2:
-                        time_in_mils -= limit
+                    if range_index == self.sample_size:  ###
+                            break  ###
 
-                    time_point = ET.SubElement(position_data, "TimePoint", val=str(time_in_mils))
-                    teams = self.coord_data.get((half, minute, second, millisecond))
-                    for index, team in enumerate((teams.home_team, teams.away_team, teams.referees, teams.unknowns)):
-                        for player in team.getTeamPlayers():
-
-                            ET.SubElement(
-                                time_point, "Player",
-                                type = str(player.object_type),
-                                id = str(player.object_id),
-                                js = str(player.jersey_number),
-                                x = str(player.position_x),
-                                y = str(player.position_y)
-                            )
-
-            ### event_data
-            evnt_data = ET.SubElement(half_root, "EventData")
-            for event_data in self.event_data:
-                half, minute, second, millisecond = event_data
-                game_event = self.event_data.get((half, minute, second, millisecond))
-
-                if half == temp_half:
-                    time_in_mils = Time.toMilliseconds((minute, second, millisecond))
-                    if half == 2:
-                        time_in_mils -= limit
-
-                    try:
+                    time_point = ET.SubElement(position_data, "TimePoint", val=str(milliseconds))
+                    for player in game_instance.players:
+                        player = PlayerBase(player)
                         ET.SubElement(
-                            evnt_data, "Event",
-                            time = str(time_in_mils),
-                            type_id = str(game_event.event_id),
-                            type = game_event.event_name,
-                            player_id = str(game_event.player.object_id)
+                            time_point, "Player",
+                            type = str(player.object_type),
+                            id = str(player.object_id),
+                            js = str(player.jersey_number),
+                            x = str(player.position_x),
+                            y = str(player.position_y)
                         )
-                    except:
-                        pass
+                    range_index += 1
+
+            range_index = 0  ###
+            evnt_data = ET.SubElement(half_root, "EventData")
+            for game_instance in self.game_instances:
+                half, milliseconds = game_instance
+                game_instance = self.game_instances.get((half, milliseconds))
+                if half == temp_half:
+                    if game_instance.event:
+                        if range_index == self.sample_size:  ###
+                            break  ###
+                        try:
+                            ET.SubElement(
+                                evnt_data, "Event",
+                                time = str(milliseconds),
+                                type_id = str(game_instance.event.event_id),
+                                type = game_instance.event.event_name,
+                                player_id = str(game_instance.event.player.object_id)
+                            )
+                        except:
+                            pass
+                        range_index += 1
 
         tree = ET.ElementTree(root)
-        tree.write(os.path.join(DATA_BASE_DIR, 'output/sentio_data.xml'))
+        tree.write(os.path.join(DATA_BASE_DIR, 'output/sample_sentio_data.xml'))
+
+
+    def createFileAsJSON(self):
+        q = self.game_instances.items()
+        halfs = range(1, q[-1][0][0] - q[0][0][0] + 2)
+
+        with open(os.path.join(DATA_BASE_DIR, "output/sample_sentio_data.json"), "w") as outfile:
+            root = {"data":
+                        {
+                            "TimeUnit": "millisecond",
+                            "Half": {}
+                        }
+                    }
+
+            for temp_half in halfs:
+                root["data"]["Half"][temp_half] = {}
+                position_data = []
+                range_index = 0  ###
+                for game_instance in self.game_instances:
+                    half, milliseconds = game_instance
+                    if half == temp_half:
+                        if range_index == self.sample_size:  ###
+                            break  ###
+                        game_instance = self.game_instances.get((half, milliseconds))
+                        temp_players = []
+                        for player in game_instance.players:
+                            player = PlayerBase(player)
+                            player = {
+                                "type": player.object_type,
+                                "id": player.object_id,
+                                "js": player.jersey_number,
+                                "x": player.position_x,
+                                "y": player.position_y
+                            }
+                            temp_players.append(player)
+                        time_point = {
+                            "val": milliseconds,
+                            "players": temp_players
+                        }
+                        position_data.append(time_point)
+                        range_index += 1  ###
+                root["data"]["Half"][temp_half]["PositionData"] = position_data
+
+                event_data = []
+                range_index = 0  ###
+                for game_instance in self.game_instances:
+                    half, milliseconds = game_instance
+                    if half == temp_half:
+                        game_instance = self.game_instances.get((half, milliseconds))
+                        if game_instance.event:
+                            if range_index == self.sample_size:  ###
+                                break  ###
+                            try:
+                                event = {
+                                    "time": milliseconds,
+                                    "type_id": game_instance.event.event_id,
+                                    "type": game_instance.event.event_name,
+                                    "player_id": game_instance.event.player.object_id
+                                }
+                                event_data.append(event)
+                            except:
+                                pass
+                            range_index += 1  ###
+                root["data"]["Half"][temp_half]["EventData"] = event_data
+
+            json.dump(root, outfile)
 
 
     def createFileAsCSV(self):
         pass
 
-
-    def createFileAsJSON(self):
-        with open(os.path.join(DATA_BASE_DIR, "output/coord_data.json"), "w") as outfile:
-            data = []
-            for coord_data in self.coord_data:
-                half, minute, second, millisecond = coord_data
-
-                tms = {}
-                team_names = ("home", "away", "referee", "unknown")
-                teams = self.coord_data.get((half, minute, second, millisecond))
-                for index, team in enumerate((teams.home_team, teams.away_team, teams.referees, teams.unknowns)):
-                    temp_team = []
-                    for player in team.getTeamPlayers():
-                        player = {
-                            "object_type": player.object_type,
-                            "object_id": player.object_id,
-                            "jersey_number": player.jersey_number,
-                            "position_x": player.position_x,
-                            "position_y": player.position_y
-                        }
-                        temp_team.append(player)
-                    tms[team_names[index]] = {
-                        "name": "-",
-                        "players": temp_team
-                    }
-
-                data.append({
-                    "time":
-                        {
-                            "half": half,
-                            "minute": minute,
-                            "second": second,
-                            "millisecond": millisecond
-                        },
-                    "teams": tms
-                })
-            json.dump(data, outfile)
 
 
     def __str__(self):

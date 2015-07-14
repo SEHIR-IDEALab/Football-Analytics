@@ -17,7 +17,7 @@ class Time(object):
 
 
     @staticmethod
-    def toMilliseconds(self, (minute, second, millisecond)):
+    def toMilliseconds((minute, second, millisecond)):
         seconds = minute * 60 + second
         milliseconds = seconds * 10 + millisecond
         return milliseconds

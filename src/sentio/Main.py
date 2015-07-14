@@ -4,6 +4,8 @@ import os
 from src.sentio.Parameters import DATA_BASE_DIR
 from src.sentio.file_io.Parser import Parser
 from src.sentio.file_io.Writer import Writer
+from src.sentio.file_io.reader.JSONreader import JSONreader
+from src.sentio.file_io.reader.XMLreader import XMLreader
 from src.sentio.object.Match import Match
 
 
@@ -16,11 +18,14 @@ def main():
     # event_data = os.path.join(DATA_BASE_DIR, 'input/GS_FB_Event.txt')
 
 
-    parser = Parser()
-    # parser.parseSentioData(coord_data, event_data)
+    reader = JSONreader(os.path.join(DATA_BASE_DIR, 'output/sentio_data.json'))
+    game_instances, slider_mapping = reader.parse()
+
+    # writer = Writer(game_instances, slider_mapping)
+    # writer.createFileAsXML()
+    # writer.createFileAsJSON()
 
 
-    parser.parseXML(os.path.join(DATA_BASE_DIR, 'output/sentio_data.xml'))
     # for i in parser.game_instances:
     #     print i, parser.game_instances[i]
 
@@ -39,13 +44,10 @@ def main():
     #
 
 
-    # writer = Writer(parser.getRevisedCoordinateData(), parser.getGameEvents())
-    # writer.createFileAsXML()
 
-
-    match = Match(parser)
+    match = Match(reader)
     match.visualizeMatch()
-
+    #
 
 
 
