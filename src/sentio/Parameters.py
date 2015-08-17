@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+from src.sentio.pass_evaluate import get_coefficient
 
 
 __author__ = 'emrullah'
@@ -53,3 +54,5 @@ SOURCE_ANGLE=60.0
 
 #probability of player run at specific speed
 Coefficient={8:0.01,0:0.01}
+
+COEFFICIENTS = get_coefficient()

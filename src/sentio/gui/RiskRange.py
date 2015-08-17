@@ -10,7 +10,11 @@ class RiskRange():
 
     def __init__(self, ax):
         self.ax = ax
-        self.is_created = False
+
+        self.total_pass_count = 3
+        self.temp_pass_count = 0
+
+        self.risk_range_info = []
 
 
     @staticmethod
@@ -90,9 +94,6 @@ class RiskRange():
 
 
     def drawRangeFor(self, pass_event):
-        if self.is_created:
-            self.remove()
-
         p1, p2 = pass_event.pass_source, pass_event.pass_target
         coord,sr,tr=RiskRange.get_Coordinates_on_Circle(p1.get_position(),p2.get_position())
 
@@ -113,51 +114,17 @@ class RiskRange():
         self.ax.add_patch(self.circle1)
         self.ax.add_patch(self.circle2)
 
-        self.is_created = True
+        self.risk_range_info.append([self.line1, self.line2, self.line3, self.line4, self.circle1, self.circle2])
 
-    # @staticmethod
-    # def get_coefficient():
-    #
-    #     speed_data={}
-    #     sum_ball,numberLine=[],0
-    #     data = open ("player_speed.txt","r").readlines()
-    #
-    #     # float("{0:.2f}".format(13.949999999999999))
-    #     for line in data:
-    #         line=line.split()
-    #
-    #         for i in range(2,45,2):
-    #             if i==2:
-    #                 tmp=float("{0:.2f}".format(float(line[2])))
-    #                 if tmp <= 60.0:
-    #                     sum_ball.append(tmp)
-    #
-    #
-    #             else:
-    #                 tmp=float("{0:.1f}".format(float(line[i])))
-    #                 if tmp <= 10.38:
-    #
-    #                     if tmp not in speed_data:
-    #                         speed_data[tmp]=1
-    #                     else:
-    #                         speed_data[tmp] = speed_data.get(tmp)+1
-    #
-    #     # print sum(sum_ball),len(sum_ball)
-    #
-    #     # print speed_data
-    #     # di=sum(speed_data.values())
-    #     # print di
-    #     for key in speed_data.keys():
-    #         speed_data[key]=100.0*speed_data.get(key)/316800.0
-    #
-    #     return speed_data
-    #
+        self.temp_pass_count += 1
 
+        if self.temp_pass_count > self.total_pass_count:
+            self.remove()
 
 
     def remove(self):
-        for item in [self.line1, self.line2, self.line3, self.line4, self.circle1, self.circle2]:
+        for item in self.risk_range_info[0]:
             try: item.pop(0).remove()
             except: item.remove()
-        self.is_created = False
+        del self.risk_range_info[0]
 

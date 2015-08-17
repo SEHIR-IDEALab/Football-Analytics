@@ -1,4 +1,5 @@
 from src.sentio.file_io import Parser
+from src.sentio.file_io.reader import ReaderBase
 from src.sentio.pass_evaluate.Pass import Pass
 
 
@@ -104,11 +105,11 @@ class DraggablePlayer:
     def displayDefinedPasses(self):
         self.pass_logger.Clear()
 
-        teams = Parser.convertDraggableToTeams(self.draggable_visual_teams)
+        teams = ReaderBase.convertDraggableToTeams(self.draggable_visual_teams)
         passes = Pass()
         passes.teams=teams
         for defined_pass in self.passes_defined:
-            passes.displayDefinedPass(defined_pass, self.pass_logger, draggable=True)
+            passes.displayDefinedPass(defined_pass, self.pass_logger, visual=True)
 
 
     def disconnect(self):

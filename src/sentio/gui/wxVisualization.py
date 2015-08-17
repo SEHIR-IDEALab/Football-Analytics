@@ -140,6 +140,7 @@ class wxVisualization(wx.Frame):
         self.ax.set_xticks(numpy.arange(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X+5, 5))
         self.ax.set_yticks(numpy.arange(FOOTBALL_FIELD_MIN_Y, FOOTBALL_FIELD_MAX_Y+5, 5))
         self.ax.tick_params(axis="both", labelsize=6)
+        self.ax.autoscale(False)
 
         a,b,c,d, = plt.plot([],[],"bo",[],[],"ro",[],[],"yo",[],[],"ko", markersize=6)
         self.ax.legend([a,b,c,d], [HOME_TEAM_NAME.decode("utf-8"), AWAY_TEAM_NAME.decode("utf-8"), 'Referees',

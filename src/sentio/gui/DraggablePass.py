@@ -5,6 +5,7 @@ import wx
 from src.sentio import Parameters
 
 from src.sentio.Parameters import *
+from src.sentio.file_io.reader import ReaderBase
 from src.sentio.gui import Dialogs
 from src.sentio.gui.HeatMap import HeatMap
 from src.sentio.gui.RiskRange import RiskRange
@@ -123,7 +124,7 @@ class DraggablePass(Pass):
                     self.pass_event.xycoords = self.pass_target
 
                     current_pass_event = PassEvent(self.pass_event.textcoords, self.pass_event.xycoords,
-                                                   Parser.convertDraggableToTeams(self.draggable_visual_teams))
+                                                   ReaderBase.convertDraggableToTeams(self.draggable_visual_teams))
                     if Parameters.IS_DEBUG_MODE_ON:
                         self.risk_range.drawRangeFor(current_pass_event)
                     self.displayDefinedPass(current_pass_event, self.logger, draggable=False, visual=True)
