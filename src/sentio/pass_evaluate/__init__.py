@@ -1,4 +1,4 @@
-__author__ = 'doktoray'
+__author__ = 'emrullah'
 
 
 def get_coefficient():

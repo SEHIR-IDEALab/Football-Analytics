@@ -56,3 +56,9 @@ SOURCE_ANGLE=60.0
 Coefficient={8:0.01,0:0.01}
 
 COEFFICIENTS = get_coefficient()
+
+
+# wxGUI
+GUI_FILE_DIALOG_DIRECTORY=''
+GUI_TITLE = "Sport Analytics Tool - IDEA Lab"
+BITMAP_DIRECTORY = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'gui/source/bitmaps')

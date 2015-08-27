@@ -40,17 +40,16 @@ from wx.lib.agw.shapedbutton import SBitmapButton
 
 __author__ = 'emrullah'
 
-dirName = os.path.dirname(os.path.abspath(__file__))
-bitmapDir = os.path.join(dirName, 'source/bitmaps')
-
 
 class wxVisualization(wx.Frame):
 
-    dirname=''
-    title = "Sport Analytics Tool - IDEA Lab"
-
     def __init__(self, sentio):
-        wx.Frame.__init__(self, None, -1, self.title, pos=(0,20), size=(1200,750))
+        display_size = wx.DisplaySize()
+        padding = 50
+        screen_perc = 3/4.
+        wx.Frame.__init__(self, None, wx.ID_ANY, GUI_TITLE,
+                          pos=(padding, padding),
+                          size=(display_size[0]*screen_perc, display_size[1]*screen_perc))
 
         self.sentio = sentio
 
@@ -156,8 +155,8 @@ class wxVisualization(wx.Frame):
         self.play_speed_slider = wx.Slider(self.panel, -1, value=2, minValue=1, maxValue=5)
         self.slider = wx.Slider(self.panel, -1, value=0, minValue=0, maxValue=len(self.sentio.game_instances)-1)
 
-        self.upbmp = wx.Bitmap(os.path.join(bitmapDir, "play.png"), wx.BITMAP_TYPE_PNG)
-        self.disbmp = wx.Bitmap(os.path.join(bitmapDir, "pause.png"), wx.BITMAP_TYPE_PNG)
+        self.upbmp = wx.Bitmap(os.path.join(BITMAP_DIRECTORY, "play.png"), wx.BITMAP_TYPE_PNG)
+        self.disbmp = wx.Bitmap(os.path.join(BITMAP_DIRECTORY, "pause.png"), wx.BITMAP_TYPE_PNG)
         self.play_button = SBitmapButton(self.panel, -1, self.upbmp, (48, 48), size=(40,40))
 
         self.Bind(wx.EVT_RADIOBOX, self.on_mouse_action, self.rb)
@@ -212,12 +211,14 @@ class wxVisualization(wx.Frame):
         self.vbox.Add(self.hbox, 1, wx.EXPAND)
 
         self.hbox_play = wx.BoxSizer(wx.HORIZONTAL)
-        self.hbox_play.Add(self.play_button, 0, border=3, flag=wx.ALIGN_CENTER)
-        self.hbox_play.Add(self.slider, 1, border=3, flag=wx.ALIGN_CENTER | wx.EXPAND)
-        self.hbox_play.Add(self.current_time_display, 0, border=3, flag=flags)
-        self.vbox.Add(self.hbox_play, 1,  wx.EXPAND)
+        self.hbox_play.Add(self.play_button, 0, flag=wx.ALIGN_CENTER)
+        self.hbox_play.Add(self.slider, 1, wx.EXPAND)
+        self.hbox_play.Add(self.current_time_display, 0, flag=flags)
+        self.vbox.Add(self.hbox_play, 0, wx.EXPAND)
 
         self.panel.SetSizer(self.vbox)
+        # self.Fit()
+
 
 
     def draw_figure(self):
@@ -251,7 +252,7 @@ class wxVisualization(wx.Frame):
 
 
     def on_open_plot(self, event):
-        dlg = wx.FileDialog(self, "Choose a file", self.dirname, "", "*.csv", wx.OPEN)
+        dlg = wx.FileDialog(self, "Choose a file", GUI_FILE_DIALOG_DIRECTORY, "", "*.csv", wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             file_path = dlg.GetPath()
 
