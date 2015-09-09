@@ -69,8 +69,8 @@ class JSONreader(ReaderBase):
                             p_game_event = GameEvent(p_player, p_event_id, p_event_type)
 
                             if p_event_id == 1:
+                                p_player = self.idToPlayer(p_player_id, teams)
                                 if p_player is not None and c_player is not None:
-                                    p_player = self.idToPlayer(p_player_id, teams)
                                     temp_game_instance.event.setPassEvent(PassEvent(p_player, c_player, teams))
                     index += 1
 

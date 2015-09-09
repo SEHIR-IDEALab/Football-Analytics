@@ -9,6 +9,10 @@ class PassEvent:
         self.teams = teams
 
 
+    def isSuccessful(self):
+        return self.pass_source.getTypeName() == self.pass_target.getTypeName()
+
+
     def getTeams(self):
         return self.teams
 
