@@ -17,5 +17,9 @@ class GameInstances:
         return self.game_instances[time.half][time.milliseconds]
 
 
+    def getInstances(self):
+        return self.game_instances
+
+
     def __str__(self):
         pass
