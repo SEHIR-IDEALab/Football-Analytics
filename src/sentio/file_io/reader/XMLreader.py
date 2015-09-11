@@ -1,5 +1,6 @@
 from collections import deque
 import xml.etree.cElementTree as ET
+from src.sentio.Time import Time
 from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.object.GameEvent import GameEvent
 from src.sentio.object.GameInstance import GameInstance
@@ -38,7 +39,8 @@ class XMLreader(ReaderBase):
                                         plyr.attrib["y"]
                                     ]
                                 )
-                            self.game_instances[temp_half][time_in_millisec] = GameInstance(players)
+                            temp_time = Time(temp_half, time_in_millisec)
+                            self.game_instances[temp_half][time_in_millisec] = GameInstance(temp_time, players)
 
                             self.slider_mapping[mapping_index] = (temp_half, time_in_millisec)
                             mapping_index += 1

@@ -3,9 +3,11 @@ __author__ = 'emrullah'
 
 class GameInstance:
 
-    def __init__(self, players, event=None):
+    def __init__(self, time, players, event=None):
         self.players = players
         self.event = event
+
+        self.time = time
 
 
     def setPlayers(self, players):

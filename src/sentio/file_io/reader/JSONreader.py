@@ -1,5 +1,6 @@
 from collections import deque
 import json
+from src.sentio.Time import Time
 from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.object.GameEvent import GameEvent
 from src.sentio.object.GameInstance import GameInstance
@@ -33,7 +34,8 @@ class JSONreader(ReaderBase):
                                 plyr["y"]
                             ]
                         )
-                    self.game_instances[int(temp_half)][time_in_millisec] = GameInstance(players)
+                    temp_time = Time(temp_half, time_in_millisec)
+                    self.game_instances[int(temp_half)][time_in_millisec] = GameInstance(temp_time, players)
 
                     self.slider_mapping[mapping_index] = (int(temp_half), time_in_millisec)
                     mapping_index += 1
