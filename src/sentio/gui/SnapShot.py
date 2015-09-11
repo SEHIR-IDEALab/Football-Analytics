@@ -1,6 +1,7 @@
 import csv
 
 from src.sentio.Parameters import *
+from src.sentio.file_io.reader import ReaderBase
 from src.sentio.object.PassEvent import PassEvent
 from src.sentio.object.PlayerBase import PlayerBase
 from src.sentio.object.Team import Team
@@ -89,7 +90,7 @@ class SnapShot:
     def displayAllPasses(self, file_path, ax, draggable_visual_teams, pass_logger):
         all_defined_passes = []
         drag_pass = Pass()
-        drag_pass.teams = Parser.convertDraggableToTeams(draggable_visual_teams)
+        drag_pass.teams = ReaderBase.convertDraggableToTeams(draggable_visual_teams)
         with open(file_path) as fname:
             fname.readline()
             snapshot_data= csv.reader(fname, delimiter="\t")

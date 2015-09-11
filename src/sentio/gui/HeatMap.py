@@ -201,7 +201,7 @@ class HeatMap:
     def draw_defencePositionTaking(self, definedPass, chosen_js, number_of_points=(105, 65)):
         p1, p2 = definedPass
 
-        teams = Parser.convertDraggableToTeams(self.draggable_visual_teams)
+        teams = ReaderBase.convertDraggableToTeams(self.draggable_visual_teams)
         if p1.isHomeTeamPlayer(): opponent_team = teams.away_team
         else: opponent_team = teams.home_team
 

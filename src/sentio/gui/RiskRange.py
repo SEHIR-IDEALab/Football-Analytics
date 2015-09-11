@@ -23,13 +23,12 @@ class RiskRange():
         (x1,y1),(x2,y2)=p1,p2
 
         distance=(math.sqrt(math.pow(x1 - x2, 2) + math.pow(y1 - y2, 2)))
-        estimated_time = distance/22.35 # average speed of ball
-
+        # estimated_time = distance/22.35 # average speed of ball
         # radius_target = estimated_time*2.86*2 # average speed of player
 
-        radius_target = estimated_time*8.36
+        # radius_target = estimated_time*8.36
 
-        # radius_target = (math.sqrt(math.pow(x1 - x2, 2) + math.pow(y1 - y2, 2)))/PASS_TARGET_RADIUS_COEFFICIENT
+        radius_target = (math.sqrt(math.pow(x1 - x2, 2) + math.pow(y1 - y2, 2)))/PASS_TARGET_RADIUS_COEFFICIENT
 
         radius_source = min(PASS_SOURCE_RADIUS,radius_target/2.0)
         # radius_source = PASS_SOURCE_RADIUS

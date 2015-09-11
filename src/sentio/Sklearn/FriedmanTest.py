@@ -10,9 +10,9 @@ class FriedmanTest():
     def __init__(self):
         self.container=[]
         self.order=['P1', 'P2', 'P3']
-        self.all_average=[]
-        self.k=3.0 # number of categories /1,2,3
-        self.n=None
+        self.all_average = []
+        self.k = 3.0 # number of categories /1,2,3
+        self.n = None
 
     def convert_number(self):
         data=q.separate_Q()
@@ -29,7 +29,7 @@ class FriedmanTest():
                         tmp_dict[item]=1
                 tmp_cont.append(tmp_dict)
             self.container.append(tmp_cont)
-        return self.container
+        # return self.container
 
 
     def get_average(self,data):
@@ -38,11 +38,11 @@ class FriedmanTest():
         for p in self.order:
             counter=0
             for di in data:
-                if len(di.keys())==3:
+                if len(di.keys()) == 3:
                     s+=di[p]
-                    counter+=1    # n
+                    counter+= 1        # n
             average.append(s*1.0/counter)
-            self.n=counter
+            self.n = counter
             s=0
         return average
 
@@ -105,12 +105,13 @@ class FriedmanTest():
 
 if __name__ == "__main__":
     w=FriedmanTest()
-    # print w.convert_number()
+    print w
     # d2=w.convert_number()[0]
-    d=w.convert_number()
-    cs=[]
-    pv=[]
-    new_cs=[]
+    # print d2
+    # d=d2.convert_number()
+    # cs=[]
+    # pv=[]
+    # new_cs=[]
     # print w.get_average(d)
     # print d
     # print w.get_SSt(d2),w.get_SSe(d2)

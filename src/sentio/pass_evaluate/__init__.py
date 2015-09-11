@@ -2,37 +2,37 @@ __author__ = 'emrullah'
 
 
 def get_coefficient():
-
     speed_data={}
-    sum_ball,numberLine=[],0
-    data = open ("pass_evaluate/player_speed.txt","r").readlines()
+    data = open ("/Users/aliuzun/PycharmProjects/futbol-data-analysis/src/sentio/pass_evaluate/player_speed.txt","r").readlines()
 
-    # float("{0:.2f}".format(13.949999999999999))
     for line in data:
         line=line.split()
-
         for i in range(2,45,2):
-            if i==2:
-                tmp=float("{0:.2f}".format(float(line[2])))
-                if tmp <= 60.0:
-                    sum_ball.append(tmp)
+            tmp=float("{0:.1f}".format(float(line[i])))
+            if (tmp >= 3.0) and (tmp <= 10):
+                if tmp not in speed_data:
+                    speed_data[tmp]=1
+                else:
+                    speed_data[tmp] = speed_data.get(tmp)+1
+    # div = sum(speed_data.values())*1.0
 
+    dd = speed_data.items()
+    dd.sort()
 
-            else:
-                tmp=float("{0:.1f}".format(float(line[i])))
-                if tmp <= 10.38:
+    key,val=[],[]
 
-                    if tmp not in speed_data:
-                        speed_data[tmp]=1
-                    else:
-                        speed_data[tmp] = speed_data.get(tmp)+1
+    for i,j in dd:
+        key.append(i)
+        val.append(j)
+    div = sum(val)*1.0
 
-    # print sum(sum_ball),len(sum_ball)
+    new_dict={}
+    end=len(val)
+    for index,num in enumerate(key):
+        new_dict[num]=sum(val[index:end])
 
-    # print speed_data
-    # di=sum(speed_data.values())
-    # print di
-    for key in speed_data.keys():
-        speed_data[key]=100.0*speed_data.get(key)/316800.0
-
-    return speed_data
+    coef={}
+    # x_val,y_val=[],[]
+    for i,j in new_dict.items():
+        coef[i]=(j/div)
+    return coef
