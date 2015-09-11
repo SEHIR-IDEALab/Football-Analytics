@@ -3,6 +3,8 @@ from src.sentio import Parameters
 from src.sentio.object.PlayerBase import PlayerBase
 from src.sentio.object.Team import Team
 from src.sentio.object.Teams import Teams
+from collections import defaultdict
+
 
 __author__ = 'emrullah'
 
@@ -28,7 +30,9 @@ class ReaderBase:
     def __init__(self, file_path):
         self.file_path = file_path
 
-        self.game_instances = OrderedDict()
+        tree = lambda: defaultdict(tree)
+
+        self.game_instances = tree()
         self.slider_mapping = OrderedDict()
 
 

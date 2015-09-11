@@ -3,7 +3,9 @@ import xml.etree.cElementTree as ET
 from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.object.GameEvent import GameEvent
 from src.sentio.object.GameInstance import GameInstance
+from src.sentio.object.GameInstances import GameInstances
 from src.sentio.object.PassEvent import PassEvent
+from src.sentio.object.PlayerBase import PlayerBase
 
 __author__ = 'emrullah'
 
@@ -36,7 +38,7 @@ class XMLreader(ReaderBase):
                                         plyr.attrib["y"]
                                     ]
                                 )
-                            self.game_instances[(temp_half, time_in_millisec)] = GameInstance(players)
+                            self.game_instances[temp_half][time_in_millisec] = GameInstance(players)
 
                             self.slider_mapping[mapping_index] = (temp_half, time_in_millisec)
                             mapping_index += 1
@@ -50,7 +52,7 @@ class XMLreader(ReaderBase):
                             c_event_type = c_event.attrib["type"]
                             c_event_id = int(c_event.attrib["type_id"])
 
-                            temp_game_instance = self.game_instances[(temp_half, c_time_in_millisec)]
+                            temp_game_instance = self.game_instances[temp_half][c_time_in_millisec]
                             teams = ReaderBase.divideIntoTeams(temp_game_instance.players)
                             c_player = self.idToPlayer(c_player_id, teams)
                             if temp_game_instance.event is not None:
@@ -67,7 +69,7 @@ class XMLreader(ReaderBase):
                                     p_event_id = int(p_event.attrib["type_id"])
                                     p_player_id = int(p_event.attrib["player_id"])
 
-                                    p_temp_game_instance = self.game_instances[(temp_half, p_time_in_millisec)]
+                                    p_temp_game_instance = self.game_instances[temp_half][p_time_in_millisec]
                                     p_teams = ReaderBase.divideIntoTeams(p_temp_game_instance.players)
                                     p_player = self.idToPlayer(p_player_id, p_teams)
                                     p_game_event = GameEvent(p_player, p_event_id, p_event_type)
@@ -78,6 +80,7 @@ class XMLreader(ReaderBase):
                                             temp_game_instance.event.setPassEvent(PassEvent(p_player, c_player, teams))
                             index += 1
 
+        self.game_instances = GameInstances(self.game_instances)
         return self.game_instances, self.slider_mapping
 
 

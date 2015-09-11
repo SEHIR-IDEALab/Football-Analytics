@@ -73,7 +73,7 @@ class wxVisualization(wx.Frame):
         self.play_speed = 2
 
         self.current_time = Time()
-        game_instance = self.sentio.game_instances.get((self.current_time.half, self.current_time.milliseconds))
+        game_instance = self.sentio.game_instances.getGameInstance(self.current_time)
         teams = ReaderBase.divideIntoTeams(game_instance.players)
         self.set_positions_of_objects(teams)
 
@@ -153,7 +153,7 @@ class wxVisualization(wx.Frame):
                               style=wx.RA_SPECIFY_COLS)
 
         self.play_speed_slider = wx.Slider(self.panel, -1, value=2, minValue=1, maxValue=5)
-        self.slider = wx.Slider(self.panel, -1, value=0, minValue=0, maxValue=len(self.sentio.game_instances)-1)
+        self.slider = wx.Slider(self.panel, -1, value=1, minValue=1, maxValue=self.sentio.game_instances.getTotalNumber())
 
         self.upbmp = wx.Bitmap(os.path.join(BITMAP_DIRECTORY, "play.png"), wx.BITMAP_TYPE_PNG)
         self.disbmp = wx.Bitmap(os.path.join(BITMAP_DIRECTORY, "pause.png"), wx.BITMAP_TYPE_PNG)
@@ -395,7 +395,7 @@ class wxVisualization(wx.Frame):
 
 
     def annotateGameEventsFor(self, time):
-        game_instance  = self.sentio.game_instances.get((time.half, time.milliseconds))
+        game_instance  = self.sentio.game_instances.getGameInstance(time)
         current_teams = ReaderBase.divideIntoTeams(game_instance.players)
 
         if self.effectiveness_count < 5: self.effectiveness_count += 1
@@ -542,7 +542,7 @@ class wxVisualization(wx.Frame):
 
 
     def updatePositionsOfPlayersFor(self, time):
-        game_instance = self.sentio.game_instances.get((time.half, time.milliseconds))
+        game_instance = self.sentio.game_instances.getGameInstance(time)
         teams = ReaderBase.divideIntoTeams(game_instance.players)
         pre_teams = self.draggable_visual_teams
         for index, current_team in enumerate((teams.home_team, teams.away_team, teams.referees, teams.unknowns)):
