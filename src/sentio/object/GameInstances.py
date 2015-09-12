@@ -13,6 +13,13 @@ class GameInstances:
         return total
 
 
+    def getTotalNumberIn(self, half):
+        try:
+            return len(self.game_instances[half].keys())
+        except:
+            return None
+
+
     def getFirstHalfInstances(self):
         try:
             return self.game_instances[1].values()
@@ -25,6 +32,10 @@ class GameInstances:
             return self.game_instances[2].values()
         except:
             return None
+
+
+    def getGameInstance(self, time):
+        return self.game_instances[time.half][time.milliseconds]
 
 
     def __str__(self):

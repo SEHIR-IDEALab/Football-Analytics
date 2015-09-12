@@ -53,6 +53,10 @@ class Time(object):
         self.milliseconds -= 2
 
 
+    def __cmp__(self, other):
+        return self.half == other.half and self.milliseconds == other.milliseconds
+
+
     def __str__(self):
         if self.converted_to_time:
             return "half = %s\n" \

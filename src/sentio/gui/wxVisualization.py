@@ -153,7 +153,7 @@ class wxVisualization(wx.Frame):
                               style=wx.RA_SPECIFY_COLS)
 
         self.play_speed_slider = wx.Slider(self.panel, -1, value=2, minValue=1, maxValue=5)
-        self.slider = wx.Slider(self.panel, -1, value=1, minValue=1, maxValue=self.sentio.game_instances.getTotalNumber())
+        self.slider = wx.Slider(self.panel, -1, value=0, minValue=0, maxValue=self.sentio.game_instances.getTotalNumber()-1)
 
         self.upbmp = wx.Bitmap(os.path.join(BITMAP_DIRECTORY, "play.png"), wx.BITMAP_TYPE_PNG)
         self.disbmp = wx.Bitmap(os.path.join(BITMAP_DIRECTORY, "pause.png"), wx.BITMAP_TYPE_PNG)
@@ -308,8 +308,7 @@ class wxVisualization(wx.Frame):
     ##### handling slider events #####
     def on_slider_release(self, event):
         slider_index = self.slider.GetValue()
-        half, milliseconds = self.sentio.slider_mapping[slider_index]
-        temp_time = Time(half, milliseconds)
+        temp_time = self.sentio.slider_mapping[slider_index]
 
         self.removeAllAnnotations()
         self.visualizePositionsFor(temp_time)
@@ -317,8 +316,7 @@ class wxVisualization(wx.Frame):
 
     def on_slider_shift(self, event):
         slider_index = self.slider.GetValue()
-        half, milliseconds = self.sentio.slider_mapping[slider_index]
-        temp_time = Time(half, milliseconds)
+        temp_time = self.sentio.slider_mapping[slider_index]
 
         formatted_time = Time.time_display(temp_time)
         self.current_time_display.SetLabel(formatted_time)
@@ -382,10 +380,19 @@ class wxVisualization(wx.Frame):
                 self.current_time.next()
 
             self.current_time_display.SetLabel(Time.time_display(self.current_time))
-            self.slider.SetValue(self.current_time.milliseconds / 2.)
+            self.slider.SetValue(self.getSliderValue())
 
             self.visualizePositionsFor(self.current_time)
             wx.Yield()
+
+
+    def getSliderValue(self):
+        total = 0
+        if self.current_time.half != 1:
+            for i in range(1, self.current_time.half):
+                total += self.sentio.game_instances.getTotalNumberIn(i)
+        return self.current_time.milliseconds / 2.0 + total
+
 
 
     def visualizePositionsFor(self, time):
@@ -575,7 +582,10 @@ class wxVisualization(wx.Frame):
 
             for js in current_team.getTeamPlayersWithJS():
                 draggable_visual_player = pre_team.get(js)
-                draggable_visual_player.visual_player.set_position(current_team.getTeamPlayersWithJS()[js].get_position())
+                try:
+                    draggable_visual_player.visual_player.set_position(current_team.getTeamPlayersWithJS()[js].get_position())
+                except:
+                    print "player not found!!!"
 
 
     def set_positions_of_objects(self, teams):

@@ -34,10 +34,10 @@ class JSONreader(ReaderBase):
                                 plyr["y"]
                             ]
                         )
-                    temp_time = Time(temp_half, time_in_millisec)
+                    temp_time = Time(int(temp_half), time_in_millisec)
                     self.game_instances[int(temp_half)][time_in_millisec] = GameInstance(temp_time, players)
 
-                    self.slider_mapping[mapping_index] = (int(temp_half), time_in_millisec)
+                    self.slider_mapping[mapping_index] = temp_time
                     mapping_index += 1
 
                 index = 0
