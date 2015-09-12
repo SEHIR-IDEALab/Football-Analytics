@@ -59,11 +59,9 @@ class Time(object):
 
     def __str__(self):
         if self.converted_to_time:
-            return "half = %s\n" \
-                   "minute = %s\n" \
-                   "second = %s\n" \
-                   "millisecond = %s" % (self.half, self.minute, self.second, self.millisecond)
+            return "half = %s, minute = %s, second = %s, millisecond = %s" \
+                        %(self.half, self.minute, self.second, self.millisecond)
         else:
-            return "half: %s\n" \
-                   "milliseconds = %s" % (self.half, self.milliseconds)
+            return "half: %s, milliseconds = %s" \
+                        %(self.half, self.milliseconds)
 

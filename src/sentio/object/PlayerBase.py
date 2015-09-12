@@ -1,12 +1,9 @@
+from src.sentio.Parameters import OBJECT_TYPES
+
 __author__ = 'emrullah'
 
 
 class PlayerBase:
-
-    object_types = {0: "Home Team Player", 1: "Away Team Player", 2: "Referee", 3: "Home Team Goalkeeper",
-                    4: "Away Team Goalkeeper", -1: "Unknown object", 6: "The other referees",
-                    7: "The other referees", 8: "The other referees", 9: "The other referees"}
-
 
     def __init__(self, object_info=None):
         if object_info is not None:
@@ -15,6 +12,12 @@ class PlayerBase:
             self.jersey_number = int(object_info[2])
             self.position_x = float(object_info[3])
             self.position_y = float(object_info[4])
+
+            self.raw_data = object_info
+
+
+    def getRawData(self):
+        return self.raw_data
 
 
     def getObjectType(self):
@@ -30,7 +33,7 @@ class PlayerBase:
 
 
     def getObjectTypeName(self):
-        return self.object_types[self.object_type]
+        return OBJECT_TYPES[self.object_type]
 
 
     def getTypeName(self):

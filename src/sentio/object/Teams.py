@@ -14,5 +14,9 @@ class Teams:
         return self.home_team.getTeamPlayers() + self.away_team.getTeamPlayers()
 
 
+    def getTeams(self):
+        return (self.home_team, self.away_team, self.referees, self.unknowns)
+
+
     def __str__(self):
         return "%s\n%s\n%s\n%s" %(self.home_team, self.away_team, self.referees, self.unknowns)

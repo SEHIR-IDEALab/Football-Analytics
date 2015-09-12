@@ -34,6 +34,14 @@ class GameInstances:
             return None
 
 
+    def getAllInstances(self):
+        q = []
+        for half in self.game_instances:
+            half_game_instances = self.game_instances[half].values()
+            q.extend(half_game_instances)
+        return q
+
+
     def getGameInstance(self, time):
         return self.game_instances[time.half][time.milliseconds]
 

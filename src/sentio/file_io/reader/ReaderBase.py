@@ -1,9 +1,9 @@
 from collections import OrderedDict
 from src.sentio import Parameters
+from src.sentio.file_io.reader import tree
 from src.sentio.object.PlayerBase import PlayerBase
 from src.sentio.object.Team import Team
 from src.sentio.object.Teams import Teams
-from collections import defaultdict
 
 
 __author__ = 'emrullah'
@@ -29,8 +29,6 @@ def convertDraggableToTeams(draggable_visual_teams):
 class ReaderBase:
     def __init__(self, file_path):
         self.file_path = file_path
-
-        tree = lambda: defaultdict(tree)
 
         self.game_instances = tree()
         self.slider_mapping = OrderedDict()

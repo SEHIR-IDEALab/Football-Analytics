@@ -1,3 +1,4 @@
+from src.sentio.file_io.reader import tree
 import math
 
 from src.sentio.Time import Time
@@ -9,18 +10,24 @@ __author__ = 'emrullah'
 
 class Player(PlayerBase):
 
-    def __init__(self, team_name, time, object_info):
+    coord_info = tree()
+
+    def __init__(self, time, object_info):
         PlayerBase.__init__(self, object_info)
-        self.player_coord_info = {(time.half, time.minute, time.second, time.mili_second): self.get_position()}
-        self.team_name = team_name
+        self.coord_info[time.half][time.milliseconds] = self.get_position()
         self.ball_steal = 0
         self.ball_lose = 0
         self.ball_pass = 0
         self.ball_ownership_time = 0
 
 
+    def appendNewCoordInfo(self, time, coord_info):
+        self.coord_info[time.half][time.milliseconds] = coord_info
+
+
     def set_eventsInfo(self, events_info):
         self.events_info = events_info
+
 
     def set_gameStopTimeInterval(self, game_stop_time_interval):
         self.game_stop_time_interval = game_stop_time_interval
@@ -42,15 +49,8 @@ class Player(PlayerBase):
         self.ball_ownership_time += bown_time
 
 
-    def appendNewCoordInfo(self, new_timeInfo, new_player_coord_info):
-        current_player_coord_info = new_player_coord_info
-        x_current, y_current = float(current_player_coord_info[3]), float(current_player_coord_info[4])
-        half, minute, second, millisecond = new_timeInfo.half, new_timeInfo.minute, new_timeInfo.second, new_timeInfo.mili_second
-        self.player_coord_info[(half, minute, second, millisecond)] = (x_current, y_current)
-
-
     def get_playerCoordInfo(self):
-        return self.player_coord_info
+        return self.coord_info
 
 
     def get_eventsInfo(self):
@@ -58,7 +58,7 @@ class Player(PlayerBase):
 
 
     def get_ballOwnershipTime(self):
-        time = Time().int_to_time(self.ball_ownership_time)
+        time = Time.milliseconds_to_time(self.ball_ownership_time)
         minute, second = time.minute, time.second
         q = "%s.%s" % (minute, second)
         return float(q)
@@ -80,20 +80,18 @@ class Player(PlayerBase):
         return self.team_name
 
 
-    def isPlayerInGame(self, half, minute, sec, milisec):
-        try:
-            if milisec in self.player_coord_info[half][minute][sec]:
-                return True
-            return False
-        except KeyError:
-            return False
+    def isPlayerInGame(self, time):
+        if self.coord_info[time.half][time.milliseconds]:
+            return True
+        return False
 
 
     def getTimeInterval_played(self):
         a = list()
-        for half in self.player_coord_info:
-            minutes = self.player_coord_info[half].keys()
-            a.append(minutes)
+        for half in self.coord_info:
+            for milliseconds in self.coord_info[half]:
+                minute, second, millisecond = Time.milliseconds_to_time(milliseconds)
+                a.append(minute)
         return a
 
 
@@ -222,9 +220,8 @@ class Player(PlayerBase):
         return (x_average, y_average)
 
 
-    def getCoordinateXY(self, half, minute, sec, milisec):
-        x,y = self.player_coord_info[half][minute][sec][milisec]
-        return (x,y)
+    def getCoordinateXY(self, time):
+        return self.coord_info[time.half][time.milliseconds]
 
 
     def __str__(self):

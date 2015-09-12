@@ -15,8 +15,10 @@ DATA_BASE_DIR = os.path.join(BASE_DIR, '../data')
 
 
 # team names
-HOME_TEAM_NAME = "Fenerbahçe"
-AWAY_TEAM_NAME = "Galatasaray"
+HOME_TEAM_NAME = "Home Team"
+AWAY_TEAM_NAME = "Away Team"
+REFEREES_TEAM_NAME = "Referees"
+UNKNOWNS_TEAM_NAME = "Unknowns"
 
 # min-max for each half
 INITIAL_HALF_MIN_MAX = {1: ((0,0,0), (44,59,8)), 2: ((45,0,0), (89,59,8))}
@@ -72,3 +74,18 @@ max_speed_player=10.0
 GUI_FILE_DIALOG_DIRECTORY=''
 GUI_TITLE = "Sport Analytics Tool - IDEA Lab"
 BITMAP_DIRECTORY = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'gui/source/bitmaps')
+
+
+# Match object types
+OBJECT_TYPES = {
+    -1: "Unknown object",
+    0: "Home Team Player",
+    1: "Away Team Player",
+    2: "Referee",
+    3: "Home Team Goalkeeper",
+    4: "Away Team Goalkeeper",
+    6: "The other referees",
+    7: "The other referees",
+    8: "The other referees",
+    9: "The other referees"
+}

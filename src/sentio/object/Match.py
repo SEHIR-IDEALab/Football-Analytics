@@ -2,9 +2,11 @@ import wx
 from src.sentio import Parameters
 
 from src.sentio.Time import Time
+from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.gui.wxVisualization import wxVisualization
 from src.sentio.object.Player import Player
 from src.sentio.object.Team import Team
+from src.sentio.object.Teams import Teams
 
 
 __author__ = 'emrullah'
@@ -14,101 +16,23 @@ class Match(object):
     def __init__(self, sentio):
 
         self.sentio = sentio
-
-        self.homeTeamPlayers = dict()
-        self.awayTeamPlayers = dict()
-        self.referees = dict()
-        self.unknownObjects = dict()
-
-
-    def getMatchID(self):
-        return self.sentio.getCoordinateData()[0][1]
-
-
-    def getValidEventDataTime_forGivenTime(self, half, minute, second, milisec):
-        try:
-            eventData_current = self.sentio.getEventData_byTime()[half][minute][second]
-            return half, minute, second
-        except KeyError:
-            time = Time(half, minute, second, milisec)
-            time.set_minMaxOfHalf(self.get_minMaxOfHalf())   ####### may be removed!
-            back_time = time.back()
-            #print back_time.half, back_time.minute, back_time.second, back_time.mili_second
-            return self.getValidEventDataTime_forGivenTime(back_time.half, back_time.minute, back_time.second, back_time.mili_second)
-
-
-    def getMatchScore_forGivenTime(self, half_, minute_, second_, milisec_):
-        d = {team_name:0 for team_name in (Parameters.HOME_TEAM_NAME, Parameters.AWAY_TEAM_NAME)}
-        e = self.sentio.getEventData_byTime()
-        done = False
-        for half in sorted(e.keys()):
-            for minute in sorted(e[half].keys()):
-                for second in sorted(e[half][minute].keys()):
-                    events = e[half][minute][second]
-                    for event in events:
-                        teamName_current, js_current, eventID_current = event
-                        if eventID_current in range(112, 218): d[teamName_current] += 1
-                    half_, minute_, second_ = self.getValidEventDataTime_forGivenTime(half_, minute_, second_, milisec_)
-                    if half==half_ and minute==minute_ and second==second_:
-                        done = True; break
-                if done: break
-            if done: break
-        return d
-
-
-    def getPlayersOfTeams(self):
-        teams_players = dict()
-        for line in self.sentio.getEventData():
-            if line[3]:
-                teamName, player_jerseyNumber = line[3], int(line[4])
-                if teamName not in teams_players:
-                    teams_players[teamName] = [player_jerseyNumber]
-                else:
-                    if player_jerseyNumber not in teams_players[teamName]:
-                        teams_players[teamName] += [player_jerseyNumber]
-        return teams_players
+        self.teams = None
 
 
     def getHomeTeam(self):
-        team = Team(Parameters.HOME_TEAM_NAME, self.homeTeamPlayers)
-        return team
+        return self.teams.home_team
 
 
     def getAwayTeam(self):
-        team = Team(Parameters.AWAY_TEAM_NAME, self.awayTeamPlayers)
-        return team
+        return self.teams.away_team
 
 
-    def get_referees(self):
-        return self.referees
+    def getReferees(self):
+        return self.teams.referees
 
 
-    def get_unknownObjects(self):
-        return self.unknownObjects
-
-
-    @staticmethod
-    def get_minMaxOfHalf(coordinate_data):
-        a, index, q = dict(), 0, coordinate_data
-        min_half, min_minute, min_second, min_mili_second = int(q[index][3]), int(q[index][4]),\
-                                                         int(q[index][5]), int(q[index][2][-3])
-        a[min_half] = []
-        a[min_half].append([min_minute, min_second, min_mili_second])
-        while index < len(q)-1:
-            current_half, next_half = q[index][3], q[index+1][3]
-            if current_half != next_half:
-                current_max_half, current_max_minute, current_max_second, current_max_mili_second = int(q[index][3]), \
-                            int(q[index][4]), int(q[index][5]), int(q[index][2][-3])
-                a[current_max_half].append([current_max_minute, current_max_second, current_max_mili_second])
-                next_min_half, next_min_minute, next_min_second, next_min_mili_second = int(q[index+1][3]), \
-                            int(q[index+1][4]), int(q[index+1][5]), int(q[index+1][2][-3])
-                a[next_min_half] = []
-                a[next_min_half].append([next_min_minute, next_min_second, next_min_mili_second])
-            index += 1
-        max_half, max_minute, max_second, max_mili_second = int(q[index][3]), int(q[index][4]), \
-                                                    int(q[index][5]), int(q[index][2][-3])
-        a[max_half].append([max_minute, max_second, max_mili_second])
-        return a
+    def getUnknownObjects(self):
+        return self.teams.unknowns
 
 
     def compute_someEvents(self):
@@ -184,35 +108,26 @@ class Match(object):
         return game_stop_time_intervals
 
 
-    def append_newEventTimeIntervals(self, myDict, new_time_info):
-        half, minute, second, mili_second = new_time_info.half, new_time_info.minute, new_time_info.second, new_time_info.millisecond
-        myDict.setdefault(half, {})
-        myDict[half].setdefault(minute, {})
-        myDict[half][minute].setdefault(second, {})
-        myDict[half][minute][second][mili_second] = None
+    def buildMatchObjects(self):
+        q = {}, {}, {}, {}  ## home_team, away_team, referees, unknowns
+        for game_instance in self.sentio.game_instances.getAllInstances():
+            teams = ReaderBase.divideIntoTeams(game_instance.players)
+            for team_index, team in enumerate(teams.getTeams()):
+                for player in team.getTeamPlayers():
+                    temp_team = q[team_index]
+                    if player.jersey_number in temp_team:
+                        temp_player = temp_team[player.jersey_number]
+                        temp_player.appendNewCoordInfo(game_instance.time, player.get_position())
+                    else:
+                        temp_team[player.jersey_number] = Player(game_instance.time, player.raw_data)
 
-        return myDict
-
-
-    def identifyObjects(self):
-        event_data = self.sentio.getEventData_byTime()
-        game_stop = self.get_timeInterval_ofGameStop()
-        time = Time()
-        time.set_minMaxOfHalf(self.get_minMaxOfHalf(self.sentio.getCoordinateData()))
-        q = self.sentio.getCoordinateData_byTime()
-        players_coord_info = q[time.half][time.minute][time.second][time.millisecond]
-        self.makeClassification(time, players_coord_info, event_data, game_stop)
-        while True:
-            try:
-                next_time = time.next()
-                try:
-                    players_coord_info = q[next_time.half][next_time.minute][next_time.second][next_time.mili_second]
-                    self.makeClassification(time, players_coord_info, event_data, game_stop)
-                except KeyError:
-                    #print half, minute, second, mili_second
-                    pass
-            except KeyError:
-                break
+        home_team, away_team, referees, unknowns = q
+        self.teams = Teams(
+            Team(Parameters.HOME_TEAM_NAME, home_team),
+            Team(Parameters.AWAY_TEAM_NAME, away_team),
+            Team(Parameters.REFEREES_TEAM_NAME, referees),
+            Team(Parameters.UNKNOWNS_TEAM_NAME, unknowns)
+        )
 
 
     def makeClassification(self, time_info, objects_coord_info, event_data, game_stop):
@@ -224,10 +139,7 @@ class Match(object):
                     if jersey_number in object_class:
                         object_class[jersey_number].appendNewCoordInfo(time_info, player_coord_info)
                     else:
-                        teamName = None
-                        if object_type in [0, 3]: teamName = Parameters.HOME_TEAM_NAME
-                        elif object_type in [1, 4]: teamName = Parameters.AWAY_TEAM_NAME
-                        object_class[jersey_number] = Player(teamName, time_info, player_coord_info)
+                        object_class[jersey_number] = Player(time_info, player_coord_info)
                         player = object_class[jersey_number]
                         player.set_eventsInfo(event_data)
                         player.set_gameStopTimeInterval(game_stop)
