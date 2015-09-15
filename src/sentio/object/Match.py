@@ -35,77 +35,40 @@ class Match(object):
         return self.teams.unknowns
 
 
-    def compute_someEvents(self):
-        teamName_previous, js_previous, eventID_previous = None, None, None
-        time_previous_miliseconds = None
-        e = self.sentio.getEventData_byTime()
-        for half in sorted(e.keys()):
-            for minute in sorted(e[half].keys()):
-                for second in sorted(e[half][minute].keys()):
-                    events = e[half][minute][second]
-                    for event in events:
-                        teamName_current, js_current, eventID_current = event
-                        time_current = Time(half, minute, second)
-                        time_current_miliseconds = time_current.time_to_int(time_current)
-                        if teamName_previous is not None:
-                            try:
-                                if teamName_current != teamName_previous or js_current != js_previous or eventID_previous == 1:
-                                    bown_time = time_current_miliseconds - time_previous_miliseconds
-                                    if teamName_previous == Parameters.HOME_TEAM_NAME:
-                                        self.homeTeamPlayers[js_previous].add_ballOwnershipTime(bown_time)
-                                    elif teamName_previous == Parameters.AWAY_TEAM_NAME:
-                                        self.awayTeamPlayers[js_previous].add_ballOwnershipTime(bown_time)
-                                if teamName_current != teamName_previous and teamName_previous != "":
-                                    if teamName_current == Parameters.HOME_TEAM_NAME:
-                                        self.homeTeamPlayers[js_current].add_ballSteal()
-                                        self.awayTeamPlayers[js_previous].add_ballLose()
-                                    elif teamName_current == Parameters.AWAY_TEAM_NAME:
-                                        self.awayTeamPlayers[js_current].add_ballSteal()
-                                        self.homeTeamPlayers[js_previous].add_ballLose()
-                                elif teamName_current == teamName_previous and teamName_previous != "" and js_current != js_previous:
-                                    if teamName_current == Parameters.HOME_TEAM_NAME:
-                                        self.homeTeamPlayers[js_previous].add_ballPass()
-                                    elif teamName_current == Parameters.AWAY_TEAM_NAME:
-                                        self.awayTeamPlayers[js_previous].add_ballPass()
-                            except KeyError:
-                                pass
-                        teamName_previous, js_previous, eventID_previous = teamName_current, js_current, eventID_current
-                        time_previous_miliseconds = time_current_miliseconds
+    def computeEventStats(self):
+        pre_game_instance = None
+        for game_instance in self.sentio.game_instances.getAllInstances():
+            if game_instance.event and pre_game_instance:
+                event = game_instance.event
+                pre_event = pre_game_instance.event
+                if event.player.getTypeName() != pre_event.player.getTypeName() or \
+                        event.player.jersey_number != pre_event.player.jersey_number or \
+                            pre_event.event_id == 1:
+                    own_time = game_instance.time.milliseconds - pre_game_instance.time.milliseconds
+                    if pre_event.player.isHomeTeamPlayer():
+                        self.teams.home_team.team_players[pre_event.player.jersey_number].add_ballOwnershipTime(own_time)
+                    elif pre_event.player.isAwayTeamPlayer():
+                        self.teams.away_team.team_players[pre_event.player.jersey_number].add_ballOwnershipTime(own_time)
 
+            if game_instance.event:
+                pre_game_instance = game_instance
 
-    def get_timeInterval_ofGameStop(self):
-        game_stop_time_intervals = dict()
-        time = Time()
-        time.set_minMaxOfHalf(self.get_minMaxOfHalf(self.sentio.getCoordinateData()))
-        q = self.sentio.getEventData_byTime()
-        game_stop_time_intervals = self.checkForGameStopEvent(time, game_stop_time_intervals, q)
-        while True:
-            try:
-                next_time = time.next()
-                #print next_time.half, next_time.minute, next_time.second, next_time.mili_second
-                game_stop_time_intervals = self.checkForGameStopEvent(next_time, game_stop_time_intervals, q)
-            except KeyError:
-                break
-        return game_stop_time_intervals
+            if game_instance.event and game_instance.event.isPassEvent():
+                pass_source = game_instance.event.pass_event.pass_source
+                pass_target = game_instance.event.pass_event.pass_target
 
-
-    def checkForGameStopEvent(self, time, game_stop_time_intervals, q):
-        try:
-            instant_events = q[time.half][time.minute][time.second]
-            for instant_event in instant_events:
-                teamName, js, eventID = instant_event
-                if eventID == 2:
-                    game_stop_time_intervals = self.append_newEventTimeIntervals(game_stop_time_intervals, time)
-        except KeyError:
-            back_time = time.back()
-            back_half, back_minute, back_second, back_millisec = back_time.half, back_time.minute, back_time.second, back_time.millisecond
-            try:
-                checkIfInside = game_stop_time_intervals[back_half][back_minute][back_second][back_millisec]
-                current_time = time.next()
-                game_stop_time_intervals = self.append_newEventTimeIntervals(game_stop_time_intervals, current_time)
-            except KeyError:
-                pass
-        return game_stop_time_intervals
+                if pass_source.getTypeName() != pass_target.getTypeName():
+                    if pass_target.isHomeTeamPlayer():
+                        self.teams.home_team.team_players[pass_target.jersey_number].add_ballSteal()
+                        self.teams.away_team.team_players[pass_source.jersey_number].add_ballLose()
+                    elif pass_target.isAwayTeamPlayer():
+                        self.teams.away_team.team_players[pass_target.jersey_number].add_ballSteal()
+                        self.teams.home_team.team_players[pass_source.jersey_number].add_ballLose()
+                else:
+                    if pass_target.isHomeTeamPlayer():
+                        self.teams.home_team.team_players[pass_source.jersey_number].add_ballPass()
+                    elif pass_target.isAwayTeamPlayer():
+                        self.teams.away_team.team_players[pass_source.jersey_number].add_ballPass()
 
 
     def buildMatchObjects(self):
@@ -143,6 +106,41 @@ class Match(object):
                         player = object_class[jersey_number]
                         player.set_eventsInfo(event_data)
                         player.set_gameStopTimeInterval(game_stop)
+
+
+    def get_timeInterval_ofGameStop(self):
+        game_stop_time_intervals = dict()
+        time = Time()
+        time.set_minMaxOfHalf(self.get_minMaxOfHalf(self.sentio.getCoordinateData()))
+        q = self.sentio.getEventData_byTime()
+        game_stop_time_intervals = self.checkForGameStopEvent(time, game_stop_time_intervals, q)
+        while True:
+            try:
+                next_time = time.next()
+                #print next_time.half, next_time.minute, next_time.second, next_time.mili_second
+                game_stop_time_intervals = self.checkForGameStopEvent(next_time, game_stop_time_intervals, q)
+            except KeyError:
+                break
+        return game_stop_time_intervals
+
+
+    def checkForGameStopEvent(self, time, game_stop_time_intervals, q):
+        try:
+            instant_events = q[time.half][time.minute][time.second]
+            for instant_event in instant_events:
+                teamName, js, eventID = instant_event
+                if eventID == 2:
+                    game_stop_time_intervals = self.append_newEventTimeIntervals(game_stop_time_intervals, time)
+        except KeyError:
+            back_time = time.back()
+            back_half, back_minute, back_second, back_millisec = back_time.half, back_time.minute, back_time.second, back_time.millisecond
+            try:
+                checkIfInside = game_stop_time_intervals[back_half][back_minute][back_second][back_millisec]
+                current_time = time.next()
+                game_stop_time_intervals = self.append_newEventTimeIntervals(game_stop_time_intervals, current_time)
+            except KeyError:
+                pass
+        return game_stop_time_intervals
 
 
     def visualizeMatch(self):

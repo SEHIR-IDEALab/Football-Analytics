@@ -21,6 +21,11 @@ class Player(PlayerBase):
         self.ball_ownership_time = 0
 
 
+    def printStats(self):
+        return "ball_steal: %s\nball_lose: %s\nball_pass: %s\nball_ownership_time: %s" \
+                %(self.ball_steal, self.ball_lose, self.ball_pass, Time.milliseconds_to_time(self.ball_ownership_time))
+
+
     def appendNewCoordInfo(self, time, coord_info):
         self.coord_info[time.half][time.milliseconds] = coord_info
 
@@ -86,13 +91,22 @@ class Player(PlayerBase):
         return False
 
 
-    def getTimeInterval_played(self):
+    ## it may include same minutes for multiple times
+    def getTimeIntervalPlayed(self):
         a = list()
         for half in self.coord_info:
             for milliseconds in self.coord_info[half]:
                 minute, second, millisecond = Time.milliseconds_to_time(milliseconds)
                 a.append(minute)
         return a
+
+
+    # def calculateSpeed(self, time):
+    #     first_coord = self.coord_info[time.half].itervalues().next()
+    #     if self.coord_info[time.half][time.milliseconds] == first_coord:
+    #         return 0
+    #     else:
+
 
 
     def getSpeedOfPlayer_atAllPoints(self):
@@ -132,20 +146,13 @@ class Player(PlayerBase):
                 pass
 
 
-    def get_minMaxOfHalf_forPlayer(self):
-        a = {}
-        q = self.get_playerCoordInfo()
-        for half in q.keys():
-            a[half] = []
-            minutes = q[half].keys()
-            min_minute, max_minute = min(minutes), max(minutes)
-            seconds = q[half][min_minute].keys()
-            min_second, max_second = min(seconds), max(seconds)
-            mili_seconds = q[half][min_minute][min_second].keys()
-            min_milisecond, max_milisecond = min(mili_seconds), max(mili_seconds)
-            a[half].append([min_minute, min_second, min_milisecond])
-            a[half].append([max_minute, max_second, max_milisecond])
-        return a
+    def getHalfIntervalsPlayed(self):
+        q = {}
+        for half in self.coord_info:
+            milliseconds = self.coord_info[half].keys()
+            min_of_half, max_of_half = milliseconds[0], milliseconds[-1]
+            q[half] = Time.milliseconds_to_time(min_of_half), Time.milliseconds_to_time(max_of_half)
+        return q
 
 
     def compute_runningDistance_withGameStopAndSpeedFilter(self):
@@ -188,36 +195,26 @@ class Player(PlayerBase):
         return total_runningDistance
 
 
-    def compute_runningDistance(self):
-        x_previous, y_previous = None, None
-        total_runningDistance = 0.0
-        q = self.get_playerCoordInfo()
-        for half in sorted(q.keys()):
-            for minute in sorted(q[half].keys()):
-                for sec in sorted(q[half][minute].keys()):
-                    for mili_sec in sorted(q[half][minute][sec].keys()):
-                        x_current, y_current = q[half][minute][sec][mili_sec]
-                        if x_previous is not None:
-                            #current_events = self.get_eventsInfo()[half][minute][sec]
-                            total_runningDistance += math.sqrt(pow(x_current-x_previous,2) + pow(y_current-y_previous,2))
-                        x_previous, y_previous = x_current, y_current
-        return total_runningDistance
+    def computeRunningDistance(self):
+        pre_x, pre_y = None, None
+        total = 0.0
+        for half in self.coord_info:
+            for position in self.coord_info[half].values():
+                if pre_x is not None:
+                    total += math.sqrt(pow(position[0]-pre_x, 2) + pow(position[1]-pre_y, 2))
+                pre_x, pre_y = position
+        return total
 
 
-    def get_averageLocation(self):
-        q = self.get_playerCoordInfo()
-        x_total, y_total = 0, 0
+    def computeAverageLocation(self):
+        total_x, total_y = 0.0, 0.0
         count = 0
-        for half in q:
-            for minute in q[half]:
-                for second in q[half][minute]:
-                    for milisecond in q[half][minute][second]:
-                        x_current, y_current = q[half][minute][second][milisecond]
-                        x_total += x_current
-                        y_total += y_current
-                        count += 1
-        x_average, y_average = (x_total/count), (y_total/count)
-        return (x_average, y_average)
+        for half in self.coord_info:
+            for position in self.coord_info[half].values():
+                total_x += position[0]
+                total_y += position[1]
+                count += 1
+        return (total_x/count), (total_y/count)
 
 
     def getCoordinateXY(self, time):
