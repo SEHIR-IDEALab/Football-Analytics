@@ -323,8 +323,6 @@ class Pass:
         for p2 in player_list:
             p2.set_position(initilaInfo[p2])
 
-            # fgc.append(max(goalChances))
-            # goal_keeper_y = goal_keeper_y + 0.5
 
         # print goalChances
         return max(goalChances)

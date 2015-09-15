@@ -14,7 +14,7 @@ class Pass:
 
     def __init__(self):
         self.teams = None
-        self.weight_coefficient=[489,1, 975, 572]
+        # self.weight_coefficient=[489,1, 975, 572]
 
 
 
@@ -136,9 +136,14 @@ class Pass:
         except: (ZeroDivisionError)
 
         if x3==x1 or x3==x2:
-            d1= math.fabs((y3-y1))
-            d2=0.001
-            risk=(d1/d2)   #*coefficients[0.0]
+            d1,d2= math.fabs((y3-y1)),0.1
+            V2 = d2/(d1/average_speed_ball)
+            d_tmp_t = float("{0:.1f}".format(V2))
+            if d_tmp_t < 3.0:    tt=1.0
+            elif d_tmp_t > 10.0: tt=0.0
+            else:                tt=COEFFICIENTS[d_tmp_t]  # d1 is distance to point that p3 cross the line1to2 right angle
+
+            risk=(d1/d2)*tt
             return risk
 
         if cond1 and cond2:
@@ -175,7 +180,8 @@ class Pass:
                 if d2 == d2_a:
                     d1 = math.sqrt(math.pow(hypotenuse_1to3, 2) - math.pow(d2, 2))
 
-        if d2==0: d2=0.001
+
+        d2 = (0.1 if d2 <= 0.1 else d2)
 
         t1 = d1/average_speed_ball
         # V2 = d2/t1
@@ -188,8 +194,6 @@ class Pass:
         else:
             tt=COEFFICIENTS[d_tmp_t]  # d1 is distance to point that p3 cross the line1to2 right angle
 
-
-        # print p1.getJerseyNumber(),(x1,y1),p2.getJerseyNumber(),(x2,y2),p3.getJerseyNumber(),(x3,y3),"d1",d1,d2,d_tmp_t,tt
 
         risk=(d1/d2)*tt
 
@@ -308,10 +312,7 @@ class Pass:
             q = self.overallRisk(p1, goal_keeper, goal_keeper=False)
 
             # q = (1 if q == 0 else q)
-            # d1 = (1 if d1 == 0 else d1)
-
-            # print "d1:",d1,"angle:",angle,"risk:",q
-            # print GOALPOST_LENGTH,min(angle, (180 - angle)),GOAL_COEFFICIENT
+            d1 = (0.1 if d1 == 0 else d1)
 
             goalChances.append((GOALPOST_LENGTH / d1) * (min(angle, (180 - angle)) / 90.) * (1. / (1 + q)) * GOAL_COEFFICIENT)
             self.getFutureCoordinates(p1,player_list,(goal_keeper_x,goal_keeper_y))
@@ -323,9 +324,7 @@ class Pass:
             # fgc.append(max(goalChances))
             # goal_keeper_y = goal_keeper_y + 0.5
 
-        # print goalChances
         return max(goalChances)
-        # return max(fgc)
     #-----------------
 
     def get_players_in_gcr(self,p1): # return the list of player has affect on goalchance
@@ -366,18 +365,24 @@ class Pass:
         x3, y3 = Gxy
 
         Q1 = math.degrees(math.atan((y3-y1)/(x3-x1))) # Q1 is the angle of p1 - goalkeeper line
-        slope = (y3 - y1) / (x3 - x1) # zero devision error gives
+        try: slope = (y3 - y1) / (x3 - x1) # zero devision error gives
+        except ZeroDivisionError: slope = 1000 # might be change
         a,b,c = slope,-1,( ( slope * (-x1) ) + y1 )
 
         for p2 in p2s:
 
             x2, y2 = p2.get_position()
             angle1 = math.degrees(math.atan((y2-y1)/(x2-x1))) # the angle of p1-p2 line
-            alpha_p1 = math.radians(math.fabs(Q1-angle1)) # the angle with p1's direction and p1-p2 line
-
+            alpha_p1 = 2*math.fabs(Q1-angle1) # the angle with p1's direction and p1-p2 line
             d2 = math.fabs(a * x2 + b * y2 + c) / math.sqrt(math.pow(a, 2) + math.pow(b, 2))
 
-            t=(d2/average_speed_player)*math.sin(2*alpha_p1)
+            if alpha_p1 > 180:
+                # alpha_p1 = alpha_p1 - 180
+                t=(d2/average_speed_player)
+            else:
+                alpha_p1 = math.radians(alpha_p1)
+                t=(d2/average_speed_player)*math.sin(alpha_p1)
+
             dists.append(int(t))
         return dists
 
@@ -478,23 +483,23 @@ class Pass:
 
     def effectiveness_withComponents(self, p1, p2):
         # w1, w2, w3, w4 = 1, 1, 1, 1
-        w1, w2, w3, w4 = self.weight_coefficient
-        gain = w1 * self.gain(p1, p2)
+        w1, w2, w3, w4 = weight_coefficient
+        gain = w1 * self.gain(p1, p2)/10.0
         passAdvantage, pa_player = self.passAdvantage(p2)
-        goalChance = w4 * self.goalChance(p2)
-        overallRisk = self.overallRisk(p1, p2)
-        effectiveness = gain + passAdvantage + goalChance
+        goalChance = w3 * self.goalChance(p2)/100.0
+        overallRisk = self.overallRisk(p1, p2)/(12620.0)
+        effectiveness = gain + w2*passAdvantage/2.0 + goalChance
+
         if not self.isSuccessfulPass(p1, p2):
             if effectiveness < 0:
                 effectiveness *= 10
             else:
                 effectiveness = -effectiveness * 10
 
-        return (overallRisk, gain, w3*passAdvantage, pa_player, goalChance, effectiveness)
+        return (overallRisk, gain, passAdvantage, pa_player, goalChance, effectiveness)
 
 
     def __str__(self):
         pass
 
 
-# [148.42707837679296, 143.43659656874934, 137.3339745035888, 130.45739176175738, 126.819882686861, 119.01529212095191, 106.36517418880885, 97.49064890666283]

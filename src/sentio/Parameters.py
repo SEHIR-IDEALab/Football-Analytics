@@ -69,6 +69,8 @@ average_speed_player = 2.86
 #maximum speed of players
 max_speed_player=10.0
 
+#coefficient for goalchace,gain,pass advantages
+weight_coefficient=[489,1, 975, 572]
 
 # wxGUI
 GUI_FILE_DIALOG_DIRECTORY=''
