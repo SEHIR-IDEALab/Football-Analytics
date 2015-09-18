@@ -41,16 +41,15 @@ class Match(object):
             if game_instance.event and pre_game_instance:
                 event = game_instance.event
                 pre_event = pre_game_instance.event
-                if event.player.getTypeName() != pre_event.player.getTypeName() or \
-                        event.player.jersey_number != pre_event.player.jersey_number or \
-                            pre_event.event_id == 1:
+                if event.player and (event.player.getTypeName() != pre_event.player.getTypeName() or
+                        event.player.jersey_number != pre_event.player.jersey_number or pre_event.event_id == 1):
                     own_time = game_instance.time.milliseconds - pre_game_instance.time.milliseconds
                     if pre_event.player.isHomeTeamPlayer():
                         self.teams.home_team.team_players[pre_event.player.jersey_number].add_ballOwnershipTime(own_time)
                     elif pre_event.player.isAwayTeamPlayer():
                         self.teams.away_team.team_players[pre_event.player.jersey_number].add_ballOwnershipTime(own_time)
 
-            if game_instance.event:
+            if game_instance.event and game_instance.event.player:
                 pre_game_instance = game_instance
 
             if game_instance.event and game_instance.event.isPassEvent():
@@ -93,7 +92,7 @@ class Match(object):
         )
 
 
-    def makeClassification(self, time_info, objects_coord_info, event_data, game_stop):
+    def makeClassification(self, time_info, objects_coord_info, game_stop):
         types = [[0,3], [1,4], [2,6,7,8,9], [-1]]
         for player_coord_info in objects_coord_info:
             object_type, jersey_number = int(player_coord_info[0]), int(player_coord_info[2])
@@ -104,7 +103,6 @@ class Match(object):
                     else:
                         object_class[jersey_number] = Player(time_info, player_coord_info)
                         player = object_class[jersey_number]
-                        player.set_eventsInfo(event_data)
                         player.set_gameStopTimeInterval(game_stop)
 
 
