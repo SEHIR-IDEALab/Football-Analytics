@@ -8,8 +8,6 @@ class GameInstance:
         self.players = players
         self.event = event
 
-        self.game_stop_status = False
-
 
     def setPlayers(self, players):
         self.players = players
@@ -17,14 +15,6 @@ class GameInstance:
 
     def setEvent(self, event):
         self.event = event
-
-
-    def setGameStopStatus(self, status):
-        self.game_stop_status = status
-
-
-    def isGameStop(self):
-        return self.game_stop_status
 
 
     def __str__(self):
