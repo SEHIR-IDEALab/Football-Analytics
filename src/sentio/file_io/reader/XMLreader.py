@@ -50,31 +50,38 @@ class XMLreader(ReaderBase):
                         while index < len(grandchild)-1:
                             c_event = grandchild[index]
                             c_time_in_millisec = int(c_event.attrib["time"])
-                            c_player_id = int(c_event.attrib["player_id"])
+                            try:
+                                c_player_id = int(c_event.attrib["player_id"])
+                            except:
+                                c_player_id = None
                             c_event_type = c_event.attrib["type"]
                             c_event_id = int(c_event.attrib["type_id"])
 
                             temp_game_instance = self.game_instances[temp_half][c_time_in_millisec]
                             teams = ReaderBase.divideIntoTeams(temp_game_instance.players)
                             c_player = self.idToPlayer(c_player_id, teams)
-                            if temp_game_instance.event is not None:
-                                if c_event_id != 1:
-                                    temp_game_instance.setEvent(GameEvent(c_player, c_event_id, c_event_type))
-                            else:
-                                temp_game_instance.setEvent(GameEvent(c_player, c_event_id, c_event_type))
+
+                            c_temp_time = Time(int(temp_half), c_time_in_millisec)
+                            temp_game_instance.setEvent(GameEvent(c_player, c_event_id, c_event_type, c_temp_time))
 
                             if c_event_id == 1:
                                 if index != 0:
                                     p_event = grandchild[index-1]
+
                                     p_time_in_millisec = int(p_event.attrib["time"])
                                     p_event_type = p_event.attrib["type"]
                                     p_event_id = int(p_event.attrib["type_id"])
-                                    p_player_id = int(p_event.attrib["player_id"])
+                                    try:
+                                        p_player_id = int(p_event.attrib["player_id"])
+                                    except:
+                                        p_player_id = None
 
                                     p_temp_game_instance = self.game_instances[temp_half][p_time_in_millisec]
                                     p_teams = ReaderBase.divideIntoTeams(p_temp_game_instance.players)
                                     p_player = self.idToPlayer(p_player_id, p_teams)
-                                    p_game_event = GameEvent(p_player, p_event_id, p_event_type)
+
+                                    p_temp_time = Time(int(temp_half), p_time_in_millisec)
+                                    p_game_event = GameEvent(p_player, p_event_id, p_event_type, p_temp_time)
 
                                     if p_event_id == 1:
                                         p_player = self.idToPlayer(p_player_id, teams)

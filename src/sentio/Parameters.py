@@ -91,3 +91,7 @@ OBJECT_TYPES = {
     8: "The other referees",
     9: "The other referees"
 }
+
+
+# running distance speed filter
+SPEED_THRESHOLD = 2.6  # 13m/s

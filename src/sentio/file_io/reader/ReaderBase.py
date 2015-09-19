@@ -58,6 +58,9 @@ class ReaderBase:
 
 
     def idToPlayer(self, player_id, teams):
+        if player_id is None:
+            return None
+
         for player in teams.getPlayers():
             if player.object_id == player_id:
                 return player
@@ -72,7 +75,8 @@ class ReaderBase:
         return own_team.getTeamPlayersWithJS().get(p_player.getJerseyNumber())
 
 
-    def convertEventPlayerToCoordinatePlayer(self, event_player, teams):
+    @staticmethod
+    def convertEventPlayerToCoordinatePlayer(event_player, teams):
         if event_player.getTeamName() == Parameters.HOME_TEAM_NAME: own_team = teams.home_team
         else: own_team = teams.away_team
 

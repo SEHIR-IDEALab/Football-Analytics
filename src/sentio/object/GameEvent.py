@@ -1,11 +1,12 @@
-__author__ = 'doktoray'
+__author__ = 'emrullah'
 
 
 class GameEvent:
-    def __init__(self, player, event_id, event_name):
+    def __init__(self, player, event_id, event_name, time):
         self.player = player
         self.event_id = event_id
         self.event_name = event_name
+        self.time = time
 
         self.pass_event = None
 

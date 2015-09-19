@@ -1,3 +1,4 @@
+from src.sentio.Parameters import SPEED_THRESHOLD
 from src.sentio.file_io.reader import tree
 import math
 
@@ -10,11 +11,11 @@ __author__ = 'emrullah'
 
 class Player(PlayerBase):
 
-    coord_info = tree()
-
     def __init__(self, time, object_info):
         PlayerBase.__init__(self, object_info)
+        self.coord_info = tree()
         self.coord_info[time.half][time.milliseconds] = self.get_position()
+
         self.ball_steal = 0
         self.ball_lose = 0
         self.ball_pass = 0
@@ -28,10 +29,6 @@ class Player(PlayerBase):
 
     def appendNewCoordInfo(self, time, coord_info):
         self.coord_info[time.half][time.milliseconds] = coord_info
-
-
-    def set_eventsInfo(self, events_info):
-        self.events_info = events_info
 
 
     def set_gameStopTimeInterval(self, game_stop_time_interval):
@@ -56,10 +53,6 @@ class Player(PlayerBase):
 
     def get_playerCoordInfo(self):
         return self.coord_info
-
-
-    def get_eventsInfo(self):
-        return self.events_info
 
 
     def get_ballOwnershipTime(self):
@@ -155,44 +148,15 @@ class Player(PlayerBase):
         return q
 
 
-    def compute_runningDistance_withGameStopAndSpeedFilter(self):
-        gameStop = self.game_stop_time_interval
-        x_previous, y_previous = None, None
-        total_runningDistance = 0.0
-        q = self.get_playerCoordInfo()
-        for half in sorted(q.keys()):
-            for minute in sorted(q[half].keys()):
-                for sec in sorted(q[half][minute].keys()):
-                    for mili_sec in sorted(q[half][minute][sec].keys()):
-                        x_current, y_current = q[half][minute][sec][mili_sec]
-                        if x_previous is not None:
-                            try:
-                                checkIfInside = gameStop[half][minute][sec][mili_sec]
-                            except KeyError:
-                                local_runningDistance = math.sqrt(pow(x_current-x_previous,2) + pow(y_current-y_previous,2))
-                                if local_runningDistance <= 2.6: # 13m/s
-                                    total_runningDistance += local_runningDistance
-                        x_previous, y_previous = x_current, y_current
-        return total_runningDistance
-
-
-    def compute_runningDistance_withGameStopFilter(self):
-        gameStop = self.game_stop_time_interval
-        x_previous, y_previous = None, None
-        total_runningDistance = 0.0
-        q = self.get_playerCoordInfo()
-        for half in sorted(q.keys()):
-            for minute in sorted(q[half].keys()):
-                for sec in sorted(q[half][minute].keys()):
-                    for mili_sec in sorted(q[half][minute][sec].keys()):
-                        x_current, y_current = q[half][minute][sec][mili_sec]
-                        if x_previous is not None:
-                            try:
-                                checkIfInside = gameStop[half][minute][sec][mili_sec]
-                            except KeyError:
-                                total_runningDistance += math.sqrt(pow(x_current-x_previous,2) + pow(y_current-y_previous,2))
-                        x_previous, y_previous = x_current, y_current
-        return total_runningDistance
+    def computeAverageLocation(self):
+        total_x, total_y = 0.0, 0.0
+        count = 0
+        for half in self.coord_info:
+            for position in self.coord_info[half].values():
+                total_x += position[0]
+                total_y += position[1]
+                count += 1
+        return (total_x/count), (total_y/count)
 
 
     def computeRunningDistance(self):
@@ -206,15 +170,30 @@ class Player(PlayerBase):
         return total
 
 
-    def computeAverageLocation(self):
-        total_x, total_y = 0.0, 0.0
-        count = 0
+    def computeRunningDistanceWithGameStopFilter(self):
+        pre_x, pre_y = None, None
+        total = 0.0
         for half in self.coord_info:
-            for position in self.coord_info[half].values():
-                total_x += position[0]
-                total_y += position[1]
-                count += 1
-        return (total_x/count), (total_y/count)
+            for milliseconds in self.coord_info[half]:
+                position = self.coord_info[half][milliseconds]
+                if pre_x is not None and self.game_stop_time_interval[half][milliseconds] != True:
+                    total += math.sqrt(pow(position[0]-pre_x, 2) + pow(position[1]-pre_y, 2))
+                pre_x, pre_y = position
+        return total
+
+
+    def computeRunningDistanceWithGameStopAndSpeedFilter(self):
+        pre_x, pre_y = None, None
+        total = 0.0
+        for half in self.coord_info:
+            for milliseconds in self.coord_info[half]:
+                position = self.coord_info[half][milliseconds]
+                if pre_x is not None and self.game_stop_time_interval[half][milliseconds] != True:
+                    local_rd = math.sqrt(pow(position[0]-pre_x, 2) + pow(position[1]-pre_y, 2))
+                    if local_rd <= SPEED_THRESHOLD:
+                        total += local_rd
+                pre_x, pre_y = position
+        return total
 
 
     def getCoordinateXY(self, time):
