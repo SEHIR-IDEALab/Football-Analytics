@@ -90,28 +90,12 @@ class PlayerBase:
         return self.jersey_number
 
 
-    def setPositionX(self, x):
-        self.position_x = x
-
-
-    def getPositionX(self):
-        return self.position_x
-
-
-    def getX(self):
-        return self.position_x
-
-
     def setX(self, x):
         self.position_x = x
 
 
-    def setPositionY(self, y):
-        self.position_y = y
-
-
-    def getPositionY(self):
-        return self.position_y
+    def getX(self):
+        return self.position_x
 
 
     def setY(self, y):
