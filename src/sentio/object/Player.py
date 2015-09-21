@@ -102,12 +102,42 @@ class Player(PlayerBase):
         return speed
 
 
-    def calculateAllSpeeds(self):
+    def calculateSpeedAtAllPoints(self):
         speeds = tree()
         for half in self.coord_info:
             for milliseconds in self.coord_info[half].keys():
                 speeds[half][milliseconds] = self.calculateSpeed(Time(half, milliseconds))
         return speeds
+
+
+    def calculateDirection(self, time):
+        positions = []
+        for temp_milliseconds in range(time.milliseconds, time.milliseconds+4, 2):
+            temp_position = self.coord_info[time.half][temp_milliseconds]
+            if temp_position:
+                positions.append(temp_position)
+
+        if len(positions) != 2:
+            return 0.0
+
+        x1, y1 = positions[0]
+        x2, y2 = positions[1]
+
+        dx = x2 - x1
+        dy = y2 - y1
+        rads = math.atan2(-dy,dx)
+        rads %= 2*math.pi
+        degs = math.degrees(rads)
+
+        return degs
+
+
+    def calculateDirectionAtAllPoints(self):
+        directions = tree()
+        for half in self.coord_info:
+            for milliseconds in self.coord_info[half].keys():
+                directions[half][milliseconds] = self.calculateDirection(Time(half, milliseconds))
+        return directions
 
 
     def computeRunningDistance(self):
