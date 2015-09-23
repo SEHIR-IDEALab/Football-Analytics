@@ -9,6 +9,13 @@ class GameInstance:
         self.event = event
 
 
+    def getPlayer(self, player_id):
+        for player in self.players:
+            if player.object_id == player_id:
+                return player
+        return None
+
+
     def setPlayers(self, players):
         self.players = players
 

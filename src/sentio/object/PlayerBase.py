@@ -1,4 +1,7 @@
+import math
 from src.sentio.Parameters import OBJECT_TYPES
+from src.sentio.Time import Time
+from src.sentio.file_io.reader.ReaderBase import ReaderBase
 
 __author__ = 'emrullah'
 
@@ -22,14 +25,6 @@ class PlayerBase:
 
     def getObjectType(self):
         return self.object_type
-
-
-    def setDraggableVisualPlayer(self, draggable_visual_player):
-        self.draggable_visual_player = draggable_visual_player
-
-
-    def getDraggableVisualPlayer(self):
-        return self.draggable_visual_player
 
 
     def getObjectTypeName(self):
@@ -119,6 +114,50 @@ class PlayerBase:
         if self.object_type in [3,4]:
             return True
         return False
+
+
+    @staticmethod
+    def calculateSpeedFor(time, coord_info, visual=False, player_id=-1):
+        pre_position = None
+        speed = 0.0
+        for temp_milliseconds in range(time.milliseconds-8, time.milliseconds+2, 2):
+            if visual:
+                game_instance = coord_info.getGameInstance(Time(time.half, temp_milliseconds))
+                idToPlayers = ReaderBase.mapIDToPlayers(game_instance.players)
+                player = idToPlayers[player_id]
+                position = player.get_position()
+            else:
+                position = coord_info[time.half][temp_milliseconds]
+
+            if pre_position and position:
+                speed += math.sqrt(pow(position[0]-pre_position[0],2) + pow(position[1]-pre_position[1],2))
+            if position: ### needed to handle missing positions
+                pre_position = position
+
+        return speed
+
+
+    @staticmethod
+    def calculateDirectionFor(time, coord_info, visual=False, player_id=-1):
+        positions = []
+        for temp_milliseconds in range(time.milliseconds, time.milliseconds+4, 2):
+            temp_position = coord_info[time.half][temp_milliseconds]
+            if temp_position:
+                positions.append(temp_position)
+
+        if len(positions) != 2:
+            return 0.0
+
+        x1, y1 = positions[0]
+        x2, y2 = positions[1]
+
+        dx = x2 - x1
+        dy = y2 - y1
+        rads = math.atan2(-dy,dx)
+        rads %= 2*math.pi
+        degs = math.degrees(rads)
+
+        return degs
 
 
     def __str__(self):

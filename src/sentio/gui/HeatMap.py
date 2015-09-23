@@ -4,8 +4,7 @@ import numpy
 import wx
 
 from src.sentio.Parameters import *
-from src.sentio.file_io import Parser
-from src.sentio.file_io.reader import ReaderBase
+from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.pass_evaluate.Pass import Pass
 
 
@@ -167,7 +166,7 @@ class HeatMap:
         totalEffectiveness_withComponents = {"overallRisk": [], "gain": [], "passAdvantage": [], "goalChance": [],
                                              "effectiveness": []}
         pas = Pass()
-        pas.teams = ReaderBase.convertDraggableToTeams(self.draggable_visual_teams)
+        pas.teams = ReaderBase.divideIntoTeams(self.draggable_visual_teams.values(), visual=True)
         if p_accordingTo.isHomeTeamPlayer(): p_accordingTo = \
             pas.teams.home_team.getTeamPlayersWithJS().get(p_accordingTo.getJerseyNumber())
         else: p_accordingTo = pas.teams.away_team.getTeamPlayersWithJS().get(p_accordingTo.getJerseyNumber())
@@ -201,7 +200,7 @@ class HeatMap:
     def draw_defencePositionTaking(self, definedPass, chosen_js, number_of_points=(105, 65)):
         p1, p2 = definedPass
 
-        teams = ReaderBase.convertDraggableToTeams(self.draggable_visual_teams)
+        teams = ReaderBase.divideIntoTeams(self.draggable_visual_teams, visual=True)
         if p1.isHomeTeamPlayer(): opponent_team = teams.away_team
         else: opponent_team = teams.home_team
 

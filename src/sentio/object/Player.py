@@ -91,15 +91,7 @@ class Player(PlayerBase):
 
 
     def calculateSpeed(self, time):
-        pre_position = None
-        speed = 0.0
-        for temp_milliseconds in range(time.milliseconds-8, time.milliseconds+2, 2):
-            position = self.coord_info[time.half][temp_milliseconds]
-            if pre_position and position:
-                speed += math.sqrt(pow(position[0]-pre_position[0],2) + pow(position[1]-pre_position[1],2))
-            if position: ### needed to handle missing positions
-                pre_position = position
-        return speed
+        return PlayerBase.calculateSpeedFor(time, self.coord_info, visual=False)
 
 
     def calculateSpeedAtAllPoints(self):
@@ -111,25 +103,7 @@ class Player(PlayerBase):
 
 
     def calculateDirection(self, time):
-        positions = []
-        for temp_milliseconds in range(time.milliseconds, time.milliseconds+4, 2):
-            temp_position = self.coord_info[time.half][temp_milliseconds]
-            if temp_position:
-                positions.append(temp_position)
-
-        if len(positions) != 2:
-            return 0.0
-
-        x1, y1 = positions[0]
-        x2, y2 = positions[1]
-
-        dx = x2 - x1
-        dy = y2 - y1
-        rads = math.atan2(-dy,dx)
-        rads %= 2*math.pi
-        degs = math.degrees(rads)
-
-        return degs
+        return PlayerBase.calculateDirectionFor(time, self.coord_info, visual=False)
 
 
     def calculateDirectionAtAllPoints(self):

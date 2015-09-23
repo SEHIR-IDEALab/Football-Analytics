@@ -5,7 +5,7 @@ import wx
 from src.sentio import Parameters
 
 from src.sentio.Parameters import *
-from src.sentio.file_io.reader import ReaderBase
+from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.gui import Dialogs
 from src.sentio.gui.HeatMap import HeatMap
 from src.sentio.gui.RiskRange import RiskRange
@@ -19,7 +19,7 @@ __author__ = 'emrullah'
 
 class DraggablePass(Pass):
 
-    def __init__(self, ax, draggable_visual_teams, figure=None):
+    def __init__(self, ax, visual_idToPlayers, figure=None):
         Pass.__init__(self)
         if figure is None: figure = p.gcf()
         self.pass_source = None
@@ -28,10 +28,10 @@ class DraggablePass(Pass):
         self.passes_defined = []
         self.ax = ax
         self.figure = figure
-        self.heatMap = HeatMap(ax, draggable_visual_teams, figure)
+        self.heatMap = HeatMap(ax, visual_idToPlayers, figure)
         self.effectiveness_withComp_byTime = None
         self.risk_range = RiskRange(self.ax)
-        self.draggable_visual_teams = draggable_visual_teams
+        self.visual_idToPlayers = visual_idToPlayers
 
 
     def set_defined_passes(self, passes):
@@ -92,8 +92,8 @@ class DraggablePass(Pass):
         chosen_heat_map = self.chosenHeatMap.GetSelection()
         self.chosenComponent.SetSelection(4)
 
-        p1 = pass_event.pass_source.player
-        p2 = pass_event.pass_target.player
+        p1 = pass_event.pass_source
+        p2 = pass_event.pass_target
 
         self.heatMap.totalEffectiveness_withComponents_byCoordinates = {}
         if chosen_heat_map == 1:
@@ -114,6 +114,13 @@ class DraggablePass(Pass):
                                                             number_of_points=self.resolutionToNumberOfPoints())
 
 
+    def convertVisualPlayerToPlayer(self, visual_player):
+        visual_player = self.visual_idToPlayers[visual_player.object_id]
+        player = visual_player.player
+        player.set_position(visual_player.get_position())
+        return player
+
+
     def on_pick_event(self, event):
         if isinstance(event.artist, Text):
             if self.pass_source is not None:
@@ -123,11 +130,13 @@ class DraggablePass(Pass):
                     self.pass_event.xy = (.5,.5)
                     self.pass_event.xycoords = self.pass_target
 
-                    current_pass_event = PassEvent(self.pass_event.textcoords, self.pass_event.xycoords,
-                                                   ReaderBase.convertDraggableToTeams(self.draggable_visual_teams))
+                    current_pass_event = PassEvent(self.convertVisualPlayerToPlayer(self.pass_event.textcoords),
+                                                   self.convertVisualPlayerToPlayer(self.pass_event.xycoords),
+                                                   ReaderBase.divideIntoTeams(self.visual_idToPlayers.values(),
+                                                       visual=True))
                     if Parameters.IS_DEBUG_MODE_ON:
                         self.risk_range.drawRangeFor(current_pass_event)
-                    self.displayDefinedPass(current_pass_event, self.logger, draggable=False, visual=True)
+                    self.displayDefinedPass(current_pass_event, self.logger, dragged=True)
                     if self.isHeatMapChosen():
                         self.drawHeatMapFor(current_pass_event)
                     self.passes_defined.append(current_pass_event)
