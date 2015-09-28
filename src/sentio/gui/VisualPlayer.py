@@ -16,9 +16,11 @@ class VisualPlayer(PlayerBase):
 
         self.player = player
         self.draggable = DraggablePoint(ax.text(player.getX(), player.getY(), player.getJerseyNumber(),
+            horizontalalignment='center',
+            verticalalignment='center',
             zorder=1,
             color="w",
-            fontsize=(9 if len(str(player.getJerseyNumber()))==1 else 7),
+            fontsize=10,
             picker=True,
             bbox=dict(
                 boxstyle="circle,pad=0.3",
