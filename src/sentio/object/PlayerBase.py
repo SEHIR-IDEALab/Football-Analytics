@@ -58,21 +58,6 @@ class PlayerBase:
         return self.team_name
 
 
-    def getObjectColor(self):
-        if self.object_type in [0,3]: return "blue"
-        elif self.object_type in [1,4]: return "red"
-        elif self.object_type in [2,6,7,8,9]: return "yellow"
-        else: return "black"
-
-
-    def getObjectTypeColor(self):
-        if self.object_type == 0: return "blue"
-        elif self.object_type == 1: return "red"
-        elif self.object_type in [3,4]: return "black"
-        elif self.object_type in [2,6,7,8,9]: return "yellow"
-        else: return "black"
-
-
     def getObjectID(self):
         return self.object_id
 
@@ -141,7 +126,13 @@ class PlayerBase:
     def calculateDirectionFor(time, coord_info, visual=False, player_id=-1):
         positions = []
         for temp_milliseconds in range(time.milliseconds, time.milliseconds+4, 2):
-            temp_position = coord_info[time.half][temp_milliseconds]
+            if visual:
+                game_instance = coord_info.getGameInstance(Time(time.half, temp_milliseconds))
+                idToPlayers = ReaderBase.mapIDToPlayers(game_instance.players)
+                player = idToPlayers[player_id]
+                temp_position = player.get_position()
+            else:
+                temp_position = coord_info[time.half][temp_milliseconds]
             if temp_position:
                 positions.append(temp_position)
 
@@ -158,6 +149,21 @@ class PlayerBase:
         degs = math.degrees(rads)
 
         return degs
+
+
+    def getObjectColor(self):
+        if self.object_type in [0,3]: return "blue"
+        elif self.object_type in [1,4]: return "red"
+        elif self.object_type in [2,6,7,8,9]: return "yellow"
+        else: return "black"
+
+
+    def getObjectTypeColor(self):
+        if self.object_type == 0: return "blue"
+        elif self.object_type == 1: return "red"
+        elif self.object_type in [3,4]: return "black"
+        elif self.object_type in [2,6,7,8,9]: return "yellow"
+        else: return "black"
 
 
     def __str__(self):
