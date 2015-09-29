@@ -69,6 +69,24 @@ class wxVisualization(wx.Frame):
         self.layouts.canvas.draw()
 
 
+    def drawAndDisplayPassStats(self, pass_events):
+        for pass_event in pass_events:
+            pass_event_annotation = self.layouts.ax.annotate(
+                '',
+                xy=pass_event.pass_target.get_position(),
+                xytext=pass_event.pass_source.get_position(),
+                size=20,
+                arrowprops=dict(
+                    arrowstyle="->",
+                    fc=pass_event.pass_source.getObjectColor(),
+                    ec=pass_event.pass_source.getObjectColor(),
+                    alpha=1.0
+                )
+            )
+            effectiveness = self.govern_passes.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
+            self.pass_event_annotations.append(pass_event_annotation)
+
+
     def flash_status_message(self, msg, flash_len_ms=1500):
         self.layouts.statusbar.SetStatusText(msg)
         self.timeroff = wx.Timer(self)
@@ -77,7 +95,6 @@ class wxVisualization(wx.Frame):
 
 
     def refresh_ui(self):
-        self.remove_allDefinedPassesForSnapShot()
         # self.remove_directionSpeedOfObjects()
 
         # self.pass_info_page.logger.Clear()
@@ -113,11 +130,11 @@ class wxVisualization(wx.Frame):
 
                     p_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_source)
                     p_visual_player.clearBallHolder()
-                    p_visual_player.clearDirectionWithSpeed()
+                    # p_visual_player.clearDirectionWithSpeed()
 
                     c_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_target)
                     c_visual_player.setAsBallHolder()
-                    c_visual_player.drawDirectionWithSpeed()
+                    # c_visual_player.drawDirectionWithSpeed()
 
                     pass_event_annotation = self.layouts.ax.annotate('', xy=pass_event.pass_target.get_position(),
                                                              xytext=pass_event.pass_source.get_position(), size=20,
@@ -150,6 +167,17 @@ class wxVisualization(wx.Frame):
                     c_visual_player.updateTrail()
             except:
                 pass
+
+
+    def drawDirectionsWithSpeed(self, snapShot=False):
+        for visual_player in self.visual_idToPlayers.values():
+            visual_player.drawDirectionWithSpeed(snapShot)
+
+
+    def clearDirections(self):
+        for visual_player in self.visual_idToPlayers.values():
+            visual_player.clearDirection()
+
 
 
     def convertPlayerToVisualPlayer(self, player):
@@ -210,14 +238,6 @@ class wxVisualization(wx.Frame):
             del self.govern_passes.passes_defined[:]
 
 
-    def remove_allDefinedPassesForSnapShot(self):
-        if self.defined_passes_forSnapShot:
-            for pass_event in self.defined_passes_forSnapShot:
-                pass_event.remove()
-            del self.defined_passes_forSnapShot[:]
-            self.layouts.canvas.draw()
-
-
     def removeEventAnnotation(self):
         if self.event_annotation != None:
             self.event_annotation.remove(); del self.event_annotation; self.event_annotation = None
@@ -275,11 +295,10 @@ class wxVisualization(wx.Frame):
 
     def removeAllAnnotations(self):
         # self.remove_directionSpeedOfObjects()
-        self.remove_allDefinedPassesForSnapShot()
-        self.removeEventAnnotation()
+        # self.removeEventAnnotation()
         self.removePassEventAnnotations()
-        self.removeTrailAnnotations()
-        self.removeEffectivenessAnnotation()
+        # self.removeTrailAnnotations()
+        # self.removeEffectivenessAnnotation()
         self.layouts.pass_info_page.logger.Clear()
 
 

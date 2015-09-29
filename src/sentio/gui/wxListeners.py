@@ -31,41 +31,29 @@ class wxListeners:
             style=wx.SAVE)
 
         if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
+            file_path = dlg.GetPath()
             if ".png" in dlg.GetFilename():
-                self.layouts.canvas.print_figure(path, dpi=self.layouts.dpi)
+                self.layouts.canvas.print_figure(file_path, dpi=self.layouts.dpi)
             else:
-                SnapShot.save(path, self.wx_gui.current_time, self.wx_gui.visual_idToPlayers.values(),
+                SnapShot.save(file_path, self.wx_gui.current_time, self.wx_gui.visual_idToPlayers.values(),
                               self.wx_gui.govern_passes.passes_defined)
 
-            self.wx_gui.flash_status_message("Saved to %s" % path)
+            self.wx_gui.flash_status_message("Saved to %s" % file_path)
 
 
     def on_open_plot(self, event):
-        dlg = wx.FileDialog(self.wx_gui, "Choose a file", GUI_FILE_DIALOG_DIRECTORY, "", "*.csv", wx.OPEN)
+        dlg = wx.FileDialog(self.wx_gui, "Choose a file", GUI_FILE_DIALOG_DIRECTORY, "", "*.xml", wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             file_path = dlg.GetPath()
 
-            try: self.wx_gui.removeAllAnnotations()
-            except: pass
+            self.wx_gui.removeAllAnnotations()
+            self.wx_gui.remove_visual_players()
 
-            snapShot = SnapShot(file_path)
-            teams, list_of_directions = snapShot.loadSnapShot(self.layouts.ax)
+            players, pass_events = SnapShot.load(file_path)
+            self.wx_gui.setPositions(players)
+            self.wx_gui.drawAndDisplayPassStats(pass_events)
 
-            self.wx_gui.directions_of_objects.extend(list_of_directions)
-
-            self.wx_gui.remove_all_draggable_visual_players()
-            self.wx_gui.set_positions_of_objects(teams)
-
-            all_defined_passes = snapShot.displayAllPasses(file_path, self.layouts.ax, self.wx_gui.draggable_visual_teams, self.wx_gui.pass_info_page.logger)
-            self.wx_gui.defined_passes_forSnapShot.extend(all_defined_passes)
-
-            for team in (self.wx_gui.draggable_visual_teams):
-                for draggable_visual_player in team.values():
-                    draggable_visual_player.setDefinedPasses(self.wx_gui.defined_passes_forSnapShot)
-                    draggable_visual_player.setDraggableVisualTeams(self.wx_gui.draggable_visual_teams)
-
-            self.wx_gui.current_time_display.SetLabel("Time = %s.%s.%s" %("--", "--", "--"))
+            self.layouts.current_time_display.SetLabel("Time = %s.%s.%s" %("--", "--", "--"))
             self.layouts.canvas.draw()
             self.wx_gui.flash_status_message("Opened file %s" % file_path)
         dlg.Destroy()

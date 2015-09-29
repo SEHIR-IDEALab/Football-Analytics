@@ -1,4 +1,7 @@
 import xml.etree.cElementTree as ET
+from src.sentio.file_io.reader.ReaderBase import ReaderBase
+from src.sentio.object.PassEvent import PassEvent
+from src.sentio.object.PlayerBase import PlayerBase
 
 
 __author__ = 'emrullah'
@@ -38,8 +41,34 @@ class SnapShot:
         tree.write(file_path)
 
 
-    def load(self):
-        pass
+    @staticmethod
+    def load(file_path):
+        idToPlayers = {}
+        pass_events = []
+
+        tree = ET.parse(file_path)
+        root = tree.getroot()
+        for child in root:
+            if child.tag == "Players":
+                for player in child:
+                    player_id = player.attrib["id"]
+                    idToPlayers[player_id] = PlayerBase([
+                        player.attrib["type"],
+                        player_id,
+                        player.attrib["js"],
+                        player.attrib["x"],
+                        player.attrib["y"]]
+                    )
+            elif child.tag == "Passes":
+                for pass_event in child:
+                    pass_events.append(
+                        PassEvent(
+                            idToPlayers[pass_event.attrib["source_id"]],
+                            idToPlayers[pass_event.attrib["target_id"]],
+                            ReaderBase.divideIntoTeams(idToPlayers.values())
+                        )
+                    )
+        return idToPlayers.values(), pass_events
 
 
     def __str__(self):
