@@ -33,6 +33,27 @@ class VisualPlayer(PlayerBase):
         self.draggable.point.object_id = self.player.object_id
 
         self.direction_annotation = None
+        self.trail_annotation = None
+
+
+    def startTrail(self):
+        x, y = self.draggable.point.get_position()
+        self.trail_x, self.trail_y = [x], [y]
+        self.trail_annotation, = self.ax.plot(self.trail_x, self.trail_y,
+                                        linestyle="--",
+                                        linewidth=2,
+                                        color="yellow")
+        self.trail_annotation.color = self.getObjectColor()
+
+
+    def updateTrail(self):
+        x, y = self.draggable.point.get_position()
+        self.trail_x.append(x), self.trail_y.append(y)
+        self.trail_annotation.set_data(self.trail_x, self.trail_y)
+
+
+    def clearTrail(self):
+        self.trail_annotation.remove()
 
 
     def setAsBallHolder(self):

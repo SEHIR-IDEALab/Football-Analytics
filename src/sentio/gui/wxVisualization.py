@@ -73,7 +73,7 @@ class wxVisualization(wx.Frame):
 
     def refresh_ui(self):
         self.remove_allDefinedPassesForSnapShot()
-        self.remove_directionSpeedOfObjects()
+        # self.remove_directionSpeedOfObjects()
 
         # self.pass_info_page.logger.Clear()
         self.govern_passes.heatMap.clear()
@@ -137,19 +137,14 @@ class wxVisualization(wx.Frame):
                                                                            ec=(1., .5, .5), alpha=0.5))
                     self.effectiveness_count = 0
 
-                    self.entire_trailX, self.entire_trailY = [pass_event.pass_target.getX()],[pass_event.pass_target.getY()]
-                    trailAnnotation, = self.layouts.ax.plot(self.entire_trailX, self.entire_trailY,
-                                                    linestyle="--", linewidth=2, color="yellow")
-                    trailAnnotation.player = pass_event.pass_target
-                    self.trail_annotations.append(trailAnnotation)
+                    c_visual_player.startTrail()
+                    self.trail_annotations.append(c_visual_player.trail_annotation)
                     self.updateTrailAnnotations()
         else:
             try:
                 if self.p_event.event_id == 1:
-                    c_player = ReaderBase.getPlayerIn(self.p_event.player, current_teams)
-                    self.entire_trailX.append(c_player.getX()), self.entire_trailY.append(c_player.getY())
-                    c_trailAnnotation = self.trail_annotations[-1]
-                    c_trailAnnotation.set_data(self.entire_trailX, self.entire_trailY)
+                    c_visual_player = self.convertPlayerToVisualPlayer(self.p_event.player)
+                    c_visual_player.updateTrail()
             except:
                 pass
 
@@ -160,8 +155,8 @@ class wxVisualization(wx.Frame):
         return None
 
 
-    def remove_all_draggable_visual_players(self):
-        for visual_player in (self.visual_players):
+    def remove_visual_players(self):
+        for visual_player in self.visual_idToPlayers.values():
             visual_player.remove()
 
 
@@ -259,7 +254,7 @@ class wxVisualization(wx.Frame):
 
             for trail_annotation in self.trail_annotations[-3:-1]:
                 trail_annotation.set_alpha(0.5)
-                trail_annotation.set_color(trail_annotation.player.getObjectColor())
+                trail_annotation.set_color(trail_annotation.color)
 
 
     def removeTrailAnnotations(self):
@@ -276,7 +271,7 @@ class wxVisualization(wx.Frame):
 
 
     def removeAllAnnotations(self):
-        self.remove_directionSpeedOfObjects()
+        # self.remove_directionSpeedOfObjects()
         self.remove_allDefinedPassesForSnapShot()
         self.removeEventAnnotation()
         self.removePassEventAnnotations()
