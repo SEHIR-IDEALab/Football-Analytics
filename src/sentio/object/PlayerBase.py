@@ -108,9 +108,12 @@ class PlayerBase:
         for temp_milliseconds in range(time.milliseconds-8, time.milliseconds+2, 2):
             if visual:
                 game_instance = coord_info.getGameInstance(Time(time.half, temp_milliseconds))
-                idToPlayers = ReaderBase.mapIDToPlayers(game_instance.players)
-                player = idToPlayers[player_id]
-                position = player.get_position()
+                if game_instance:
+                    idToPlayers = ReaderBase.mapIDToPlayers(game_instance.players)
+                    player = idToPlayers[player_id]
+                    position = player.get_position()
+                else:
+                    position = None
             else:
                 position = coord_info[time.half][temp_milliseconds]
 
@@ -128,9 +131,12 @@ class PlayerBase:
         for temp_milliseconds in range(time.milliseconds, time.milliseconds+4, 2):
             if visual:
                 game_instance = coord_info.getGameInstance(Time(time.half, temp_milliseconds))
-                idToPlayers = ReaderBase.mapIDToPlayers(game_instance.players)
-                player = idToPlayers[player_id]
-                temp_position = player.get_position()
+                if game_instance:
+                    idToPlayers = ReaderBase.mapIDToPlayers(game_instance.players)
+                    player = idToPlayers[player_id]
+                    temp_position = player.get_position()
+                else:
+                    temp_position = None
             else:
                 temp_position = coord_info[time.half][temp_milliseconds]
             if temp_position:
