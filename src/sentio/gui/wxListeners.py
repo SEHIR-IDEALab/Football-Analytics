@@ -20,7 +20,7 @@ class wxListeners:
 
     ##### handling menu events #####
     def on_save_plot(self, event):
-        file_choices = "PNG (*.png)|*.png|CSV (*.csv)|*.csv"
+        file_choices = "PNG (*.png)|*.png|XML (*.xml)|*.xml"
 
         dlg = wx.FileDialog(
             self.wx_gui,
@@ -35,12 +35,9 @@ class wxListeners:
             if ".png" in dlg.GetFilename():
                 self.layouts.canvas.print_figure(path, dpi=self.layouts.dpi)
             else:
-                defined_passes = self.wx_gui.govern_passes.passes_defined
-                directions = self.wx_gui.getDirectionsOfPlayersFor(self.wx_gui.current_time)
-                speeds = self.wx_gui.getSpeedsOfPlayersFor(self.wx_gui.current_time)
+                SnapShot.save(path, self.wx_gui.current_time, self.wx_gui.visual_idToPlayers.values(),
+                              self.wx_gui.govern_passes.passes_defined)
 
-                snapShot = SnapShot(path)
-                snapShot.saveSnapShot(self.wx_gui.draggable_visual_teams, defined_passes, directions, speeds)
             self.wx_gui.flash_status_message("Saved to %s" % path)
 
 
@@ -70,19 +67,12 @@ class wxListeners:
 
             self.wx_gui.current_time_display.SetLabel("Time = %s.%s.%s" %("--", "--", "--"))
             self.layouts.canvas.draw()
-            self.flash_status_message("Opened file %s" % file_path)
+            self.wx_gui.flash_status_message("Opened file %s" % file_path)
         dlg.Destroy()
 
 
-    def flash_status_message(self, msg, flash_len_ms=1500):
-        self.layouts.statusbar.SetStatusText(msg)
-        self.timeroff = wx.Timer(self)
-        self.wx_gui.Bind(wx.EVT_TIMER, self.on_flash_status_off, self.timeroff)
-        self.timeroff.Start(flash_len_ms, oneShot=True)
-
-
     def on_flash_status_off(self, event):
-        self.wx_gui.statusbar.SetStatusText('')
+        self.layouts.statusbar.SetStatusText('')
 
 
     def on_exit(self, event):
@@ -134,14 +124,14 @@ class wxListeners:
     def on_mouse_action(self, event):
         q = event.GetInt()
         if q == 0:
-            if self.wx_gui.directions_of_objects:
-                self.wx_gui.remove_directionSpeedOfObjects()
+            # if self.wx_gui.directions_of_objects:
+            #     self.wx_gui.remove_directionSpeedOfObjects()
             for visual_player in self.wx_gui.visual_idToPlayers.values():
                 visual_player.draggable.disconnect()
             self.wx_gui.govern_passes.connect()
         elif q == 1:
-            if self.wx_gui.directions_of_objects:
-                self.wx_gui.remove_directionSpeedOfObjects()
+            # if self.wx_gui.directions_of_objects:
+            #     self.wx_gui.remove_directionSpeedOfObjects()
             self.wx_gui.govern_passes.disconnect()
             for visual_player in self.wx_gui.visual_idToPlayers.values():
                 visual_player.draggable.connect()
@@ -197,5 +187,6 @@ class wxListeners:
         self.wx_gui.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_slider_release, self.layouts.slider)
         self.wx_gui.Bind(wx.EVT_COMMAND_SCROLL_THUMBTRACK, self.on_slider_shift, self.layouts.slider)
         self.wx_gui.Bind(wx.EVT_COMMAND_SCROLL_THUMBRELEASE, self.on_play_speed_slider, self.layouts.play_speed_slider)
+
 
 

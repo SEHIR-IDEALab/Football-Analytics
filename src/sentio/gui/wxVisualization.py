@@ -8,8 +8,6 @@ matplotlib.use('WXAgg')   # The recommended way to use wx with mpl is with the W
 from src.sentio.Parameters import GUI_TITLE
 from src.sentio.gui.RiskRange import RiskRange
 
-
-from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.gui.VisualPlayer import VisualPlayer
 from src.sentio.gui.wxListeners import wxListeners
 from src.sentio.gui.wxLayouts import wxLayouts
@@ -71,6 +69,13 @@ class wxVisualization(wx.Frame):
         self.layouts.canvas.draw()
 
 
+    def flash_status_message(self, msg, flash_len_ms=1500):
+        self.layouts.statusbar.SetStatusText(msg)
+        self.timeroff = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.listeners.on_flash_status_off, self.timeroff)
+        self.timeroff.Start(flash_len_ms, oneShot=True)
+
+
     def refresh_ui(self):
         self.remove_allDefinedPassesForSnapShot()
         # self.remove_directionSpeedOfObjects()
@@ -87,7 +92,6 @@ class wxVisualization(wx.Frame):
 
     def annotateGameEventsFor(self, time):
         game_instance  = self.sentio.game_instances.getGameInstance(time)
-        current_teams = ReaderBase.divideIntoTeams(game_instance.players)
 
         if self.effectiveness_count < 5: self.effectiveness_count += 1
         if self.effectiveness_count == 5: self.removeEffectivenessAnnotation()
@@ -106,7 +110,6 @@ class wxVisualization(wx.Frame):
             else:
                 if current_event.isPassEvent():
                     pass_event = current_event.getPassEvent()
-                    print pass_event
 
                     p_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_source)
                     p_visual_player.clearBallHolder()
