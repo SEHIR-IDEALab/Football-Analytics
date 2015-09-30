@@ -2,7 +2,8 @@ import os
 import numpy
 import wx
 from wx.lib.agw.shapedbutton import SBitmapButton
-from src.sentio.Parameters import FOOTBALL_FIELD_MIN_X, HOME_TEAM_NAME, AWAY_TEAM_NAME, BITMAP_DIRECTORY
+from src.sentio.Parameters import FOOTBALL_FIELD_MIN_X, HOME_TEAM_NAME, AWAY_TEAM_NAME, BITMAP_DIRECTORY, \
+    REFEREES_TEAM_NAME, UNKNOWNS_TEAM_NAME
 from src.sentio.Parameters import FOOTBALL_FIELD_MAX_X
 from src.sentio.Parameters import FOOTBALL_FIELD_MIN_Y
 from src.sentio.Parameters import FOOTBALL_FIELD_MAX_Y
@@ -38,6 +39,7 @@ class wxLayouts:
 
         menu_view = wx.Menu()
         self.debug_mode = menu_view.Append(-1, "&Debug Mode", kind=wx.ITEM_CHECK)
+        self.show_directions = menu_view.Append(-1, "&Show Directions", kind=wx.ITEM_CHECK)
 
         menu_help = wx.Menu()
         self.m_about = menu_help.Append(-1, "&About\tF1", "About the tool")
@@ -74,15 +76,14 @@ class wxLayouts:
         self.ax.autoscale(False)
 
         a,b,c,d, = plt.plot([],[],"bo",[],[],"ro",[],[],"yo",[],[],"ko", markersize=6)
-        self.ax.legend([a,b,c,d], [HOME_TEAM_NAME.decode("utf-8"), AWAY_TEAM_NAME.decode("utf-8"), 'Referees',
-                                   'Unknown Objects'], numpoints=1, fontsize=6, bbox_to_anchor=(0., 1.0, 1., .102),
+        self.ax.legend([a,b,c,d], [HOME_TEAM_NAME, AWAY_TEAM_NAME, REFEREES_TEAM_NAME, UNKNOWNS_TEAM_NAME],
+                       numpoints=1, fontsize=6, bbox_to_anchor=(0., 1.0, 1., .102),
                        loc=3, ncol=4, mode="expand", borderaxespad=0.5)
 
         self.current_time_display = wx.StaticText(self.panel, -1, "Time = 1_00:00:00")
 
-        radioList = ['New Pass', 'Drag Object']
-        self.rb = wx.RadioBox(self.panel,label="Mouse Action",choices=radioList, majorDimension=1,
-                              style=wx.RA_SPECIFY_COLS)
+        self.rb = wx.RadioBox(self.panel, label="Mouse Action", choices=['New Pass', 'Drag Object'],
+                              majorDimension=1, style=wx.RA_SPECIFY_COLS)
 
         self.play_speed_slider = wx.Slider(self.panel, -1, value=2, minValue=1, maxValue=5)
         self.slider = wx.Slider(self.panel, -1, value=0, minValue=0, maxValue=self.wx_gui.sentio.game_instances.getTotalNumber()-1)
