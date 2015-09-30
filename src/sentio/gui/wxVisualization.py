@@ -5,7 +5,6 @@ import wx
 import matplotlib
 matplotlib.use('WXAgg')   # The recommended way to use wx with mpl is with the WXAgg backend.
 
-from src.sentio.Parameters import GUI_TITLE
 from src.sentio.gui.RiskRange import RiskRange
 
 from src.sentio.gui.VisualPlayer import VisualPlayer
@@ -27,13 +26,14 @@ class wxVisualization(wx.Frame):
         display_size = wx.DisplaySize()
         padding = 50
         screen_perc = 3/4.
-        wx.Frame.__init__(self, None, wx.ID_ANY, GUI_TITLE,
+        wx.Frame.__init__(self, None, wx.ID_ANY, Parameters.GUI_TITLE,
                           pos=(padding, padding),
                           size=(display_size[0]*screen_perc, display_size[1]*screen_perc))
 
         self.sentio = sentio
 
         self.paused = True
+        self.snapShot = False
 
         #-------------------
         self.listeners = wxListeners(self)
@@ -87,108 +87,10 @@ class wxVisualization(wx.Frame):
             self.pass_event_annotations.append(pass_event_annotation)
 
 
-    def flash_status_message(self, msg, flash_len_ms=1500):
-        self.layouts.statusbar.SetStatusText(msg)
-        self.timeroff = wx.Timer(self)
-        self.Bind(wx.EVT_TIMER, self.listeners.on_flash_status_off, self.timeroff)
-        self.timeroff.Start(flash_len_ms, oneShot=True)
-
-
-    def refresh_ui(self):
-        # self.remove_directionSpeedOfObjects()
-
-        # self.pass_info_page.logger.Clear()
-        self.govern_passes.heatMap.clear()
-
-
     def visualizePositionsFor(self, time):
         self.updatePositions(time)
         self.annotateGameEventsFor(time)
         self.layouts.canvas.draw()
-
-
-    def annotateGameEventsFor(self, time):
-        game_instance  = self.sentio.game_instances.getGameInstance(time)
-
-        if self.effectiveness_count < 5: self.effectiveness_count += 1
-        if self.effectiveness_count == 5: self.removeEffectivenessAnnotation()
-
-        current_event = game_instance.event
-        if current_event:
-            self.removeEventAnnotation()
-
-            self.p_event = current_event
-            if current_event.event_id != 1:
-                self.removePassEventAnnotations()
-                self.removeTrailAnnotations()
-                self.event_annotation = self.layouts.ax.annotate(current_event.event_name, xy=(52.5,32.5),  xycoords='data',
-                                        va="center", ha="center", xytext=(0, 0), textcoords='offset points', size=20,
-                                        bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7), ec=(1., .5, .5), alpha=0.5))
-            else:
-                if current_event.isPassEvent():
-                    pass_event = current_event.getPassEvent()
-
-                    p_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_source)
-                    p_visual_player.clearBallHolder()
-                    # p_visual_player.clearDirectionWithSpeed()
-
-                    c_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_target)
-                    c_visual_player.setAsBallHolder()
-                    # c_visual_player.drawDirectionWithSpeed()
-
-                    pass_event_annotation = self.layouts.ax.annotate('', xy=pass_event.pass_target.get_position(),
-                                                             xytext=pass_event.pass_source.get_position(), size=20,
-                                                             arrowprops=dict(arrowstyle="->", fc=pass_event.pass_source.getObjectColor(),
-                                                                          ec=pass_event.pass_source.getObjectColor(), alpha=1.0))
-
-                    effectiveness = self.govern_passes.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
-                    self.pass_event_annotations.append(pass_event_annotation)
-                    self.updatePassEventAnnotations()
-
-                    if Parameters.IS_DEBUG_MODE_ON:
-                        self.risk_range.drawRangeFor(pass_event)
-
-                    ultX = ((pass_event.pass_target.getX() + pass_event.pass_source.getX()) / 2.)
-                    ultY = ((pass_event.pass_target.getY() + pass_event.pass_source.getY()) / 2.)
-
-                    self.effectiveness_annotation = self.layouts.ax.annotate(("effectiveness %.2f"%(effectiveness)),
-                        xy=(ultX-10, ultY), xycoords="data", va="center", ha="center", xytext=(ultX-10, ultY),
-                        textcoords="offset points", size=10, bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7),
-                                                                           ec=(1., .5, .5), alpha=0.5))
-                    self.effectiveness_count = 0
-
-                    c_visual_player.startTrail()
-                    self.trail_annotations.append(c_visual_player.trail_annotation)
-                    self.updateTrailAnnotations()
-        else:
-            try:
-                if self.p_event.event_id == 1:
-                    c_visual_player = self.convertPlayerToVisualPlayer(self.p_event.player)
-                    c_visual_player.updateTrail()
-            except:
-                pass
-
-
-    def drawDirectionsWithSpeed(self, snapShot=False):
-        for visual_player in self.visual_idToPlayers.values():
-            visual_player.drawDirectionWithSpeed(snapShot)
-
-
-    def clearDirections(self):
-        for visual_player in self.visual_idToPlayers.values():
-            visual_player.clearDirection()
-
-
-
-    def convertPlayerToVisualPlayer(self, player):
-        if player.object_id in self.visual_idToPlayers:
-            return self.visual_idToPlayers[player.object_id]
-        return None
-
-
-    def remove_visual_players(self):
-        for visual_player in self.visual_idToPlayers.values():
-            visual_player.remove()
 
 
     def setPositions(self, players):
@@ -231,23 +133,83 @@ class wxVisualization(wx.Frame):
                 self.visual_idToPlayers[player.object_id] = visual_player
 
 
+    def annotateGameEventsFor(self, time):
+        game_instance  = self.sentio.game_instances.getGameInstance(time)
 
-    def remove_defined_passes(self):
-        if self.govern_passes.passes_defined:
-            for i in self.govern_passes.passes_defined: i.remove()
-            del self.govern_passes.passes_defined[:]
+        if self.effectiveness_count < 5: self.effectiveness_count += 1
+        if self.effectiveness_count == 5: self.removeEffectivenessAnnotation()
+
+        current_event = game_instance.event
+        if current_event:
+            self.removeEventAnnotation()
+
+            self.p_event = current_event
+            if current_event.event_id != 1:
+                self.removePassEventAnnotations()
+                self.removeTrailAnnotations()
+                self.event_annotation = self.layouts.ax.annotate(current_event.event_name, xy=(52.5,32.5),  xycoords='data',
+                                        va="center", ha="center", xytext=(0, 0), textcoords='offset points', size=20,
+                                        bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7), ec=(1., .5, .5), alpha=0.5))
+            else:
+                if current_event.isPassEvent():
+                    pass_event = current_event.getPassEvent()
+
+                    p_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_source)
+                    p_visual_player.clearBallHolder()
+
+                    c_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_target)
+                    c_visual_player.setAsBallHolder()
+
+                    pass_event_annotation = self.layouts.ax.annotate('', xy=pass_event.pass_target.get_position(),
+                                                             xytext=pass_event.pass_source.get_position(), size=20,
+                                                             arrowprops=dict(arrowstyle="->", fc=pass_event.pass_source.getObjectColor(),
+                                                                          ec=pass_event.pass_source.getObjectColor(), alpha=1.0))
+
+                    effectiveness = self.govern_passes.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
+                    self.pass_event_annotations.append(pass_event_annotation)
+                    self.updatePassEventAnnotations()
+
+                    if Parameters.IS_DEBUG_MODE_ON:
+                        self.risk_range.drawRangeFor(pass_event)
+
+                    ultX = ((pass_event.pass_target.getX() + pass_event.pass_source.getX()) / 2.)
+                    ultY = ((pass_event.pass_target.getY() + pass_event.pass_source.getY()) / 2.)
+
+                    self.effectiveness_annotation = self.layouts.ax.annotate(("effectiveness %.2f"%(effectiveness)),
+                        xy=(ultX-10, ultY), xycoords="data", va="center", ha="center", xytext=(ultX-10, ultY),
+                        textcoords="offset points", size=10, bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7),
+                                                                           ec=(1., .5, .5), alpha=0.5))
+                    self.effectiveness_count = 0
+
+                    c_visual_player.startTrail()
+                    self.trail_annotations.append(c_visual_player.trail_annotation)
+                    self.updateTrailAnnotations()
+        else:
+            try:
+                if self.p_event.event_id == 1:
+                    c_visual_player = self.convertPlayerToVisualPlayer(self.p_event.player)
+                    c_visual_player.updateTrail()
+            except:
+                pass
+
+        if Parameters.IS_SHOW_DIRECTIONS_ON:
+            self.drawDirectionsWithSpeed()
 
 
-    def removeEventAnnotation(self):
-        if self.event_annotation != None:
-            self.event_annotation.remove(); del self.event_annotation; self.event_annotation = None
+    def drawDirectionsWithSpeed(self, snapShot=False):
+        for visual_player in self.visual_idToPlayers.values():
+            visual_player.drawDirectionWithSpeed(snapShot)
 
 
-    def removePassEventAnnotations(self):
-        if self.pass_event_annotations != []:
-            for pass_event_annotation in self.pass_event_annotations:
-                pass_event_annotation.remove()
-            del self.pass_event_annotations[:]
+    def clearDirections(self):
+        for visual_player in self.visual_idToPlayers.values():
+            visual_player.clearDirection()
+
+
+    def convertPlayerToVisualPlayer(self, player):
+        if player.object_id in self.visual_idToPlayers:
+            return self.visual_idToPlayers[player.object_id]
+        return None
 
 
     def updatePassEventAnnotations(self):
@@ -280,6 +242,13 @@ class wxVisualization(wx.Frame):
                 trail_annotation.set_color(trail_annotation.color)
 
 
+    def flash_status_message(self, msg, flash_len_ms=1500):
+        self.layouts.statusbar.SetStatusText(msg)
+        self.timeroff = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.listeners.on_flash_status_off, self.timeroff)
+        self.timeroff.Start(flash_len_ms, oneShot=True)
+
+
     def removeTrailAnnotations(self):
         if self.trail_annotations !=[]:
             for trail_annotation in self.trail_annotations:
@@ -293,11 +262,37 @@ class wxVisualization(wx.Frame):
             self.effectiveness_annotation = None
 
 
+    def remove_visual_players(self):
+        for visual_player in self.visual_idToPlayers.values():
+            visual_player.remove()
+
+
+    def remove_defined_passes(self):
+        if self.govern_passes.passes_defined:
+            for i in self.govern_passes.passes_defined:
+                i.remove()
+            del self.govern_passes.passes_defined[:]
+
+
+    def removeEventAnnotation(self):
+        if self.event_annotation != None:
+            self.event_annotation.remove()
+            del self.event_annotation
+            self.event_annotation = None
+
+
+    def removePassEventAnnotations(self):
+        if self.pass_event_annotations != []:
+            for pass_event_annotation in self.pass_event_annotations:
+                pass_event_annotation.remove()
+            del self.pass_event_annotations[:]
+
+
     def removeAllAnnotations(self):
-        # self.remove_directionSpeedOfObjects()
+        # self.clearDirections()
         # self.removeEventAnnotation()
         self.removePassEventAnnotations()
-        # self.removeTrailAnnotations()
+        self.removeTrailAnnotations()
         # self.removeEffectivenessAnnotation()
         self.layouts.pass_info_page.logger.Clear()
 

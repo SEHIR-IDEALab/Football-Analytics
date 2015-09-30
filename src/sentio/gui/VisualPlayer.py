@@ -71,13 +71,20 @@ class VisualPlayer(PlayerBase):
                                            linewidth=1))
 
 
-    def drawDirectionWithSpeed(self):
-        speed = self.calculateSpeed()
-        direction = self.calculateDirection()
+    def drawDirectionWithSpeed(self, snapShot=False):
+        self.clearDirection()
+
+        if snapShot:
+            speed = self.player.speed
+            direction = self.player.direction
+        else:
+            speed = self.calculateSpeed()
+            direction = self.calculateDirection()
 
         import math
         def point_pos(x0, y0, d, theta):
-            theta_rad = math.pi/4 - math.radians(theta)
+            if d == 0.0: d = 0.01
+            theta_rad = math.pi/4.0 - math.radians(theta)
             return x0 + d*math.cos(theta_rad), y0 + d*math.sin(theta_rad)
 
         x, y = self.draggable.point.get_position()
@@ -97,9 +104,10 @@ class VisualPlayer(PlayerBase):
                                               lw=2))
 
 
-    def clearDirectionWithSpeed(self):
+    def clearDirection(self):
         if self.direction_annotation:
             self.direction_annotation.remove()
+            self.direction_annotation = None
 
 
     def update_position(self, time):

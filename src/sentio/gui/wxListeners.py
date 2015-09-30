@@ -44,6 +44,7 @@ class wxListeners:
     def on_open_plot(self, event):
         dlg = wx.FileDialog(self.wx_gui, "Choose a file", GUI_FILE_DIALOG_DIRECTORY, "", "*.xml", wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
+            self.wx_gui.snapShot = True
             file_path = dlg.GetPath()
 
             self.wx_gui.removeAllAnnotations()
@@ -52,6 +53,9 @@ class wxListeners:
             players, pass_events = SnapShot.load(file_path)
             self.wx_gui.setPositions(players)
             self.wx_gui.drawAndDisplayPassStats(pass_events)
+
+            if Parameters.IS_SHOW_DIRECTIONS_ON:
+                self.wx_gui.drawDirectionsWithSpeed(snapShot=self.wx_gui.snapShot)
 
             self.layouts.current_time_display.SetLabel("Time = %s.%s.%s" %("--", "--", "--"))
             self.layouts.canvas.draw()
@@ -69,7 +73,18 @@ class wxListeners:
 
     def on_debug_mode(self, e):
         Parameters.IS_DEBUG_MODE_ON = not Parameters.IS_DEBUG_MODE_ON
-        print Parameters.IS_DEBUG_MODE_ON
+        print "debug mode: ", Parameters.IS_DEBUG_MODE_ON
+
+
+    def on_show_directions(self, e):
+        Parameters.IS_SHOW_DIRECTIONS_ON = not Parameters.IS_SHOW_DIRECTIONS_ON
+        print "show directions: ", Parameters.IS_SHOW_DIRECTIONS_ON
+
+        if Parameters.IS_SHOW_DIRECTIONS_ON:
+            self.wx_gui.drawDirectionsWithSpeed(snapShot=self.wx_gui.snapShot)
+        else:
+            self.wx_gui.clearDirections()
+        self.layouts.canvas.draw()
 
 
     def on_about(self, event):
@@ -78,13 +93,14 @@ class wxListeners:
 
          we are still working on it!!! ;)
         """
-        dlg = wx.MessageDialog(self, msg, "About", wx.OK)
+        dlg = wx.MessageDialog(self.wx_gui, msg, "About", wx.OK)
         dlg.ShowModal()
         dlg.Destroy()
 
 
     ##### handling slider events #####
     def on_slider_release(self, event):
+        self.wx_gui.snapShot = False
         slider_index = self.wx_gui.slider.GetValue()
         temp_time = self.wx_gui.sentio.slider_mapping[slider_index]
 
@@ -132,8 +148,13 @@ class wxListeners:
 
 
     def on_play_button(self, event):
-        self.wx_gui.refresh_ui()
-        self.wx_gui.remove_defined_passes()
+        if self.wx_gui.snapShot:
+            self.wx_gui.remove_defined_passes()
+            self.layouts.pass_info_page.logger.Clear()
+            self.wx_gui.removeAllAnnotations()
+            self.wx_gui.snapShot = False
+
+        self.wx_gui.govern_passes.heatMap.clear()
 
         self.wx_gui.paused = not self.wx_gui.paused
         while not self.wx_gui.paused:
@@ -167,6 +188,7 @@ class wxListeners:
         self.wx_gui.Bind(wx.EVT_MENU, self.on_open_plot, self.layouts.m_open)
         self.wx_gui.Bind(wx.EVT_MENU, self.on_exit, self.layouts.m_exit)
         self.wx_gui.Bind(wx.EVT_MENU, self.on_debug_mode, self.layouts.debug_mode)
+        self.wx_gui.Bind(wx.EVT_MENU, self.on_show_directions, self.layouts.show_directions)
         self.wx_gui.Bind(wx.EVT_MENU, self.on_about, self.layouts.m_about)
 
         self.wx_gui.Bind(wx.EVT_RADIOBOX, self.on_mouse_action, self.layouts.rb)

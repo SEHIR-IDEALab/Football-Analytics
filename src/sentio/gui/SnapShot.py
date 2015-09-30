@@ -50,15 +50,17 @@ class SnapShot:
         root = tree.getroot()
         for child in root:
             if child.tag == "Players":
-                for player in child:
-                    player_id = player.attrib["id"]
-                    idToPlayers[player_id] = PlayerBase([
-                        player.attrib["type"],
+                for plyr in child:
+                    player_id = plyr.attrib["id"]
+                    player = PlayerBase([
+                        plyr.attrib["type"],
                         player_id,
-                        player.attrib["js"],
-                        player.attrib["x"],
-                        player.attrib["y"]]
-                    )
+                        plyr.attrib["js"],
+                        plyr.attrib["x"],
+                        plyr.attrib["y"]])
+                    player.speed = float(plyr.attrib["speed"])
+                    player.direction = float(plyr.attrib["direction"])
+                    idToPlayers[player_id] = player
             elif child.tag == "Passes":
                 for pass_event in child:
                     pass_events.append(
