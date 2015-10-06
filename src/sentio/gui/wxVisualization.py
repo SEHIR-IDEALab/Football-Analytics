@@ -3,6 +3,8 @@
 
 import wx
 import matplotlib
+from src.sentio.file_io.reader.ReaderBase import ReaderBase
+
 matplotlib.use('WXAgg')   # The recommended way to use wx with mpl is with the WXAgg backend.
 
 from src.sentio.gui.RiskRange import RiskRange
@@ -132,6 +134,12 @@ class wxVisualization(wx.Frame):
                 visual_player = VisualPlayer(self.layouts.ax, player, time, self.sentio.game_instances)
                 self.visual_idToPlayers[player.object_id] = visual_player
 
+        for visual_player_id in self.visual_idToPlayers.keys():
+            if visual_player_id not in ReaderBase.mapIDToPlayers(game_instance.players):
+                visual_player = self.visual_idToPlayers[visual_player_id]
+                visual_player.remove()
+                del self.visual_idToPlayers[visual_player_id]
+
 
     def annotateGameEventsFor(self, time):
         game_instance  = self.sentio.game_instances.getGameInstance(time)
@@ -198,7 +206,10 @@ class wxVisualization(wx.Frame):
 
     def drawDirectionsWithSpeed(self, snapShot=False):
         for visual_player in self.visual_idToPlayers.values():
-            visual_player.drawDirectionWithSpeed(snapShot)
+            try: visual_player.drawDirectionWithSpeed(snapShot)
+            except:
+                print "direction with speed is missing for %s" %visual_player.player
+                pass
 
 
     def clearDirections(self):

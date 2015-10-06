@@ -10,7 +10,6 @@ from src.sentio.gui import Dialogs
 from src.sentio.gui.HeatMap import HeatMap
 from src.sentio.gui.RiskRange import RiskRange
 from src.sentio.object.PassEvent import PassEvent
-from src.sentio.file_io import Parser
 from src.sentio.pass_evaluate.Pass import Pass
 
 
@@ -136,7 +135,7 @@ class DraggablePass(Pass):
                                                        visual=True))
                     if Parameters.IS_DEBUG_MODE_ON:
                         self.risk_range.drawRangeFor(current_pass_event)
-                    self.displayDefinedPass(current_pass_event, self.logger, dragged=True)
+                    self.displayDefinedPass(current_pass_event, self.logger)
                     if self.isHeatMapChosen():
                         self.drawHeatMapFor(current_pass_event)
                     self.passes_defined.append(current_pass_event)

@@ -32,19 +32,7 @@ class Pass:
         logger.SetInsertionPoint(0)
 
 
-    def displayDefinedPass(self, defined_pass, pass_logger, dragged=False):
-        # if draggable:
-        #     p1 = defined_pass.textcoords.player; p2 = defined_pass.xycoords.player
-        #     p1.set_position(defined_pass.textcoords.get_position()); p2.set_position(defined_pass.xycoords.get_position())
-        # else:
-        #     if visual: p1 = defined_pass.pass_source.player; p2 = defined_pass.pass_target.player
-        #     else: p1 = defined_pass.pass_source; p2 = defined_pass.pass_target
-
-        # if visual:
-        #     defined_pass.teams[self.pass_source.object_id]
-        #     p1 = defined_pass.pass_source.player; p1.set_position(defined_pass.pass_source.get_position())
-        #     p2 = defined_pass.pass_target.player; p2.set_position(defined_pass.pass_target.get_position())
-        # else:
+    def displayDefinedPass(self, defined_pass, pass_logger):
         p1 = defined_pass.pass_source
         p2 = defined_pass.pass_target
 

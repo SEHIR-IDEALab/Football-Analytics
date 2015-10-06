@@ -101,7 +101,7 @@ class wxListeners:
     ##### handling slider events #####
     def on_slider_release(self, event):
         self.wx_gui.snapShot = False
-        slider_index = self.wx_gui.slider.GetValue()
+        slider_index = self.layouts.slider.GetValue()
         temp_time = self.wx_gui.sentio.slider_mapping[slider_index]
 
         self.wx_gui.removeAllAnnotations()
@@ -109,19 +109,19 @@ class wxListeners:
 
 
     def on_slider_shift(self, event):
-        slider_index = self.wx_gui.slider.GetValue()
+        slider_index = self.layouts.slider.GetValue()
         temp_time = self.wx_gui.sentio.slider_mapping[slider_index]
 
         formatted_time = Time.time_display(temp_time)
-        self.wx_gui.current_time_display.SetLabel(formatted_time)
+        self.layouts.current_time_display.SetLabel(formatted_time)
         self.wx_gui.current_time = temp_time
 
 
     def on_play_speed_slider(self, event):
         speeds = {1:"0.5", 2:"1", 3:"2", 4:"3", 5:"4"}
 
-        self.play_speed = self.wx_gui.play_speed_slider.GetValue()
-        self.wx_gui.play_speed_box.SetLabel("Speed = %sx"%speeds[self.play_speed])
+        self.play_speed = self.layouts.play_speed_slider.GetValue()
+        self.layouts.play_speed_box.SetLabel("Speed = %sx"%speeds[self.play_speed])
 
 
     ##### handling radioBox events #####

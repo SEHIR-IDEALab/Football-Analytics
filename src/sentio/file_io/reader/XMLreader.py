@@ -30,7 +30,7 @@ class XMLreader(ReaderBase):
                             time_in_millisec = int(time_point.attrib["val"])
                             players = deque()
                             for plyr in time_point:
-                                players.append(
+                                players.append(PlayerBase(
                                     [
                                         plyr.attrib["type"],
                                         plyr.attrib["id"],
@@ -38,7 +38,7 @@ class XMLreader(ReaderBase):
                                         plyr.attrib["x"],
                                         plyr.attrib["y"]
                                     ]
-                                )
+                                ))
                             temp_time = Time(int(temp_half), time_in_millisec)
                             self.game_instances[temp_half][time_in_millisec] = GameInstance(temp_time, players)
 

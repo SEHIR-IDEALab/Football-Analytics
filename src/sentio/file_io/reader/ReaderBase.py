@@ -1,28 +1,11 @@
 from collections import OrderedDict
 from src.sentio import Parameters
 from src.sentio.file_io.reader import tree
-from src.sentio.object.PlayerBase import PlayerBase
 from src.sentio.object.Team import Team
 from src.sentio.object.Teams import Teams
 
 
 __author__ = 'emrullah'
-
-
-
-
-
-
-def convertDraggableToTeams(draggable_visual_teams):
-    q = ({},{},{},{})
-    for index, team in enumerate(draggable_visual_teams):
-        for draggable_visual_player in team.values():
-            player = draggable_visual_player.visual_player.player
-            player.set_position(draggable_visual_player.visual_player.get_position())
-            q[index][player.getJerseyNumber()] = player
-    return Teams(Team("home", q[0]), Team("away", q[1]),
-                 Team("referee", q[2]), Team("unknown", q[3]))
-
 
 
 
@@ -43,11 +26,23 @@ class ReaderBase:
 
 
     @staticmethod
-    def divideIntoTeams(players):
+    def mapIDToPlayers(players):
+        q = {}
+        for player in players:
+            q[player.object_id] = player
+        return q
+
+
+    @staticmethod
+    def divideIntoTeams(players, visual=False):
         home_team_players, away_team_players, referees, unknowns = {}, {}, {}, {}
 
-        for object_info in players:
-            player = PlayerBase(object_info)
+        for player in players:
+            if visual:
+                temp_player = player.player
+                temp_player.set_position(player.get_position())
+                player = temp_player
+
             if player.isHomeTeamPlayer(): home_team_players[player.getJerseyNumber()] = player
             elif player.isAwayTeamPlayer(): away_team_players[player.getJerseyNumber()] = player
             elif player.isReferee(): referees[player.getJerseyNumber()] = player
@@ -84,14 +79,6 @@ class ReaderBase:
             if player.getJerseyNumber() == event_player.getJerseyNumber():
                 player.team_name = event_player.team_name
                 return player
-
-
-    def get_ID_Explanation(self):
-        a = dict()
-        for line in self.event_data:
-            id, explanation = int(line[5]), line[6]
-            a[id] = explanation
-        return a
 
 
     def __str__(self):

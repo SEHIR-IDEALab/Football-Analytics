@@ -1,4 +1,3 @@
-from src.sentio.file_io import Parser
 from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.pass_evaluate.Pass import Pass
 
@@ -10,14 +9,6 @@ class DraggablePoint:
         self.point = point
         self.press = None
         self.background = None
-
-
-    def setPlayer(self, player):
-        self.player = player
-
-
-    def getPlayer(self):
-        return self.player
 
 
     def connect(self):
@@ -117,7 +108,7 @@ class DraggablePoint:
             defined_pass.pass_source = self.convertVisualPlayerToPlayer(defined_pass.pass_source)
             defined_pass.pass_target = self.convertVisualPlayerToPlayer(defined_pass.pass_target)
             defined_pass.teams = ReaderBase.divideIntoTeams(self.visual_idToPlayers.values(), visual=True)
-            passes.displayDefinedPass(defined_pass, self.pass_logger, dragged=True)
+            passes.displayDefinedPass(defined_pass, self.pass_logger)
 
 
     def disconnect(self):

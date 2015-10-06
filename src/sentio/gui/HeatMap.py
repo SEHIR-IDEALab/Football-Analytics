@@ -58,6 +58,11 @@ class HeatMap:
         return mean, standard_deviation
 
 
+    def set_color_bar(self, color_bar, color_bar_canvas):
+        self.color_bar = color_bar
+        self.color_bar_canvas = color_bar_canvas
+
+
     def set_color_bar_listeners(self, (vmin_auto, vmin_custom, vmin_text), (vmax_auto, vmax_custom, vmax_text),
                                 refresh_button):
         self.vmin_auto = vmin_auto
@@ -108,11 +113,6 @@ class HeatMap:
         self.vmax_auto.SetValue(True)
         self.vmin_text.Disable()
         self.vmax_text.Disable()
-
-
-    def set_color_bar(self, color_bar, color_bar_canvas):
-        self.color_bar = color_bar
-        self.color_bar_canvas = color_bar_canvas
 
 
     def adjust_color_bar(self, *args):

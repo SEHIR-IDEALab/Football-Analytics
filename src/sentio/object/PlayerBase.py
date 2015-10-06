@@ -173,4 +173,4 @@ class PlayerBase:
 
 
     def __str__(self):
-        return "%s, %s, %s" % (self.jersey_number, self.position_x, self.position_y)
+        return "%s, %s, %s, %s" % (self.getTypeName(), self.jersey_number, self.position_x, self.position_y)
