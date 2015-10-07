@@ -35,8 +35,7 @@ class wxListeners:
             if ".png" in dlg.GetFilename():
                 self.layouts.canvas.print_figure(file_path, dpi=self.layouts.dpi)
             else:
-                SnapShot.save(file_path, self.wx_gui.current_time, self.wx_gui.visual_idToPlayers.values(),
-                              self.wx_gui.govern_passes.passes_defined)
+                SnapShot.save(file_path, self.wx_gui.visual_idToPlayers.values(), self.wx_gui.govern_passes.passes_defined)
 
             self.wx_gui.flash_status_message("Saved to %s" % file_path)
 
@@ -149,11 +148,12 @@ class wxListeners:
 
     def on_play_button(self, event):
         if self.wx_gui.snapShot:
-            self.wx_gui.remove_defined_passes()
-            self.layouts.pass_info_page.logger.Clear()
+            # self.wx_gui.removePassEventAnnotations()
+            # self.layouts.pass_info_page.logger.Clear()
             self.wx_gui.removeAllAnnotations()
             self.wx_gui.snapShot = False
 
+        self.wx_gui.removeManualPassEventAnnotations()
         self.wx_gui.govern_passes.heatMap.clear()
 
         self.wx_gui.paused = not self.wx_gui.paused

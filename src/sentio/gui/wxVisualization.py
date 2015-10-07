@@ -50,12 +50,12 @@ class wxVisualization(wx.Frame):
         self.risk_range = RiskRange(self.layouts.ax)
 
         self.govern_passes = None
-        self.defined_passes_forSnapShot = list()
+        self.defined_passes = list()
 
         self.trail_annotations, self.event_annotation, self.pass_event_annotations, self.effectiveness_annotation = \
             [], None, [], None
 
-        self.pass_event = None
+        self.ball_holder = None
 
         self.effectiveness_count = 0
         self.play_speed = 2
@@ -87,6 +87,7 @@ class wxVisualization(wx.Frame):
             )
             effectiveness = self.govern_passes.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
             self.pass_event_annotations.append(pass_event_annotation)
+        self.govern_passes.passes_defined = pass_events
 
 
     def visualizePositionsFor(self, time):
@@ -102,7 +103,7 @@ class wxVisualization(wx.Frame):
             self.visual_idToPlayers[player.object_id] = visual_player
 
         self.govern_passes = DraggablePass(self.layouts.ax, self.visual_idToPlayers, self.layouts.fig)
-        self.govern_passes.set_defined_passes(self.defined_passes_forSnapShot)
+        self.govern_passes.set_defined_passes(self.defined_passes)
         self.govern_passes.set_passDisplayer(self.layouts.pass_info_page.logger)
         self.govern_passes.set_variables(self.layouts.heatmap_setup_page.heat_map,
                                          self.layouts.heatmap_setup_page.resolution,
@@ -165,8 +166,8 @@ class wxVisualization(wx.Frame):
                     p_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_source)
                     p_visual_player.clearBallHolder()
 
-                    c_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_target)
-                    c_visual_player.setAsBallHolder()
+                    self.ball_holder = self.convertPlayerToVisualPlayer(pass_event.pass_target)
+                    self.ball_holder.setAsBallHolder()
 
                     pass_event_annotation = self.layouts.ax.annotate('', xy=pass_event.pass_target.get_position(),
                                                              xytext=pass_event.pass_source.get_position(), size=20,
@@ -189,14 +190,14 @@ class wxVisualization(wx.Frame):
                                                                            ec=(1., .5, .5), alpha=0.5))
                     self.effectiveness_count = 0
 
-                    c_visual_player.startTrail()
-                    self.trail_annotations.append(c_visual_player.trail_annotation)
+                    self.ball_holder.startTrail()
+                    self.trail_annotations.append(self.ball_holder.trail_annotation)
                     self.updateTrailAnnotations()
         else:
             try:
                 if self.p_event.event_id == 1:
-                    c_visual_player = self.convertPlayerToVisualPlayer(self.p_event.player)
-                    c_visual_player.updateTrail()
+                    # c_visual_player = self.convertPlayerToVisualPlayer(self.p_event.player)
+                    self.ball_holder.updateTrail()
             except:
                 pass
 
@@ -278,13 +279,6 @@ class wxVisualization(wx.Frame):
             visual_player.remove()
 
 
-    def remove_defined_passes(self):
-        if self.govern_passes.passes_defined:
-            for i in self.govern_passes.passes_defined:
-                i.remove()
-            del self.govern_passes.passes_defined[:]
-
-
     def removeEventAnnotation(self):
         if self.event_annotation != None:
             self.event_annotation.remove()
@@ -299,12 +293,26 @@ class wxVisualization(wx.Frame):
             del self.pass_event_annotations[:]
 
 
+    def removeManualPassEventAnnotations(self):
+        if self.govern_passes.manual_pass_event_annotations:
+            for pass_event_annotation in self.govern_passes.manual_pass_event_annotations:
+                pass_event_annotation.remove()
+            del self.govern_passes.manual_pass_event_annotations[:]
+
+
+
+    def removeBallHolderAnnotation(self):
+        if self.ball_holder:
+            self.ball_holder.clearBallHolder()
+
+
     def removeAllAnnotations(self):
-        # self.clearDirections()
-        # self.removeEventAnnotation()
-        self.removePassEventAnnotations()
+        self.removeBallHolderAnnotation()
         self.removeTrailAnnotations()
-        # self.removeEffectivenessAnnotation()
+        self.risk_range.removeAll()
+        self.removeEventAnnotation()
+        self.removePassEventAnnotations()
+        self.removeEffectivenessAnnotation()
         self.layouts.pass_info_page.logger.Clear()
 
 

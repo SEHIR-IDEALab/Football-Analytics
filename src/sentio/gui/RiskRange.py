@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from src.sentio.Parameters import PASS_SOURCE_RADIUS, PASS_TARGET_RADIUS_COEFFICIENT,SOURCE_ANGLE
 
 
-__author__ = 'doktoray'
+__author__ = 'emrullah'
 
 
 class RiskRange():
@@ -14,7 +14,7 @@ class RiskRange():
         self.total_pass_count = 3
         self.temp_pass_count = 0
 
-        self.risk_range_info = []
+        self.risk_ranges = []
 
 
     @staticmethod
@@ -113,17 +113,22 @@ class RiskRange():
         self.ax.add_patch(self.circle1)
         self.ax.add_patch(self.circle2)
 
-        self.risk_range_info.append([self.line1, self.line2, self.line3, self.line4, self.circle1, self.circle2])
+        self.risk_ranges.append([self.line1, self.line2, self.line3, self.line4, self.circle1, self.circle2])
 
         self.temp_pass_count += 1
 
         if self.temp_pass_count > self.total_pass_count:
-            self.remove()
+            self.removeFILO()
 
 
-    def remove(self):
-        for item in self.risk_range_info[0]:
+    def removeFILO(self):
+        for item in self.risk_ranges[0]:
             try: item.pop(0).remove()
             except: item.remove()
-        del self.risk_range_info[0]
+        del self.risk_ranges[0]
 
+
+    def removeAll(self):
+        if len(self.risk_ranges) != 0:
+            for i in range(len(self.risk_ranges)):
+                self.removeFILO()

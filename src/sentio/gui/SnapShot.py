@@ -14,7 +14,7 @@ class SnapShot:
 
 
     @staticmethod
-    def save(file_path, time, visual_players, pass_events):
+    def save(file_path, visual_players, pass_events):
         root = ET.Element("data")
 
         time_point = ET.SubElement(root, "Players")

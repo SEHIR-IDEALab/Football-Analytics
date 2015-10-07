@@ -24,7 +24,10 @@ class DraggablePass(Pass):
         self.pass_source = None
         self.pass_target = None
         self.pass_event = None
+
         self.passes_defined = []
+        self.manual_pass_event_annotations = []
+
         self.ax = ax
         self.figure = figure
         self.heatMap = HeatMap(ax, visual_idToPlayers, figure)
@@ -139,6 +142,7 @@ class DraggablePass(Pass):
                     if self.isHeatMapChosen():
                         self.drawHeatMapFor(current_pass_event)
                     self.passes_defined.append(current_pass_event)
+                    self.manual_pass_event_annotations.append(self.pass_event)
                 else:
                     self.pass_target = None
             else:
