@@ -1,4 +1,4 @@
-from src.sentio.Parameters import VISUAL_PLAYER_JS_SIZE
+from src.sentio.Parameters import VISUAL_PLAYER_JS_SIZE, SPEED_ADDER
 from src.sentio.gui.DraggablePoint import DraggablePoint
 from src.sentio.object.PlayerBase import PlayerBase
 
@@ -90,7 +90,7 @@ class VisualPlayer(PlayerBase):
 
         x, y = self.draggable.point.get_position()
         self.direction_annotation = self.ax.annotate('',
-                                          xy=point_pos(x, y, speed, direction),
+                                          xy=point_pos(x, y, speed+SPEED_ADDER, direction),
                                           xycoords='data',
                                           xytext=(x,y),
                                           textcoords='data',

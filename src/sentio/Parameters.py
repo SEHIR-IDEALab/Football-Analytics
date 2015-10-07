@@ -96,6 +96,9 @@ OBJECT_TYPES = {
 
 # running distance speed filter
 SPEED_THRESHOLD = 2.6  # 13m/s
+# additional value, added to the result of speed for visualisation purposes
+SPEED_ADDER = 4
+
 
 # radius of visual player in CircleStyle
 VISUAL_PLAYER_RADIUS = 12
