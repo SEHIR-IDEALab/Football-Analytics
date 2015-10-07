@@ -90,9 +90,12 @@ class wxVisualization(wx.Frame):
         self.govern_passes.passes_defined = pass_events
 
 
-    def visualizePositionsFor(self, time):
+    def visualizePositionsFor(self, time, chosen_skip=0):
         self.updatePositions(time)
-        self.annotateGameEventsFor(time)
+        if chosen_skip == 0:
+            self.annotateGameEventsFor(time)
+        else:
+            self.removeAllAnnotations()
         self.layouts.canvas.draw()
 
 

@@ -119,8 +119,8 @@ class wxListeners:
     def on_play_speed_slider(self, event):
         speeds = {1:"0.5", 2:"1", 3:"2", 4:"3", 5:"4"}
 
-        self.play_speed = self.layouts.play_speed_slider.GetValue()
-        self.layouts.play_speed_box.SetLabel("Speed = %sx"%speeds[self.play_speed])
+        self.wx_gui.play_speed = self.layouts.play_speed_slider.GetValue()
+        self.layouts.play_speed_box.SetLabel("Speed = %sx"%speeds[self.wx_gui.play_speed])
 
 
     ##### handling radioBox events #####
@@ -171,7 +171,7 @@ class wxListeners:
             self.layouts.current_time_display.SetLabel(Time.time_display(self.wx_gui.current_time))
             self.layouts.slider.SetValue(self.getSliderValue())
 
-            self.wx_gui.visualizePositionsFor(self.wx_gui.current_time)
+            self.wx_gui.visualizePositionsFor(self.wx_gui.current_time, chosen_skip=chosenSkip)
             wx.Yield()
 
 
