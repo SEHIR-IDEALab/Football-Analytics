@@ -1,3 +1,4 @@
+from src.sentio.Parameters import VISUAL_PLAYER_JS_SIZE
 from src.sentio.gui.DraggablePoint import DraggablePoint
 from src.sentio.object.PlayerBase import PlayerBase
 
@@ -20,7 +21,7 @@ class VisualPlayer(PlayerBase):
             verticalalignment='center',
             zorder=1,
             color="w",
-            fontsize=10,
+            fontsize=VISUAL_PLAYER_JS_SIZE,
             picker=True,
             bbox=dict(
                 boxstyle="circle,pad=0.3",
