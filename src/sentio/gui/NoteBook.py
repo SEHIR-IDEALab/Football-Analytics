@@ -74,9 +74,9 @@ class PageTwo(wx.Panel):
                      (wx.StaticText(self), wx.EXPAND),
                      (self.resolution_label),
                      (self.resolution, 1, wx.EXPAND)])
-        vbox.Add(fgs)
+        vbox.Add(fgs, 1, wx.ALIGN_CENTER)
         vbox.AddSpacer(10)
-        vbox.Add(wx.StaticLine(self, style=wx.HORIZONTAL, size=(150,2)), 0, wx.ALIGN_CENTER)
+        vbox.Add(wx.StaticLine(self, style=wx.HORIZONTAL, size=(170,2)), 0, wx.ALIGN_CENTER)
         vbox.AddSpacer(10)
 
         color_logend_box = wx.StaticBox(self, wx.ID_ANY, "Color Legend")
