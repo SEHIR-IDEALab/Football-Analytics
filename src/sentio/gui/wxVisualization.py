@@ -147,6 +147,9 @@ class wxVisualization(wx.Frame):
         if current_event:
             self.event_annotation_manager.removeEventTitleAnnotation()
 
+            if self.ball_holder:
+                self.ball_holder.clearBallHolder()
+
             self.p_event = current_event
             if current_event.event_id != 1:
                 self.event_annotation_manager.removePassEventAnnotations()
@@ -156,9 +159,6 @@ class wxVisualization(wx.Frame):
             else:
                 if not skipped and current_event.isPassEvent():
                     pass_event = current_event.getPassEvent()
-
-                    if self.ball_holder:
-                        self.ball_holder.clearBallHolder()
 
                     self.ball_holder = self.convertPlayerToVisualPlayer(pass_event.pass_target)
                     self.ball_holder.setAsBallHolder()
