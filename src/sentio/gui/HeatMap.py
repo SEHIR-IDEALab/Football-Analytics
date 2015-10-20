@@ -18,13 +18,9 @@ class HeatMap:
         self.hm = None
         self.cbar = None
         self.figure = figure
-        self.clt_pass = Pass()
+        self.pass_evaluate = Pass()
 
-        self.totalEffectiveness_withComponents_byCoordinates = {}
-
-
-    def get_totalEffectiveness_withComponents_byCoordinates(self, x, y):
-        return self.totalEffectiveness_withComponents_byCoordinates[(x, y)]
+        self.effectivenessByPosition = {}
 
 
     def clear(self):
@@ -151,71 +147,60 @@ class HeatMap:
 
 
     def draw(self, data):
-        self.ax.set_xlim(FOOTBALL_FIELD_MIN_X-4.5, FOOTBALL_FIELD_MAX_X+4.5)
-        self.ax.set_ylim(FOOTBALL_FIELD_MAX_Y+1.5, FOOTBALL_FIELD_MIN_Y-1.5)
         self.adjust_heatMap(data)
 
 
-    def heatmap_base(self, definedPass, p_accordingTo, number_of_points):
-        p1, p2 = definedPass
+    def evaluate(self, definedPass, p_accordingTo, resolution):
+        p1 = definedPass.pass_source
+        p2 = definedPass.pass_target
 
-        x_points, y_points = number_of_points
-        x_coord = numpy.linspace(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X, x_points)
-        y_coord = numpy.linspace(FOOTBALL_FIELD_MIN_Y, FOOTBALL_FIELD_MAX_Y, y_points)
+        x_coord = numpy.linspace(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X, resolution[0])
+        y_coord = numpy.linspace(FOOTBALL_FIELD_MIN_Y, FOOTBALL_FIELD_MAX_Y, resolution[1])
 
-        totalEffectiveness_withComponents = {"overallRisk": [], "gain": [], "passAdvantage": [], "goalChance": [],
-                                             "effectiveness": []}
-        pas = Pass()
-        pas.teams = ReaderBase.divideIntoTeams(self.draggable_visual_teams.values(), visual=True)
-        if p_accordingTo.isHomeTeamPlayer(): p_accordingTo = \
-            pas.teams.home_team.getTeamPlayersWithJS().get(p_accordingTo.getJerseyNumber())
-        else: p_accordingTo = pas.teams.away_team.getTeamPlayersWithJS().get(p_accordingTo.getJerseyNumber())
+        self.effectivenessByComponent = {"overallRisk": [], "gain": [], "passAdvantage": [],
+                                    "goalChance": [],"effectiveness": []}
+
+        self.pass_evaluate.teams = ReaderBase.divideIntoTeams(self.draggable_visual_teams.values(), visual=True)
 
         for y in y_coord:
             temp_overRisk, temp_gain, temp_passAdv, temp_goalChange, temp_effect = [], [], [], [], []
             for x in x_coord:
                 p_accordingTo.set_position((x, y))
                 if p_accordingTo.object_id == p1.object_id:
-                    currentEffectiveness_withComponents = pas.effectiveness_withComponents(p_accordingTo, p2)
+                    currentEffectiveness_withComponents = self.pass_evaluate.effectiveness_withComponents(p_accordingTo, p2)
                 elif p_accordingTo.object_id == p2.object_id:
-                    currentEffectiveness_withComponents = pas.effectiveness_withComponents(p1, p_accordingTo)
+                    currentEffectiveness_withComponents = self.pass_evaluate.effectiveness_withComponents(p1, p_accordingTo)
                 else:
-                    currentEffectiveness_withComponents = pas.effectiveness_withComponents(p1, p2)
-                self.totalEffectiveness_withComponents_byCoordinates[(x, y)] = currentEffectiveness_withComponents
+                    currentEffectiveness_withComponents = self.pass_evaluate.effectiveness_withComponents(p1, p2)
+                self.effectivenessByPosition[(x, y)] = currentEffectiveness_withComponents
                 for index, component in enumerate(
                         [temp_overRisk, temp_gain, temp_passAdv, temp_goalChange, temp_effect]):
                     component.append(currentEffectiveness_withComponents[index])
                     # print x,y
-            totalEffectiveness_withComponents["overallRisk"].append(temp_overRisk)
-            totalEffectiveness_withComponents["gain"].append(temp_gain)
-            totalEffectiveness_withComponents["passAdvantage"].append(temp_passAdv)
-            totalEffectiveness_withComponents["goalChance"].append(temp_goalChange)
-            totalEffectiveness_withComponents["effectiveness"].append(temp_effect)
+            self.effectivenessByComponent["overallRisk"].append(temp_overRisk)
+            self.effectivenessByComponent["gain"].append(temp_gain)
+            self.effectivenessByComponent["passAdvantage"].append(temp_passAdv)
+            self.effectivenessByComponent["goalChance"].append(temp_goalChange)
+            self.effectivenessByComponent["effectiveness"].append(temp_effect)
 
-        data = totalEffectiveness_withComponents["effectiveness"]
-        self.draw(data)
-        return totalEffectiveness_withComponents
+        self.draw(self.effectivenessByComponent["effectiveness"])
 
 
     def draw_defencePositionTaking(self, definedPass, chosen_js, number_of_points=(105, 65)):
-        p1, p2 = definedPass
-
         teams = ReaderBase.divideIntoTeams(self.draggable_visual_teams, visual=True)
-        if p1.isHomeTeamPlayer(): opponent_team = teams.away_team
+        if definedPass.pass_source.isHomeTeamPlayer(): opponent_team = teams.away_team
         else: opponent_team = teams.home_team
 
         p_chosen = opponent_team.getTeamPlayersWithJS().get(chosen_js)
-        return self.heatmap_base(definedPass, p_chosen, number_of_points)
+        return self.evaluate(definedPass, p_chosen, number_of_points)
 
 
     def draw_positionOfTargetOfPass(self, definedPass, number_of_points=(105, 65)):
-        p1, p2 = definedPass
-        return self.heatmap_base(definedPass, p2, number_of_points)
+        return self.evaluate(definedPass, definedPass.pass_target, number_of_points)
 
 
     def draw_positionOfSourceOfPass(self, definedPass, number_of_points=(105, 65)):
-        p1, p2 = definedPass
-        return self.heatmap_base(definedPass, p1, number_of_points)
+        return self.evaluate(definedPass, definedPass.pass_source, number_of_points)
 
 
     def __str__(self):

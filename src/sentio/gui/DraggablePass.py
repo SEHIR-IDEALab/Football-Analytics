@@ -31,7 +31,6 @@ class DraggablePass(Pass):
         self.ax = ax
         self.figure = figure
         self.heatMap = HeatMap(ax, visual_idToPlayers, figure)
-        self.effectiveness_withComp_byTime = None
         self.risk_range = RiskRange(self.ax)
         self.visual_idToPlayers = visual_idToPlayers
 
@@ -74,11 +73,11 @@ class DraggablePass(Pass):
 
     def draw_withChosenComponent(self, *args):
         chosenComponent = self.chosenComponent.GetSelection()
-        if chosenComponent == 0: q = self.effectiveness_withComp["overallRisk"]
-        elif chosenComponent == 1: q = self.effectiveness_withComp["gain"]
-        elif chosenComponent == 2: q = self.effectiveness_withComp["passAdvantage"]
-        elif chosenComponent == 3: q = self.effectiveness_withComp["goalChance"]
-        else: q = self.effectiveness_withComp["effectiveness"]
+        if chosenComponent == 0: q = self.heatMap.effectivenessByComponent["overallRisk"]
+        elif chosenComponent == 1: q = self.heatMap.effectivenessByComponent["gain"]
+        elif chosenComponent == 2: q = self.heatMap.effectivenessByComponent["passAdvantage"]
+        elif chosenComponent == 3: q = self.heatMap.effectivenessByComponent["goalChance"]
+        else: q = self.heatMap.effectivenessByComponent["effectiveness"]
         return self.heatMap.draw(q)
 
 
@@ -94,9 +93,6 @@ class DraggablePass(Pass):
         chosen_heat_map = self.chosenHeatMap.GetSelection()
         self.chosenComponent.SetSelection(4)
 
-        p1 = pass_event.pass_source
-        p2 = pass_event.pass_target
-
         self.heatMap.totalEffectiveness_withComponents_byCoordinates = {}
         if chosen_heat_map == 1:
             chosenNumber = Dialogs.ask(message='Enter the jersey number of a player from the opponent team')
@@ -105,15 +101,15 @@ class DraggablePass(Pass):
             if chosenNumber is not None:
                 chosenNumber = int(chosenNumber)
                 app = wx.App()
-                self.effectiveness_withComp = self.heatMap.draw_defencePositionTaking((p1,p2), chosenNumber,
-                                                           number_of_points=self.resolutionToNumberOfPoints())
+                self.heatMap.draw_defencePositionTaking(pass_event, chosenNumber,
+                                                        number_of_points=self.resolutionToNumberOfPoints())
                 app.MainLoop()
         elif chosen_heat_map == 2:
-            self.effectiveness_withComp = self.heatMap.draw_positionOfTargetOfPass((p1,p2),
-                                                            number_of_points=self.resolutionToNumberOfPoints())
+            self.heatMap.draw_positionOfTargetOfPass(pass_event,
+                                                     number_of_points=self.resolutionToNumberOfPoints())
         elif chosen_heat_map == 3:
-            self.effectiveness_withComp = self.heatMap.draw_positionOfSourceOfPass((p1,p2),
-                                                            number_of_points=self.resolutionToNumberOfPoints())
+            self.heatMap.draw_positionOfSourceOfPass(pass_event,
+                                                     number_of_points=self.resolutionToNumberOfPoints())
 
 
     def convertVisualPlayerToPlayer(self, visual_player):
@@ -168,14 +164,14 @@ class DraggablePass(Pass):
 
     def on_press_event(self, event):
         if event.button == 3:
-            if self.heatMap.totalEffectiveness_withComponents_byCoordinates != {}:
+            if self.heatMap.effectivenessByPosition != {}:
                 x_points, y_points = self.resolutionToNumberOfPoints()
                 x_coords = numpy.linspace(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X, x_points)
                 y_coords = numpy.linspace(FOOTBALL_FIELD_MIN_Y, FOOTBALL_FIELD_MAX_Y, y_points)
                 givenCoordinate_x, givenCoordinate_y = event.xdata, event.ydata
                 coord_x = min(x_coords, key=lambda x:abs(x-givenCoordinate_x))
                 coord_y = min(y_coords, key=lambda y:abs(y-givenCoordinate_y))
-                components = self.heatMap.get_totalEffectiveness_withComponents_byCoordinates(coord_x, coord_y)
+                components = self.heatMap.effectivenessByPosition(coord_x, coord_y)
                 Pass.display_effectiveness((coord_x, coord_y), components, self.logger)
 
 
