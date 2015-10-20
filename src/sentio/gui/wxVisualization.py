@@ -91,12 +91,14 @@ class wxVisualization(wx.Frame):
 
 
     def visualizePositionsFor(self, time, chosen_skip=0):
-        self.updatePositions(time)
-        if chosen_skip == 0:
-            self.annotateGameEventsFor(time)
+        if self.updatePositions(time):
+            if chosen_skip == 0:
+                self.annotateGameEventsFor(time)
+            else:
+                self.annotateGameEventsFor(time, skipped=True)
+            self.layouts.canvas.draw()
         else:
-            self.removeAllAnnotations()
-        self.layouts.canvas.draw()
+            print "missing positions"
 
 
     def setPositions(self, players):
@@ -128,24 +130,28 @@ class wxVisualization(wx.Frame):
 
     def updatePositions(self, time):
         game_instance = self.sentio.game_instances.getGameInstance(time)
-        for player in game_instance.players:
-            if player.object_id in self.visual_idToPlayers:
-                visual_player = self.visual_idToPlayers[player.object_id]
-                if not visual_player.update_position(time):
+        if game_instance:
+            for player in game_instance.players:
+                if player.object_id in self.visual_idToPlayers:
+                    visual_player = self.visual_idToPlayers[player.object_id]
+                    if not visual_player.update_position(time):
+                        visual_player.remove()
+                        del self.visual_idToPlayers[player.object_id]
+                else:
+                    visual_player = VisualPlayer(self.layouts.ax, player, time, self.sentio.game_instances)
+                    self.visual_idToPlayers[player.object_id] = visual_player
+
+            for visual_player_id in self.visual_idToPlayers.keys():
+                if visual_player_id not in ReaderBase.mapIDToPlayers(game_instance.players):
+                    visual_player = self.visual_idToPlayers[visual_player_id]
                     visual_player.remove()
-                    del self.visual_idToPlayers[player.object_id]
-            else:
-                visual_player = VisualPlayer(self.layouts.ax, player, time, self.sentio.game_instances)
-                self.visual_idToPlayers[player.object_id] = visual_player
-
-        for visual_player_id in self.visual_idToPlayers.keys():
-            if visual_player_id not in ReaderBase.mapIDToPlayers(game_instance.players):
-                visual_player = self.visual_idToPlayers[visual_player_id]
-                visual_player.remove()
-                del self.visual_idToPlayers[visual_player_id]
+                    del self.visual_idToPlayers[visual_player_id]
+            return True
+        else:
+            return False
 
 
-    def annotateGameEventsFor(self, time):
+    def annotateGameEventsFor(self, time, skipped=False):
         game_instance  = self.sentio.game_instances.getGameInstance(time)
 
         if self.effectiveness_count < 5: self.effectiveness_count += 1
@@ -163,7 +169,7 @@ class wxVisualization(wx.Frame):
                                         va="center", ha="center", xytext=(0, 0), textcoords='offset points', size=20,
                                         bbox=dict(boxstyle="round", fc=(1.0, 0.7, 0.7), ec=(1., .5, .5), alpha=0.5))
             else:
-                if current_event.isPassEvent():
+                if not skipped and current_event.isPassEvent():
                     pass_event = current_event.getPassEvent()
 
                     p_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_source)
@@ -173,9 +179,9 @@ class wxVisualization(wx.Frame):
                     self.ball_holder.setAsBallHolder()
 
                     pass_event_annotation = self.layouts.ax.annotate('', xy=pass_event.pass_target.get_position(),
-                                                             xytext=pass_event.pass_source.get_position(), size=20,
-                                                             arrowprops=dict(arrowstyle="->", fc=pass_event.pass_source.getObjectColor(),
-                                                                          ec=pass_event.pass_source.getObjectColor(), alpha=1.0))
+                                                    xytext=pass_event.pass_source.get_position(), size=20,
+                                                    arrowprops=dict(arrowstyle="->", fc=pass_event.pass_source.getObjectColor(),
+                                                    ec=pass_event.pass_source.getObjectColor(), alpha=1.0))
 
                     effectiveness = self.govern_passes.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
                     self.pass_event_annotations.append(pass_event_annotation)
@@ -198,8 +204,7 @@ class wxVisualization(wx.Frame):
                     self.updateTrailAnnotations()
         else:
             try:
-                if self.p_event.event_id == 1:
-                    # c_visual_player = self.convertPlayerToVisualPlayer(self.p_event.player)
+                if not skipped and self.p_event.event_id == 1:
                     self.ball_holder.updateTrail()
             except:
                 pass

@@ -122,6 +122,9 @@ class wxListeners:
         self.wx_gui.play_speed = self.layouts.play_speed_slider.GetValue()
         self.layouts.play_speed_box.SetLabel("Speed = %sx"%speeds[self.wx_gui.play_speed])
 
+        if self.wx_gui.play_speed > 2:
+            self.wx_gui.removeAllAnnotations()
+
 
     ##### handling radioBox events #####
     def on_mouse_action(self, event):
