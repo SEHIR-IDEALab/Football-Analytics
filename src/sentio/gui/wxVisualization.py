@@ -140,10 +140,9 @@ class wxVisualization(wx.Frame):
 
 
     def annotateGameEventsFor(self, time, skipped=False):
-        game_instance  = self.sentio.game_instances.getGameInstance(time)
-
         self.event_annotation_manager.updateEffectivenessCount()
 
+        game_instance  = self.sentio.game_instances.getGameInstance(time)
         current_event = game_instance.event
         if current_event:
             self.event_annotation_manager.removeEventTitleAnnotation()
@@ -158,14 +157,13 @@ class wxVisualization(wx.Frame):
                 if not skipped and current_event.isPassEvent():
                     pass_event = current_event.getPassEvent()
 
-                    p_visual_player = self.convertPlayerToVisualPlayer(pass_event.pass_source)
-                    p_visual_player.clearBallHolder()
+                    if self.ball_holder:
+                        self.ball_holder.clearBallHolder()
 
                     self.ball_holder = self.convertPlayerToVisualPlayer(pass_event.pass_target)
                     self.ball_holder.setAsBallHolder()
 
                     self.event_annotation_manager.annotatePassEvent(pass_event)
-
                     effectiveness = self.govern_passes.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
                     self.event_annotation_manager.updatePassEventAnnotations()
 
