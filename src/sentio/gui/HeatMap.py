@@ -59,15 +59,10 @@ class HeatMap:
         self.color_bar_canvas = color_bar_canvas
 
 
-    def set_color_bar_listeners(self, (vmin_auto, vmin_custom, vmin_text), (vmax_auto, vmax_custom, vmax_text),
-                                refresh_button):
-        self.vmin_auto = vmin_auto
-        self.vmin_custom = vmin_custom
-        self.vmin_text = vmin_text
-        self.vmax_auto = vmax_auto
-        self.vmax_custom = vmax_custom
-        self.vmax_text = vmax_text
-        self.refresh_button = refresh_button
+    def set_color_bar_listeners(self, colorbar_listeners):
+        self.vmin_auto, self.vmin_custom, self.vmin_text, \
+        self.vmax_auto, self.vmax_custom, self.vmax_text, \
+        self.refresh_button = colorbar_listeners
 
         self.refresh_button.Bind(wx.EVT_BUTTON, self.adjust_color_bar)
         self.vmax_auto.Bind(wx.EVT_RADIOBUTTON, self.on_vmax_auto)

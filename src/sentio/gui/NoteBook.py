@@ -23,7 +23,7 @@ class PageOne(wx.Panel):
         #vbox.Fit(self)
 
 
-class PageTwo(wx.Panel):
+class HeatMapLayout(wx.Panel):
 
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
@@ -110,6 +110,12 @@ class PageTwo(wx.Panel):
         vbox.Add(color_logend_box_sizer, 1, wx.EXPAND)
         self.SetSizer(vbox)
         #vbox.Fit(self)
+
+
+    def get_colorbar_listeners(self):
+        return self.vmin_auto_rbutton, self.vmin_custom_rbutton, self.vmin_custom_entry, \
+               self.vmax_auto_rbutton, self.vmax_custom_rbutton, self.vmax_custom_entry, \
+               self.colorbar_refresh_button
 
 
     def on_vmin_custom(self, event):

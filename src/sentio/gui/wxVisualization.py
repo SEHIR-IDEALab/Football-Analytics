@@ -52,7 +52,7 @@ class wxVisualization(wx.Frame):
 
         self.event_annotation_manager = EventAnnotationManager(self.layouts.ax)
 
-        self.govern_passes = None
+        self.pass_manager = None
         self.defined_passes = list()
 
         self.ball_holder = None
@@ -74,8 +74,8 @@ class wxVisualization(wx.Frame):
     def drawAndDisplayPassStats(self, pass_events):
         for pass_event in pass_events:
             self.event_annotation_manager.annotatePassEvent(pass_event)
-            effectiveness = self.govern_passes.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
-        self.govern_passes.passes_defined = pass_events
+            effectiveness = self.pass_manager.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
+        self.pass_manager.passes_defined = pass_events
 
 
     def visualizePositionsFor(self, time, chosen_skip=0):
@@ -95,24 +95,18 @@ class wxVisualization(wx.Frame):
             visual_player = VisualPlayer(self.layouts.ax, player, self.current_time, self.sentio.game_instances)
             self.visual_idToPlayers[player.object_id] = visual_player
 
-        self.govern_passes = DraggablePass(self.layouts.ax, self.visual_idToPlayers, self.layouts.fig)
-        self.govern_passes.set_defined_passes(self.defined_passes)
-        self.govern_passes.set_passDisplayer(self.layouts.pass_info_page.logger)
-        self.govern_passes.set_variables(self.layouts.heatmap_setup_page.heat_map,
+        self.pass_manager = DraggablePass(self.layouts.ax, self.visual_idToPlayers, self.layouts.fig)
+        self.pass_manager.set_defined_passes(self.defined_passes)
+        self.pass_manager.set_passDisplayer(self.layouts.pass_info_page.logger)
+        self.pass_manager.set_variables(self.layouts.heatmap_setup_page.heat_map,
                                          self.layouts.heatmap_setup_page.resolution,
                                         self.layouts.heatmap_setup_page.effectiveness)
-        self.govern_passes.heatMap.set_color_bar(self.layouts.heatmap_setup_page.color_bar,
+        self.pass_manager.heatMap.set_color_bar(self.layouts.heatmap_setup_page.color_bar,
                                                 self.layouts.heatmap_setup_page.colorbar_canvas)
-        self.govern_passes.heatMap.set_color_bar_listeners((self.layouts.heatmap_setup_page.vmin_auto_rbutton,
-                                                           self.layouts.heatmap_setup_page.vmin_custom_rbutton,
-                                                           self.layouts.heatmap_setup_page.vmin_custom_entry),
-                                                          (self.layouts.heatmap_setup_page.vmax_auto_rbutton,
-                                                           self.layouts.heatmap_setup_page.vmax_custom_rbutton,
-                                                           self.layouts.heatmap_setup_page.vmax_custom_entry),
-                                                          self.layouts.heatmap_setup_page.colorbar_refresh_button)
+        self.pass_manager.heatMap.set_color_bar_listeners(self.layouts.heatmap_setup_page.get_colorbar_listeners())
         for visual_player in self.visual_idToPlayers.values():
             visual_player.draggable.setPassLogger(self.layouts.pass_info_page.logger)
-            visual_player.draggable.setDefinedPasses(self.govern_passes.passes_defined)
+            visual_player.draggable.setDefinedPasses(self.pass_manager.passes_defined)
             visual_player.draggable.setVisualPlayers(self.visual_idToPlayers)
 
 
@@ -164,7 +158,7 @@ class wxVisualization(wx.Frame):
                     self.ball_holder.setAsBallHolder()
 
                     self.event_annotation_manager.annotatePassEvent(pass_event)
-                    effectiveness = self.govern_passes.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
+                    effectiveness = self.pass_manager.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
                     self.event_annotation_manager.updatePassEventAnnotations()
 
                     if Parameters.IS_DEBUG_MODE_ON:
@@ -237,10 +231,10 @@ class wxVisualization(wx.Frame):
 
 
     def removeManualPassEventAnnotations(self):
-        if self.govern_passes.manual_pass_event_annotations:
-            for pass_event_annotation in self.govern_passes.manual_pass_event_annotations:
+        if self.pass_manager.manual_pass_event_annotations:
+            for pass_event_annotation in self.pass_manager.manual_pass_event_annotations:
                 pass_event_annotation.remove()
-            del self.govern_passes.manual_pass_event_annotations[:]
+            del self.pass_manager.manual_pass_event_annotations[:]
 
 
     def removeBallHolderAnnotation(self):

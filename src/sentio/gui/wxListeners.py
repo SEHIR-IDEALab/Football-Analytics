@@ -35,7 +35,7 @@ class wxListeners:
             if ".png" in dlg.GetFilename():
                 self.layouts.canvas.print_figure(file_path, dpi=self.layouts.dpi)
             else:
-                SnapShot.save(file_path, self.wx_gui.visual_idToPlayers.values(), self.wx_gui.govern_passes.passes_defined)
+                SnapShot.save(file_path, self.wx_gui.visual_idToPlayers.values(), self.wx_gui.pass_manager.passes_defined)
 
             self.wx_gui.flash_status_message("Saved to %s" % file_path)
 
@@ -134,11 +134,11 @@ class wxListeners:
             #     self.wx_gui.remove_directionSpeedOfObjects()
             for visual_player in self.wx_gui.visual_idToPlayers.values():
                 visual_player.draggable.disconnect()
-            self.wx_gui.govern_passes.connect()
+            self.wx_gui.pass_manager.connect()
         elif q == 1:
             # if self.wx_gui.directions_of_objects:
             #     self.wx_gui.remove_directionSpeedOfObjects()
-            self.wx_gui.govern_passes.disconnect()
+            self.wx_gui.pass_manager.disconnect()
             for visual_player in self.wx_gui.visual_idToPlayers.values():
                 visual_player.draggable.connect()
 
@@ -157,7 +157,7 @@ class wxListeners:
             self.wx_gui.snapShot = False
 
         self.wx_gui.removeManualPassEventAnnotations()
-        self.wx_gui.govern_passes.heatMap.clear()
+        self.wx_gui.pass_manager.heatMap.clear()
 
         self.wx_gui.paused = not self.wx_gui.paused
         while not self.wx_gui.paused:

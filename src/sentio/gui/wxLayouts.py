@@ -7,7 +7,7 @@ from src.sentio.Parameters import FOOTBALL_FIELD_MIN_X, HOME_TEAM_NAME, AWAY_TEA
 from src.sentio.Parameters import FOOTBALL_FIELD_MAX_X
 from src.sentio.Parameters import FOOTBALL_FIELD_MIN_Y
 from src.sentio.Parameters import FOOTBALL_FIELD_MAX_Y
-from src.sentio.gui.NoteBook import PageOne, PageTwo
+from src.sentio.gui.NoteBook import PageOne, HeatMapLayout
 
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
@@ -104,7 +104,7 @@ class wxLayouts:
 
         # create the page windows as children of the notebook
         self.pass_info_page = PageOne(nb)
-        self.heatmap_setup_page = PageTwo(nb)
+        self.heatmap_setup_page = HeatMapLayout(nb)
 
         # add the pages to the notebook with the label to show on the tab
         nb.AddPage(self.pass_info_page, "Info")
