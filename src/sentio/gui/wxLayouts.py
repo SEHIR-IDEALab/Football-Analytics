@@ -40,6 +40,7 @@ class wxLayouts:
         menu_view = wx.Menu()
         self.debug_mode = menu_view.Append(-1, "&Debug Mode", kind=wx.ITEM_CHECK)
         self.show_directions = menu_view.Append(-1, "&Show Directions", kind=wx.ITEM_CHECK)
+        self.voronoi_diagram = menu_view.Append(-1, "&Voronoi Diagram", kind=wx.ITEM_CHECK)
 
         menu_help = wx.Menu()
         self.m_about = menu_help.Append(-1, "&About\tF1", "About the tool")

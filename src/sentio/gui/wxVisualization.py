@@ -5,6 +5,7 @@ import wx
 import matplotlib
 from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.gui.EventAnnotationManager import EventAnnotationManager
+from src.sentio.gui.Voronoi import Voronoi
 
 matplotlib.use('WXAgg')   # The recommended way to use wx with mpl is with the WXAgg backend.
 
@@ -64,7 +65,18 @@ class wxVisualization(wx.Frame):
         game_instance = self.sentio.game_instances.getGameInstance(self.current_time)
         self.setPositions(game_instance.players)
 
+        self.voronoi = Voronoi(self.layouts.ax)
+
         self.draw_figure()
+
+
+    def getPositions(self):
+        import numpy as np
+        q = []
+        for visual_player in self.visual_idToPlayers.values():
+            x, y = visual_player.get_position()
+            q.append(np.array([x,y]))
+        return np.array(q)
 
 
     def draw_figure(self):
@@ -178,6 +190,9 @@ class wxVisualization(wx.Frame):
 
         if Parameters.IS_SHOW_DIRECTIONS_ON:
             self.drawDirectionsWithSpeed()
+
+        if Parameters.IS_VORONOI_DIAGRAM_ON:
+            self.voronoi.update(self.getPositions())
 
 
     def drawDirectionsWithSpeed(self, snapShot=False):

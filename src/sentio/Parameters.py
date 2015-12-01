@@ -46,6 +46,7 @@ GOAL_COEFFICIENT = 1
 # debug mode
 IS_DEBUG_MODE_ON = False
 IS_SHOW_DIRECTIONS_ON = False
+IS_VORONOI_DIAGRAM_ON = False
 
 # radius of pass_source
 PASS_SOURCE_RADIUS = 1.0

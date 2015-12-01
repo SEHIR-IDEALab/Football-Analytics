@@ -56,6 +56,9 @@ class wxListeners:
             if Parameters.IS_SHOW_DIRECTIONS_ON:
                 self.wx_gui.drawDirectionsWithSpeed(snapShot=self.wx_gui.snapShot)
 
+            if Parameters.IS_VORONOI_DIAGRAM_ON:
+                self.wx_gui.voronoi.update(self.wx_gui.getPositions())
+
             self.layouts.current_time_display.SetLabel("Time = %s.%s.%s" %("--", "--", "--"))
             self.layouts.canvas.draw()
             self.wx_gui.flash_status_message("Opened file %s" % file_path)
@@ -83,6 +86,19 @@ class wxListeners:
             self.wx_gui.drawDirectionsWithSpeed(snapShot=self.wx_gui.snapShot)
         else:
             self.wx_gui.clearDirections()
+
+        self.layouts.canvas.draw()
+
+
+    def on_voronoi_diagram(self, e):
+        Parameters.IS_VORONOI_DIAGRAM_ON = not Parameters.IS_VORONOI_DIAGRAM_ON
+        print "voronoi diagram: ", Parameters.IS_VORONOI_DIAGRAM_ON
+
+        if Parameters.IS_VORONOI_DIAGRAM_ON:
+            self.wx_gui.voronoi.update(self.wx_gui.getPositions())
+        else:
+            self.wx_gui.voronoi.remove()
+
         self.layouts.canvas.draw()
 
 
@@ -192,6 +208,7 @@ class wxListeners:
         self.wx_gui.Bind(wx.EVT_MENU, self.on_exit, self.layouts.m_exit)
         self.wx_gui.Bind(wx.EVT_MENU, self.on_debug_mode, self.layouts.debug_mode)
         self.wx_gui.Bind(wx.EVT_MENU, self.on_show_directions, self.layouts.show_directions)
+        self.wx_gui.Bind(wx.EVT_MENU, self.on_voronoi_diagram, self.layouts.voronoi_diagram)
         self.wx_gui.Bind(wx.EVT_MENU, self.on_about, self.layouts.m_about)
 
         self.wx_gui.Bind(wx.EVT_RADIOBOX, self.on_mouse_action, self.layouts.rb)
