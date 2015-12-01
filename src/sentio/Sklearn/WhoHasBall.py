@@ -2,7 +2,7 @@ __author__ = 'aliuzun'
 import csv
 #from profilehooks import profile, timecall
 import math
-from src.sentio.Match import Match
+from src.sentio.object import Match
 from src.sentio.Time import Time
 from sklearn import svm
 import numpy
@@ -14,7 +14,7 @@ class WhoHasBall():
 
     def __init__(self,sentio):
         self.sentio = sentio
-        self.match=Match(sentio)
+        self.match = Match(sentio)
         self.time_int,self.score,self.had_ball=None,None,None
         self.corrFB,self.corrGS,self.corrXFB,self.corrXGS=0,0,0,0
 

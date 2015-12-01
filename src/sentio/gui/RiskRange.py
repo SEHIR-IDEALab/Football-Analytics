@@ -40,7 +40,7 @@ class RiskRange():
         try:
             slope=math.degrees(math.atan((y2-y1)/(x2-x1)))
         except ZeroDivisionError:
-            slope=90
+            slope=100
 
         tmp_angle, s_angle1, s_angle2, t_angle1, t_angle2 = 0,0,0,0,0
         if x2 > x1:

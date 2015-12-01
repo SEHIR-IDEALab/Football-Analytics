@@ -17,7 +17,7 @@ class SurveyAnalyse():
     def Write_to_csv(self):
         aaa=list()
         aaa.extend(["Q #","overal_risk","gain","pass_advantages","goal_chance","effectiveness_score"])
-        out = csv.writer(open("/Users/aliuzun/PycharmProjects/SentioProject/SurveyAnalysis/Po2.csv","w"), delimiter='\t', quoting=csv.QUOTE_NONE)
+        out = csv.writer(open("/Users/aliuzun/PycharmProjects/SentioProject/SurveyAnalysis/Pos2.csv","w"), delimiter='\t', quoting=csv.QUOTE_NONE)
         out.writerow(aaa)
         PosDict={}
         del aaa[:]
@@ -59,7 +59,7 @@ class SurveyAnalyse():
         # sorted_risk,sorted_effectiveness,sorted_gc,sorted_pass_adv=[],[],[],[]
 
         # with open("PossitionsInfo.csv") as file:
-        with open("/Users/aliuzun/PycharmProjects/SentioProject/SurveyAnalysis/Po2.csv") as file:
+        with open("/Users/aliuzun/PycharmProjects/SentioProject/SurveyAnalysis/Pos2.csv") as file:
             file.readline()
             data=csv.reader(file, delimiter="\t")
             for line in data:

@@ -481,18 +481,18 @@ class Pass:
     def effectiveness_withComponents(self, p1, p2,weight_coefficient,risk_ignore):
         # w1, w2, w3, w4 = 1, 1, 1, 1
         w1, w2, w3 = weight_coefficient
-        # w1, w2, w3 = self.weight_coefficient
-        gain = w1 * self.gain(p1, p2)/10.0
-        # print self.passAdvantage(p2,risk_ignore)
+        gain = (w1/max_gain) * self.gain(p1, p2)
         passAdvantage, pa_player = self.passAdvantage(p2,risk_ignore)
-        goalChance = w3 * self.goalChance(p2)/100.0
-        overallRisk = self.overallRisk(p1, p2,risk_ignore)/(12620.0)
-        effectiveness = gain + w2*passAdvantage/2.0 + goalChance
+        goalChance = (w3/max_goalChance) * self.goalChance(p2)
+        overallRisk = self.overallRisk(p1, p2,risk_ignore)
+        effectiveness = gain + (w2/max_passAdvantage)*passAdvantage + goalChance
+
         if not self.isSuccessfulPass(p1, p2):
             if effectiveness < 0:
                 effectiveness *= 10
             else:
                 effectiveness = -effectiveness * 10
+
 
         return (overallRisk, gain, passAdvantage, pa_player, goalChance, effectiveness)
 

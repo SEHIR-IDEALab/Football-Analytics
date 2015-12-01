@@ -14,9 +14,6 @@ class Pass:
 
     def __init__(self):
         self.teams = None
-        # self.weight_coefficient=[489,1, 975, 572]
-
-
 
     @staticmethod
     def display_effectiveness(coordinates, components, logger):
@@ -104,22 +101,12 @@ class Pass:
         x2, y2 = p2.get_position()
         x3, y3 = p3.get_position()
 
-        # print p1.getJerseyNumber(),":",(x1,y1),p3.getJerseyNumber(),":", (x3,y3),p2.getJerseyNumber(),":", (x2,y2),"1"
         if not self.isInRange((x1,y1), (x3,y3), (x2,y2)):
             return risk
+        try: slope = (y2 - y1) / (x2 - x1) # zero devision error gives
+        except (ZeroDivisionError):  slope=100
 
-        slope = (y2 - y1) / (x2 - x1) # zero devision error gives
         a,b,c = slope,-1,( ( slope * (-x1) ) + y1 )
-
-        # #-----
-        # Q1 = math.degrees(math.atan((y2-y1)/(x2-x1))) # Q1 is the angle of p1 - goalkeeper line
-        # angle1 = math.degrees(math.atan((y3-y1)/(x3-x1))) # the angle of p1-p2 line
-        # alpha_p1 = math.radians(math.fabs(Q1-angle1)) # the angle with p1's direction and p1-p2 line
-        #
-        # dx = math.fabs(a * x3 + b * y3 + c) / math.sqrt(math.pow(a, 2) + math.pow(b, 2))
-        #
-        # t1a=math.fabs((dx/average_speed_ball)*math.sin(2*alpha_p1))
-        #-----
 
 
         cond1,cond2 = min(x1,x2) <= x3 <= max(x1,x2) , min(y1,y2) <= y3 <= max(y1,y2)
@@ -180,8 +167,11 @@ class Pass:
         d2 = (0.1 if d2 <= 0.1 else d2)
 
         t1 = d1/average_speed_ball
-        # V2 = d2/t1
-        V2=d2/t1
+        try:
+            # V2 = d2/t1
+            V2=d2/t1
+        except ZeroDivisionError: V2=10.0
+
         d_tmp_t = float("{0:.1f}".format(V2))
         if d_tmp_t < 3.0:
             tt=1.0
@@ -272,27 +262,12 @@ class Pass:
         elif p1.getY() > GOALPOST_MAX_Y: goal_keeper_y = GOALPOST_MAX_Y
         else: goal_keeper_y = p1.getY()
 
-        # goal_keeper_y = GOALPOST_MIN_Y
-        # fgc=[]
 
         goal_keeper = PlayerBase()
         goal_keeper.set_position((goal_keeper_x, goal_keeper_y))
         goal_keeper.setJerseyNumber("goal_keeper")
 
 
-        # for i in range(20):
-
-        # # --------------------
-        # d1 = math.sqrt(math.pow(goal_keeper_x - p1.getX(), 2) + math.pow(goal_keeper_y - p1.getY(), 2))
-        # angle = math.atan2(math.fabs(p1.getY() - goal_keeper_y), math.fabs(p1.getX() - goal_keeper_x)) * 180 / math.pi
-        # angle = math.fabs(90 - angle)
-        # q = self.overallRisk(p1, goal_keeper, goal_keeper=False)
-        # q = (1 if q == 0 else q)
-        #
-        # d1 = (1 if d1 == 0 else d1)
-        # return (GOALPOST_LENGTH / d1) * (min(angle, (180 - angle)) / 90.) * (1. / (1 + q)) * GOAL_COEFFICIENT
-
-        # --------------------
 
         player_list, initilaInfo = self.get_players_in_gcr(p1)
         try:
@@ -317,8 +292,6 @@ class Pass:
         for p2 in player_list:
             p2.set_position(initilaInfo[p2])
 
-            # fgc.append(max(goalChances))
-            # goal_keeper_y = goal_keeper_y + 0.5
 
         return max(goalChances)
     #-----------------
@@ -360,9 +333,12 @@ class Pass:
         x1, y1 = p1.get_position()
         x3, y3 = Gxy
 
-        Q1 = math.degrees(math.atan((y3-y1)/(x3-x1))) # Q1 is the angle of p1 - goalkeeper line
+        try: tmp_slope=(y3-y1)/(x3-x1)
+        except ZeroDivisionError: tmp_slope=100
+
+        Q1 = math.degrees(math.atan(tmp_slope)) # Q1 is the angle of p1 - goalkeeper line
         try: slope = (y3 - y1) / (x3 - x1) # zero devision error gives
-        except ZeroDivisionError: slope = 1000 # might be change
+        except ZeroDivisionError: slope = 100 # might be change
         a,b,c = slope,-1,( ( slope * (-x1) ) + y1 )
 
         for p2 in p2s:
@@ -387,7 +363,10 @@ class Pass:
         x1,y1=p1.get_position()
         x2,y2=p2.get_position()
 
-        m=(y3-y1)/(x3-x1) #slope
+        try: m=(y3-y1)/(x3-x1)
+        except ZeroDivisionError: m=100
+
+        # m=(y3-y1)/(x3-x1) #slope
         a=y1-m*x1 # constant
         tmp_val=m*x2+a
 
@@ -400,8 +379,10 @@ class Pass:
     def getFutureCoordinates(self,p1,p2s,Gxy):
         x1, y1 = p1.get_position()
         x3, y3 = Gxy
+        try: tmp_slope=(y3-y1)/(x3-x1)
+        except ZeroDivisionError: tmp_slope=100
 
-        Q1 = math.degrees(math.atan((y3-y1)/(x3-x1))) # Q1 is the angle of p1 - goalkeeper line
+        Q1 = math.degrees(math.atan(tmp_slope)) # Q1 is the angle of p1 - goalkeeper line
 
         if x1 > x3:
             x1_p,y1_p  = x1 - (average_distance_per_frame)*round(math.cos(math.radians(Q1)),2) ,\
@@ -467,24 +448,23 @@ class Pass:
                FOOTBALL_FIELD_MIN_Y <= p1.getY() <= FOOTBALL_FIELD_MAX_Y
 
 
-    def effectiveness(self, p1, p2):
-        w1, w2, w3, w4 = 1, 1, 1, 1
-        effectiveness = w1 * self.gain(p1, p2) + w3 * self.passAdvantage(p2)[0] + w4 * self.goalChance(p2)
-        if not self.isSuccessfulPass(p1, p2):
-            if effectiveness < 0:
-                return effectiveness*10
-            return -effectiveness*10
-        return effectiveness
+    # def effectiveness(self, p1, p2):
+    #     w1, w2, w3, w4 = 1, 1, 1, 1
+    #     effectiveness = w1 * self.gain(p1, p2) + w3 * self.passAdvantage(p2)[0] + w4 * self.goalChance(p2)
+    #     if not self.isSuccessfulPass(p1, p2):
+    #         if effectiveness < 0:
+    #             return effectiveness*10
+    #         return -effectiveness*10
+    #     return effectiveness
 
 
     def effectiveness_withComponents(self, p1, p2):
-        # w1, w2, w3, w4 = 1, 1, 1, 1
         w1, w2, w3, w4 = weight_coefficient
-        gain = w1 * self.gain(p1, p2)/10.0
+        gain = (w1/max_gain) * self.gain(p1, p2)
         passAdvantage, pa_player = self.passAdvantage(p2)
-        goalChance = w3 * self.goalChance(p2)/100.0
-        overallRisk = self.overallRisk(p1, p2)/(12620.0)
-        effectiveness = gain + w2*passAdvantage/2.0 + goalChance
+        goalChance = (w4/max_goalChance) * self.goalChance(p2)
+        overallRisk = self.overallRisk(p1, p2)
+        effectiveness = gain + (w3/max_passAdvantage)*passAdvantage + goalChance
 
         if not self.isSuccessfulPass(p1, p2):
             if effectiveness < 0:

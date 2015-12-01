@@ -14,7 +14,6 @@ def get_coefficient():
                     speed_data[tmp]=1
                 else:
                     speed_data[tmp] = speed_data.get(tmp)+1
-    # div = sum(speed_data.values())*1.0
 
     dd = speed_data.items()
     dd.sort()

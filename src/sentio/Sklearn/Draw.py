@@ -24,7 +24,7 @@ class Draw():
         elif V >=5:
             t_r=3
 
-        for i in range(0,181,1):
+        for i in range(0,181):
             # if i <=180:
             t_tmp=(t_r/180.0)*(i)
             distance=V*(t-t_tmp)
