@@ -11,8 +11,7 @@ from src.sentio.Parameters import FOOTBALL_FIELD_MAX_Y
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import \
-    FigureCanvasWxAgg as FigCanvas, \
-    NavigationToolbar2WxAgg as NavigationToolbar
+    FigureCanvasWxAgg as FigCanvas
 from src.sentio.gui.notebook.HeatMapNotebook import HeatMapNotebook
 from src.sentio.gui.notebook.LoggerNotebook import LoggerNotebook
 
@@ -76,13 +75,6 @@ class wxLayouts:
         self.ax.set_yticks(numpy.arange(FOOTBALL_FIELD_MIN_Y, FOOTBALL_FIELD_MAX_Y+5, 5))
         self.ax.tick_params(axis="both", labelsize=6)
         self.ax.autoscale(False)
-
-        # self.ax.axis('off')
-
-        # # recompute the ax.dataLim
-        # self.ax.relim()
-        # # update ax.viewLim using the new dataLim
-        # self.ax.autoscale_view()
 
         a,b,c,d, = plt.plot([],[],"bo",[],[],"ro",[],[],"yo",[],[],"ko", markersize=6)
         self.ax.legend([a,b,c,d], [HOME_TEAM_NAME, AWAY_TEAM_NAME, REFEREES_TEAM_NAME, UNKNOWNS_TEAM_NAME],
