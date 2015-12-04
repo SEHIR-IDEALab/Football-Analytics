@@ -7,13 +7,14 @@ from src.sentio.Parameters import FOOTBALL_FIELD_MIN_X, HOME_TEAM_NAME, AWAY_TEA
 from src.sentio.Parameters import FOOTBALL_FIELD_MAX_X
 from src.sentio.Parameters import FOOTBALL_FIELD_MIN_Y
 from src.sentio.Parameters import FOOTBALL_FIELD_MAX_Y
-from src.sentio.gui.NoteBook import PageOne, HeatMapLayout
 
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import \
     FigureCanvasWxAgg as FigCanvas, \
     NavigationToolbar2WxAgg as NavigationToolbar
+from src.sentio.gui.notebook.HeatMapNotebook import HeatMapNotebook
+from src.sentio.gui.notebook.LoggerNotebook import LoggerNotebook
 
 
 __author__ = 'emrullah'
@@ -62,19 +63,26 @@ class wxLayouts:
         self.dpi = 100
         self.fig = Figure((7,5), dpi=self.dpi)
         self.canvas = FigCanvas(self.panel, -1, self.fig)
-        self.toolbar = NavigationToolbar(self.canvas)
+        # self.toolbar = NavigationToolbar(self.canvas)
 
-        self.ax = self.fig.add_axes([0.015, 0.03, 0.980, 0.925])
+        self.ax = self.fig.add_axes([0.025, 0.03, 0.970, 0.925]) # x0, y0, x1, y1
 
         im = plt.imread('gui/source/background.png')
-        self.ax.imshow(im, zorder=0, extent=[FOOTBALL_FIELD_MIN_X-4.5, FOOTBALL_FIELD_MAX_X+4.5,
-                                             FOOTBALL_FIELD_MIN_Y-1.5, FOOTBALL_FIELD_MAX_Y+1.5])
+        self.ax.imshow(im, zorder=0, aspect='auto', extent=[FOOTBALL_FIELD_MIN_X-4.5, FOOTBALL_FIELD_MAX_X+4.5,
+                                                            FOOTBALL_FIELD_MIN_Y-1.5, FOOTBALL_FIELD_MAX_Y+1.5])
         self.ax.grid()
         self.ax.axes.invert_yaxis()
         self.ax.set_xticks(numpy.arange(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X+5, 5))
         self.ax.set_yticks(numpy.arange(FOOTBALL_FIELD_MIN_Y, FOOTBALL_FIELD_MAX_Y+5, 5))
         self.ax.tick_params(axis="both", labelsize=6)
         self.ax.autoscale(False)
+
+        # self.ax.axis('off')
+
+        # # recompute the ax.dataLim
+        # self.ax.relim()
+        # # update ax.viewLim using the new dataLim
+        # self.ax.autoscale_view()
 
         a,b,c,d, = plt.plot([],[],"bo",[],[],"ro",[],[],"yo",[],[],"ko", markersize=6)
         self.ax.legend([a,b,c,d], [HOME_TEAM_NAME, AWAY_TEAM_NAME, REFEREES_TEAM_NAME, UNKNOWNS_TEAM_NAME],
@@ -104,8 +112,8 @@ class wxLayouts:
         nb = wx.Notebook(p)
 
         # create the page windows as children of the notebook
-        self.pass_info_page = PageOne(nb)
-        self.heatmap_setup_page = HeatMapLayout(nb)
+        self.pass_info_page = LoggerNotebook(nb)
+        self.heatmap_setup_page = HeatMapNotebook(nb)
 
         # add the pages to the notebook with the label to show on the tab
         nb.AddPage(self.pass_info_page, "Info")
@@ -130,7 +138,7 @@ class wxLayouts:
         
         self.vbox_canvas = wx.BoxSizer(wx.VERTICAL)
         self.vbox_canvas.Add(self.canvas, 1, wx.EXPAND)
-        self.vbox_canvas.Add(self.toolbar, 0, wx.EXPAND)
+        # self.vbox_canvas.Add(self.toolbar, 0, wx.EXPAND)
 
         self.hbox.Add(self.vbox_canvas, 1, wx.EXPAND)
 
