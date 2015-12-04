@@ -121,6 +121,8 @@ class wxVisualization(wx.Frame):
             visual_player.draggable.setDefinedPasses(self.pass_manager.passes_defined)
             visual_player.draggable.setVisualPlayers(self.visual_idToPlayers)
 
+        self.layouts.team_config_page.update(self.visual_idToPlayers.values())
+
 
     def updatePositions(self, time):
         game_instance = self.sentio.game_instances.getGameInstance(time)
@@ -140,6 +142,8 @@ class wxVisualization(wx.Frame):
                     visual_player = self.visual_idToPlayers[visual_player_id]
                     visual_player.remove()
                     del self.visual_idToPlayers[visual_player_id]
+
+            self.layouts.team_config_page.update(self.visual_idToPlayers.values())
             return True
         else:
             return False

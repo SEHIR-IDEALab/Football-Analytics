@@ -110,8 +110,11 @@ class PlayerBase:
                 game_instance = coord_info.getGameInstance(Time(time.half, temp_milliseconds))
                 if game_instance:
                     idToPlayers = ReaderBase.mapIDToPlayers(game_instance.players)
-                    player = idToPlayers[player_id]
-                    position = player.get_position()
+                    try:
+                        player = idToPlayers[player_id]
+                        position = player.get_position()
+                    except:
+                        position = None
                 else:
                     position = None
             else:
@@ -122,7 +125,7 @@ class PlayerBase:
             if position: ### needed to handle missing positions
                 pre_position = position
 
-        return speed
+        return float("{0:.2f}".format(speed))
 
 
     @staticmethod
@@ -133,8 +136,11 @@ class PlayerBase:
                 game_instance = coord_info.getGameInstance(Time(time.half, temp_milliseconds))
                 if game_instance:
                     idToPlayers = ReaderBase.mapIDToPlayers(game_instance.players)
-                    player = idToPlayers[player_id]
-                    temp_position = player.get_position()
+                    try:
+                        player = idToPlayers[player_id]
+                        temp_position = player.get_position()
+                    except:
+                        temp_position = None
                 else:
                     temp_position = None
             else:
@@ -154,7 +160,7 @@ class PlayerBase:
         rads %= 2*math.pi
         degs = math.degrees(rads)
 
-        return degs
+        return float("{0:.2f}".format(degs))
 
 
     def getObjectColor(self):
