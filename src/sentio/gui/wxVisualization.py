@@ -121,7 +121,7 @@ class wxVisualization(wx.Frame):
             visual_player.draggable.setDefinedPasses(self.pass_manager.passes_defined)
             visual_player.draggable.setVisualPlayers(self.visual_idToPlayers)
 
-        self.layouts.team_config_page.update(self.visual_idToPlayers.values(), snapShot)
+        self.layouts.team_config_page.update(self.visual_idToPlayers, snapShot)
 
 
     def updatePositions(self, time):
@@ -143,7 +143,7 @@ class wxVisualization(wx.Frame):
                     visual_player.remove()
                     del self.visual_idToPlayers[visual_player_id]
 
-            self.layouts.team_config_page.update(self.visual_idToPlayers.values())
+            self.layouts.team_config_page.update(self.visual_idToPlayers)
             return True
         else:
             return False
@@ -201,9 +201,9 @@ class wxVisualization(wx.Frame):
             self.voronoi.update(self.getPositions())
 
 
-    def drawDirectionsWithSpeed(self, snapShot=False):
+    def drawDirectionsWithSpeed(self):
         for visual_player in self.visual_idToPlayers.values():
-            try: visual_player.drawDirectionWithSpeed(snapShot)
+            try: visual_player.drawDirectionWithSpeed()
             except:
                 print "direction with speed is missing for %s" %visual_player.player
                 pass
@@ -264,6 +264,7 @@ class wxVisualization(wx.Frame):
 
 
     def removeAllAnnotations(self):
+        self.clearDirections()
         self.removeBallHolderAnnotation()
         self.removeTrailAnnotations()
         self.risk_range.removeAll()

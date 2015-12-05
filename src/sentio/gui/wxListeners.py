@@ -83,7 +83,7 @@ class wxListeners:
         print "show directions: ", Parameters.IS_SHOW_DIRECTIONS_ON
 
         if Parameters.IS_SHOW_DIRECTIONS_ON:
-            self.wx_gui.drawDirectionsWithSpeed(snapShot=self.wx_gui.snapShot)
+            self.wx_gui.drawDirectionsWithSpeed()
         else:
             self.wx_gui.clearDirections()
 

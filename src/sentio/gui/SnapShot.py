@@ -26,8 +26,8 @@ class SnapShot:
                           js = str(visual_player.player.jersey_number),
                           x = str(visual_player.get_position()[0]),
                           y = str(visual_player.get_position()[1]),
-                          speed = str(visual_player.calculateSpeed()),
-                          direction = str(visual_player.calculateDirection())
+                          speed = str(visual_player.speed),
+                          direction = str(visual_player.direction)
             )
 
         defined_passes = ET.SubElement(root, "Passes")
