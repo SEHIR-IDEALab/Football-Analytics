@@ -70,15 +70,6 @@ class wxVisualization(wx.Frame):
         self.draw_figure()
 
 
-    def getPositions(self):
-        import numpy as np
-        q = []
-        for visual_player in self.visual_idToPlayers.values():
-            x, y = visual_player.get_position()
-            q.append(np.array([x,y]))
-        return np.array(q)
-
-
     def draw_figure(self):
         self.layouts.canvas.draw()
 
@@ -198,7 +189,7 @@ class wxVisualization(wx.Frame):
             self.drawDirectionsWithSpeed()
 
         if Parameters.IS_VORONOI_DIAGRAM_ON:
-            self.voronoi.update(self.getPositions())
+            self.voronoi.update(self.visual_idToPlayers.values())
 
 
     def drawDirectionsWithSpeed(self):

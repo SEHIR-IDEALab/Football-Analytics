@@ -38,6 +38,10 @@ class PlayerBase:
         else: return "unknown"
 
 
+    def isPlayer(self):
+        return self.object_type in [0,1,3,4]
+
+
     def isHomeTeamPlayer(self):
         return self.getTypeName() == "home"
 

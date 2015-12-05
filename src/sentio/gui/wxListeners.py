@@ -57,7 +57,7 @@ class wxListeners:
                 self.wx_gui.drawDirectionsWithSpeed()
 
             if Parameters.IS_VORONOI_DIAGRAM_ON:
-                self.wx_gui.voronoi.update(self.wx_gui.getPositions())
+                self.wx_gui.voronoi.update(self.wx_gui.visual_idToPlayers.values())
 
             self.layouts.current_time_display.SetLabel("Time = %s.%s.%s" %("--", "--", "--"))
             self.layouts.canvas.draw()
@@ -95,7 +95,7 @@ class wxListeners:
         print "voronoi diagram: ", Parameters.IS_VORONOI_DIAGRAM_ON
 
         if Parameters.IS_VORONOI_DIAGRAM_ON:
-            self.wx_gui.voronoi.update(self.wx_gui.getPositions())
+            self.wx_gui.voronoi.update(self.wx_gui.visual_idToPlayers.values())
         else:
             self.wx_gui.voronoi.remove()
 
