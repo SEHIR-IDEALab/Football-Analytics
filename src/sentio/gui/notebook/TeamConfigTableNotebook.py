@@ -4,7 +4,7 @@ __author__ = 'emrullah'
 
 
 import wx
-import wx.grid as gridlib
+import wx.grid
 
 
 
@@ -20,36 +20,50 @@ class TeamConfigTableNotebook(wx.Panel):
         self.grid.SetColLabelValue(1, "speed")
         self.grid.SetColLabelValue(2, "direction")
 
-        self.grid.SetDefaultColSize(60)
+        # self.grid.SetDefaultColSize(60)
         self.grid.SetRowLabelSize(30)
 
-        self.grid.SetColSize(0, 45)
+        self.grid.SetColSize(0, 35)
         self.grid.SetColSize(1, 55)
-        self.grid.SetColSize(2, 65)
+        self.grid.SetColSize(2, 70)
 
         self.grid.EnableDragGridSize(False)
         self.grid.DisableDragColSize()
         self.grid.DisableDragRowSize()
 
         # self.grid.SetCellFont(0, 0, wx.Font(12, wx.ROMAN, wx.ITALIC, wx.NORMAL))
-        # self.grid.SetCellTextColour(1, 1, wx.RED)
-        # self.grid.SetCellBackgroundColour(2, 2, wx.CYAN)
-        #
-        # self.grid.SetReadOnly(3, 3, True)
-        #
         # self.grid.SetCellEditor(5, 0, gridlib.GridCellNumberEditor(1,1000))
-        # self.grid.SetCellValue(5, 0, "123")
         # self.grid.SetCellEditor(6, 0, gridlib.GridCellFloatEditor())
-        # self.grid.SetCellValue(6, 0, "123.34")
         # self.grid.SetCellEditor(7, 0, gridlib.GridCellNumberEditor())
-        #
-        # self.grid.SetCellSize(11, 1, 3, 3)
         # self.grid.SetCellAlignment(11, 1, wx.ALIGN_CENTRE, wx.ALIGN_CENTRE)
-        # self.grid.SetCellValue(11, 1, "This cell is set to span 3 rows and 3 columns")
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.grid, 1, wx.EXPAND)
         self.SetSizer(sizer)
+
+        self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.OnCellChange)
+
+
+    def update(self, visual_players, snapShot=False):
+        self.resizeRows(len(visual_players))
+
+        #- Populate the grid with new data:
+        for i in range(len(visual_players)):
+            visual_player = visual_players[i]
+            
+            if snapShot:
+                visual_player.speed = visual_player.player.speed
+                visual_player.direction = visual_player.player.direction
+            else:
+                visual_player.calculateSpeed()
+                visual_player.calculateDirection()
+
+            self.grid.SetCellValue(i, 0, str(visual_player.player.jersey_number))
+            self.grid.SetCellValue(i, 1, str(visual_player.speed))
+            self.grid.SetCellValue(i, 2, str(visual_player.direction))
+
+            self.grid.SetCellBackgroundColour(i, 0, visual_player.getObjectColor())
+            self.grid.SetReadOnly(i, 0, True)
 
 
     def resizeRows(self, number_of_players):
@@ -64,15 +78,16 @@ class TeamConfigTableNotebook(wx.Panel):
             self.grid.AppendRows(new-current)
 
 
-    def update(self, visual_players):
-        self.resizeRows(len(visual_players))
+    def OnCellChange(self, evt):
+        print "OnCellChange: (%d,%d) %s\n" % (evt.GetRow(), evt.GetCol(), evt.GetPosition())
 
-        #- Populate the grid with new data:
-        for i in range(len(visual_players)):
-            visual_player = visual_players[i]
-            self.grid.SetCellValue(i, 0, str(visual_player.player.jersey_number))
-            self.grid.SetCellValue(i, 1, str(visual_player.calculateSpeed()))
-            self.grid.SetCellValue(i, 2, str(visual_player.calculateDirection()))
+        # Show how to stay in a cell that has bad data.  We can't just
+        # call SetGridCursor here since we are nested inside one so it
+        # won't have any effect.  Instead, set coordinates to move to in
+        # idle time.
+        value = self.grid.GetCellValue(evt.GetRow(), evt.GetCol())
 
-            self.grid.SetCellBackgroundColour(i, 0, visual_player.getObjectColor())
-            self.grid.SetReadOnly(i, 0, True)
+        print value
+
+        if value == 'no good':
+            self.moveTo = evt.GetRow(), evt.GetCol()

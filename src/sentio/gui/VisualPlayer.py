@@ -36,6 +36,9 @@ class VisualPlayer(PlayerBase):
         self.direction_annotation = None
         self.trail_annotation = None
 
+        self.speed = 0.0
+        self.direction = 0.0
+
 
     def startTrail(self):
         x, y = self.draggable.point.get_position()
@@ -72,15 +75,8 @@ class VisualPlayer(PlayerBase):
                                            linewidth=1))
 
 
-    def drawDirectionWithSpeed(self, snapShot=False):
+    def drawDirectionWithSpeed(self):
         self.clearDirection()
-
-        if snapShot:
-            speed = self.player.speed
-            direction = self.player.direction
-        else:
-            speed = self.calculateSpeed()
-            direction = self.calculateDirection()
 
         import math
         def point_pos(x0, y0, d, theta):
@@ -90,7 +86,7 @@ class VisualPlayer(PlayerBase):
 
         x, y = self.draggable.point.get_position()
         self.direction_annotation = self.ax.annotate('',
-                                          xy=point_pos(x, y, speed+SPEED_ADDER, direction),
+                                          xy=point_pos(x, y, self.speed+SPEED_ADDER, self.direction),
                                           xycoords='data',
                                           xytext=(x,y),
                                           textcoords='data',
@@ -130,11 +126,15 @@ class VisualPlayer(PlayerBase):
 
 
     def calculateSpeed(self):
-        return PlayerBase.calculateSpeedFor(self.time, self.game_instances, visual=True, player_id=self.object_id)
+        self.speed = \
+            PlayerBase.calculateSpeedFor(self.time, self.game_instances, visual=True, player_id=self.object_id)
+        return self.speed
 
 
     def calculateDirection(self):
-        return PlayerBase.calculateDirectionFor(self.time, self.game_instances, visual=True, player_id=self.object_id)
+        self.direction = \
+            PlayerBase.calculateDirectionFor(self.time, self.game_instances, visual=True, player_id=self.object_id)
+        return self.direction
 
 
     def getObjectColor(self):

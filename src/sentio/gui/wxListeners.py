@@ -50,11 +50,11 @@ class wxListeners:
             self.wx_gui.remove_visual_players()
 
             players, pass_events = SnapShot.load(file_path)
-            self.wx_gui.setPositions(players)
+            self.wx_gui.setPositions(players, snapShot=self.wx_gui.snapShot)
             self.wx_gui.drawAndDisplayPassStats(pass_events)
 
             if Parameters.IS_SHOW_DIRECTIONS_ON:
-                self.wx_gui.drawDirectionsWithSpeed(snapShot=self.wx_gui.snapShot)
+                self.wx_gui.drawDirectionsWithSpeed()
 
             if Parameters.IS_VORONOI_DIAGRAM_ON:
                 self.wx_gui.voronoi.update(self.wx_gui.getPositions())

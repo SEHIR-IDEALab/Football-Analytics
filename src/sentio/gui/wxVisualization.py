@@ -101,7 +101,7 @@ class wxVisualization(wx.Frame):
             print "missing positions"
 
 
-    def setPositions(self, players):
+    def setPositions(self, players, snapShot=False):
         self.visual_idToPlayers = {}
         for player in players:
             visual_player = VisualPlayer(self.layouts.ax, player, self.current_time, self.sentio.game_instances)
@@ -121,7 +121,7 @@ class wxVisualization(wx.Frame):
             visual_player.draggable.setDefinedPasses(self.pass_manager.passes_defined)
             visual_player.draggable.setVisualPlayers(self.visual_idToPlayers)
 
-        self.layouts.team_config_page.update(self.visual_idToPlayers.values())
+        self.layouts.team_config_page.update(self.visual_idToPlayers.values(), snapShot)
 
 
     def updatePositions(self, time):
@@ -172,6 +172,8 @@ class wxVisualization(wx.Frame):
 
                     self.ball_holder = self.convertPlayerToVisualPlayer(pass_event.pass_target)
                     self.ball_holder.setAsBallHolder()
+
+                    self.pass_manager.passes_defined.append(pass_event)
 
                     self.event_annotation_manager.annotatePassEvent(pass_event)
                     effectiveness = self.pass_manager.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
