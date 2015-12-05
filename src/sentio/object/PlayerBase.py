@@ -153,14 +153,16 @@ class PlayerBase:
 
         x1, y1 = positions[0]
         x2, y2 = positions[1]
-
-        dx = x2 - x1
-        dy = y2 - y1
-        rads = math.atan2(-dy,dx)
-        rads %= 2*math.pi
-        degs = math.degrees(rads)
-
-        return float("{0:.2f}".format(degs))
+        if y2 > y1: sign = 1
+        else: sign = -1
+        try:
+            Q = math.degrees(math.atan((y2-y1)/(x2-x1)))
+        except ZeroDivisionError:
+            if sign > 0: Q = 90.0
+            else: Q = 270.0
+        if Q < 0: Q = Q + 360.0
+        if Q==0.0: Q = 0.0
+        return float("{0:.2f}".format(Q))
 
 
     def getObjectColor(self):
