@@ -107,3 +107,6 @@ SPEED_ADDER = 4
 VISUAL_PLAYER_RADIUS = 12
 # text of jersey number for visual players
 VISUAL_PLAYER_JS_SIZE = 10
+
+# default acceleration value for visual_players
+DEFAULT_ACCELERATION = average_speed_player

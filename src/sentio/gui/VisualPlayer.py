@@ -1,4 +1,4 @@
-from src.sentio.Parameters import VISUAL_PLAYER_JS_SIZE, SPEED_ADDER
+from src.sentio.Parameters import VISUAL_PLAYER_JS_SIZE, SPEED_ADDER, DEFAULT_ACCELERATION
 from src.sentio.gui.DraggablePoint import DraggablePoint
 from src.sentio.object.PlayerBase import PlayerBase
 
@@ -38,6 +38,7 @@ class VisualPlayer(PlayerBase):
 
         self.speed = 0.0
         self.direction = 0.0
+        self.acceleration = DEFAULT_ACCELERATION
 
 
     def startTrail(self):
