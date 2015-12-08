@@ -112,7 +112,14 @@ class wxVisualization(wx.Frame):
             visual_player.draggable.setDefinedPasses(self.pass_manager.passes_defined)
             visual_player.draggable.setVisualPlayers(self.visual_idToPlayers)
 
-        self.layouts.team_config_page.update(self.visual_idToPlayers, snapShot)
+        self.layouts.team_config_page.update(self.filterTeamPlayers(self.visual_idToPlayers), snapShot)
+
+
+    def filterTeamPlayers(self, visual_idToPlayers):
+        teams = ReaderBase.divideIntoVisualTeams(visual_idToPlayers.values())
+        team_players = teams.home_team.team_players
+        team_players.update(teams.away_team.team_players)
+        return team_players
 
 
     def updatePositions(self, time):
@@ -134,7 +141,7 @@ class wxVisualization(wx.Frame):
                     visual_player.remove()
                     del self.visual_idToPlayers[visual_player_id]
 
-            self.layouts.team_config_page.update(self.visual_idToPlayers)
+            self.layouts.team_config_page.update(self.filterTeamPlayers(self.visual_idToPlayers))
             return True
         else:
             return False
@@ -189,7 +196,7 @@ class wxVisualization(wx.Frame):
             self.drawDirectionsWithSpeed()
 
         if Parameters.IS_VORONOI_DIAGRAM_ON:
-            self.voronoi.update(self.visual_idToPlayers.values())
+            self.voronoi.update(self.filterTeamPlayers(self.visual_idToPlayers))
 
 
     def drawDirectionsWithSpeed(self):

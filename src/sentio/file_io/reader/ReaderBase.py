@@ -52,6 +52,22 @@ class ReaderBase:
                      Team("referee", referees), Team("unknown", unknowns))
 
 
+    @staticmethod
+    def divideIntoVisualTeams(players):
+        home_team_players, away_team_players, referees, unknowns = \
+            OrderedDict(), OrderedDict(), OrderedDict(), OrderedDict()
+
+        for visual_player in players:
+            player = visual_player.player
+            if player.isHomeTeamPlayer(): home_team_players[player.object_id] = visual_player
+            elif player.isAwayTeamPlayer(): away_team_players[player.object_id] = visual_player
+            elif player.isReferee(): referees[player.object_id] = visual_player
+            else: unknowns[player.object_id] = visual_player
+
+        return Teams(Team("home", home_team_players), Team("away", away_team_players),
+                     Team("referee", referees), Team("unknown", unknowns))
+
+
     def idToPlayer(self, player_id, teams):
         if player_id is None:
             return None

@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.tri
 from scipy import spatial
 import matplotlib.path
+from shapely.geometry import LineString
 
 
 
@@ -162,7 +163,7 @@ class Voronoi:
         for index, region in enumerate(regions):
             polygon = vertices[region]
             visual_player = visual_players[index]
-            # polygon = self.fill_normalizer(polygon)
+            # polygon = self.normalize_polygon(polygon)
             poly_patch = Polygon(polygon,
                                  alpha=0.4,
                                  color=visual_player.getObjectColor())  # fc and ec
@@ -171,21 +172,77 @@ class Voronoi:
             # voronoi_region = self.ax.fill(*zip(*polygon), alpha=0.4, color=visual_player.getObjectColor())
 
 
-    def fill_normalizer(self, polygon):
-        for index in range(len(polygon)):
-            position = polygon[index]
-            x, y = position
-            if x < FOOTBALL_FIELD_MIN_X:
-                x = FOOTBALL_FIELD_MIN_X
-            elif x > FOOTBALL_FIELD_MAX_X:
-                x = FOOTBALL_FIELD_MAX_X
+    def normalize_polygon(self, polygon):
+        polygon = polygon.tolist()
+        try:
+            for index in range(len(polygon)):
+                position = polygon[index]
+                x, y = position
+                if not (FOOTBALL_FIELD_MIN_X <= x <= FOOTBALL_FIELD_MAX_X and
+                                    FOOTBALL_FIELD_MIN_Y <= y <= FOOTBALL_FIELD_MAX_Y):
 
-            if y < FOOTBALL_FIELD_MIN_Y:
-                y = FOOTBALL_FIELD_MIN_Y
-            elif y > FOOTBALL_FIELD_MAX_Y:
-                y = FOOTBALL_FIELD_MAX_Y
-            polygon[index] = np.array([x,y])
-        return polygon
+                    pre_position = polygon[index-1]
+                    if not FOOTBALL_FIELD_MIN_Y <= y <= FOOTBALL_FIELD_MAX_Y:
+                        if y > FOOTBALL_FIELD_MAX_Y:
+                            y_threshold = FOOTBALL_FIELD_MAX_Y
+                        else:
+                            y_threshold = FOOTBALL_FIELD_MIN_Y
+                        line2 = LineString([(FOOTBALL_FIELD_MIN_X,y_threshold),
+                                            (FOOTBALL_FIELD_MAX_X,y_threshold)])
+                    else:
+                        if x > FOOTBALL_FIELD_MAX_X:
+                            x_threshold = FOOTBALL_FIELD_MAX_X
+                        else:
+                            x_threshold = FOOTBALL_FIELD_MIN_X
+                        line2 = LineString([(x_threshold,FOOTBALL_FIELD_MIN_Y),
+                                            (x_threshold,FOOTBALL_FIELD_MAX_Y)])
+
+                    line1 = LineString([pre_position, position])
+
+                    additional_point1 = line1.intersection(line2)
+                    polygon[index] = [additional_point1.x, additional_point1.y]
+
+
+                    next_position = polygon[index+1]
+                    next_x, next_y = next_position
+                    if not (FOOTBALL_FIELD_MIN_X <= next_x <= FOOTBALL_FIELD_MAX_X and
+                                    FOOTBALL_FIELD_MIN_Y <= next_y <= FOOTBALL_FIELD_MAX_Y):
+                        if not FOOTBALL_FIELD_MIN_Y <= next_y <= FOOTBALL_FIELD_MAX_Y:
+                            if next_y > FOOTBALL_FIELD_MAX_Y:
+                                y_threshold = FOOTBALL_FIELD_MAX_Y
+                            else:
+                                y_threshold = FOOTBALL_FIELD_MIN_Y
+                            line2 = LineString([(FOOTBALL_FIELD_MIN_X,y_threshold),
+                                                (FOOTBALL_FIELD_MAX_X,y_threshold)])
+                        else:
+                            if next_x > FOOTBALL_FIELD_MAX_X:
+                                x_threshold = FOOTBALL_FIELD_MAX_X
+                            else:
+                                x_threshold = FOOTBALL_FIELD_MIN_X
+                            line2 = LineString([(x_threshold,FOOTBALL_FIELD_MIN_Y),
+                                                (x_threshold,FOOTBALL_FIELD_MAX_Y)])
+                        line1 = LineString([polygon[index+2], next_position])
+                        additional_point2 = line1.intersection(line2)
+                        polygon[index+1] = [additional_point2.x, additional_point2.y]
+                    else:
+                        line1 = LineString([next_position, position])
+                        additional_point2 = line1.intersection(line2)
+                        polygon.insert(index+1, [additional_point2.x, additional_point2.y])
+
+
+                # if x < FOOTBALL_FIELD_MIN_X:
+                #     x = FOOTBALL_FIELD_MIN_X
+                # elif x > FOOTBALL_FIELD_MAX_X:
+                #     x = FOOTBALL_FIELD_MAX_X
+                #
+                # if y < FOOTBALL_FIELD_MIN_Y:
+                #     y = FOOTBALL_FIELD_MIN_Y
+                # elif y > FOOTBALL_FIELD_MAX_Y:
+                #     y = FOOTBALL_FIELD_MAX_Y
+                # polygon[index] = np.array([x,y])
+        except:
+            print polygon
+        return np.array(polygon)
 
 
     def remove(self):
@@ -199,9 +256,9 @@ class Voronoi:
             self.voronoi_regions = []
 
 
-    def update(self, visual_players):
+    def update(self, visual_idToPlayers):
         self.remove()
-        self.draw(visual_players)
+        self.draw(visual_idToPlayers.values())
 
 
     def voronoi_finite_polygons_2d(self, vor, radius=None):
