@@ -26,7 +26,7 @@ __author__ = 'emrullah'
 
 class wxVisualization(wx.Frame):
 
-    def __init__(self, sentio):
+    def __init__(self, match):
         display_size = wx.DisplaySize()
         padding = 50
         screen_perc = 3/4.
@@ -34,7 +34,7 @@ class wxVisualization(wx.Frame):
                           pos=(padding, padding),
                           size=(display_size[0]*screen_perc, display_size[1]*screen_perc))
 
-        self.sentio = sentio
+        self.sentio = match.sentio
 
         self.paused = True
         self.snapShot = False
@@ -44,6 +44,7 @@ class wxVisualization(wx.Frame):
 
         self.layouts = wxLayouts(self)
         self.layouts.layout_controls()
+        self.layouts.analytics_page.setMatch(match)
 
         self.listeners.layouts = self.layouts
         self.listeners.activate()

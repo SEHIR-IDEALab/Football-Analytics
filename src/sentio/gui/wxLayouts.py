@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_wxagg import \
     FigureCanvasWxAgg as FigCanvas
+from src.sentio.gui.notebook.AnalyticsNotebook import AnalyticsNotebook
 from src.sentio.gui.notebook.HeatMapNotebook import HeatMapNotebook
 from src.sentio.gui.notebook.LoggerNotebook import LoggerNotebook
 from src.sentio.gui.notebook.TeamConfigTableNotebook import TeamConfigTableNotebook
@@ -108,11 +109,13 @@ class wxLayouts:
         self.pass_info_page = LoggerNotebook(nb)
         self.heatmap_setup_page = HeatMapNotebook(nb)
         self.team_config_page = TeamConfigTableNotebook(nb, self.canvas)
+        self.analytics_page = AnalyticsNotebook(nb)
 
         # add the pages to the notebook with the label to show on the tab
         nb.AddPage(self.pass_info_page, "Log")
-        nb.AddPage(self.heatmap_setup_page, "HeatMap")
+        nb.AddPage(self.heatmap_setup_page, "HM")
         nb.AddPage(self.team_config_page, "Conf")
+        nb.AddPage(self.analytics_page, "Analytics")
 
         # finally, put the notebook in a sizer for the panel to manage
         # the layout

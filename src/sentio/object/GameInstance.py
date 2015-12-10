@@ -25,4 +25,4 @@ class GameInstance:
 
 
     def __str__(self):
-        return "%s" %(self.event)
+        return "%s\n%s\n%s" %(self.time, self.players, self.event)

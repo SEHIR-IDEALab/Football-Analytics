@@ -17,7 +17,7 @@ class TeamConfigTableNotebook(wx.Panel):
 
         self.canvas = canvas
 
-        self.grid = wx.grid.Grid(self)
+        self.grid = wx.grid.Grid(self, size=(225, 200))
         self.grid.CreateGrid(0, 5)
         self.grid.SetColLabelValue(0, "ID")
         self.grid.SetColLabelValue(1, "js")
@@ -29,10 +29,10 @@ class TeamConfigTableNotebook(wx.Panel):
         self.grid.SetRowLabelSize(30)
 
         self.grid.SetColSize(0, 0)
-        self.grid.SetColSize(1, 35)
+        self.grid.SetColSize(1, 25)
         self.grid.SetColSize(2, 55)
         self.grid.SetColSize(3, 70)
-        self.grid.SetColSize(4, 100)
+        self.grid.SetColSize(4, 75)
 
         self.grid.EnableDragGridSize(False)
         self.grid.DisableDragColSize()
@@ -95,8 +95,9 @@ class TeamConfigTableNotebook(wx.Panel):
         globals_box_sizer.Add(self.globals_update_button, 0, wx.ALIGN_CENTER)
 
         sizer.Add(globals_box_sizer, 0, wx.EXPAND)
-        self.SetSizer(sizer)
 
+        self.SetSizer(sizer)
+        sizer.Fit(self)
 
 
         #####################
@@ -104,7 +105,7 @@ class TeamConfigTableNotebook(wx.Panel):
         #####################
 
         self.grid.Bind(wx.grid.EVT_GRID_CELL_CHANGE, self.OnCellChange)
-        
+
         self.global_speed.Bind(wx.EVT_CHECKBOX, self.OnGlobalSpeed)
         self.global_acceleration.Bind(wx.EVT_CHECKBOX, self.OnGlobalAcceleration)
 
@@ -131,18 +132,27 @@ class TeamConfigTableNotebook(wx.Panel):
             self.canvas.draw()
 
 
+    def chanceReadOnlyStatusForAndTo(self, column, status):
+        for i in range(self.grid.GetNumberRows()):
+            self.grid.SetReadOnly(i, column, status)
+
+
     def OnGlobalSpeed(self, event):
         if self.global_speed.GetValue():
             self.speed_entry.Enable()
+            self.chanceReadOnlyStatusForAndTo(2, True)
         else:
             self.speed_entry.Disable()
+            self.chanceReadOnlyStatusForAndTo(2, False)
 
 
     def OnGlobalAcceleration(self, event):
         if self.global_acceleration.GetValue():
             self.acceleration_entry.Enable()
+            self.chanceReadOnlyStatusForAndTo(4, True)
         else:
             self.acceleration_entry.Disable()
+            self.chanceReadOnlyStatusForAndTo(4, False)
 
 
     def update(self, visual_idToPlayers, snapShot=False):

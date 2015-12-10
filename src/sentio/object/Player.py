@@ -137,6 +137,19 @@ class Player(PlayerBase):
         return total
 
 
+    def computeRunningDistanceWithSpeedFilter(self):
+        pre_x, pre_y = None, None
+        total = 0.0
+        for half in self.coord_info:
+            for position in self.coord_info[half].values():
+                if pre_x is not None:
+                    local_rd = math.sqrt(pow(position[0]-pre_x, 2) + pow(position[1]-pre_y, 2))
+                    if local_rd <= SPEED_THRESHOLD:
+                        total += local_rd
+                pre_x, pre_y = position
+        return total
+
+
     def computeRunningDistanceWithGameStopAndSpeedFilter(self):
         pre_x, pre_y = None, None
         total = 0.0
