@@ -3,12 +3,8 @@ from matplotlib.patches import Polygon
 from src.sentio.Parameters import FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X, \
                                   FOOTBALL_FIELD_MAX_Y, FOOTBALL_FIELD_MIN_Y
 
-
-import sys
 import numpy as np
-import matplotlib.tri
 from scipy import spatial
-import matplotlib.path
 
 
 
@@ -18,173 +14,63 @@ __author__ = 'emrullah'
 
 class Voronoi:
 
-    def __init__(self, ax):
+    def __init__(self, ax=None):
         self.ax = ax
 
-        self.voronoi_lines = None
         self.voronoi_regions = []
 
 
-
-    def circumcircle2(self, T):
-        P1,P2,P3=T[:,0], T[:,1], T[:,2]
-        b = P2 - P1
-        c = P3 - P1
-        d=2*(b[:,0]*c[:,1]-b[:,1]*c[:,0])
-        center_x=(c[:,1]*(np.square(b[:,0])+np.square(b[:,1]))- b[:,1]*(np.square(c[:,0])+np.square(c[:,1])))/d + P1[:,0]
-        center_y=(b[:,0]*(np.square(c[:,0])+np.square(c[:,1]))- c[:,0]*(np.square(b[:,0])+np.square(b[:,1])))/d + P1[:,1]
-        return np.array((center_x, center_y)).T
+    @staticmethod
+    def getPositions(visual_players):
+        q = []
+        for visual_player in visual_players:
+            x, y = visual_player.get_position()
+            q.append(np.array([x,y]))
+        return np.array(q)
 
 
-    def check_outside(self, point, bbox):
-        point=np.round(point, 4)
-        return point[0]<bbox[0] or point[0]>bbox[2] or point[1]< bbox[1] or point[1]>bbox[3]
-
-
-    def move_point(self, start, end, bbox):
-        vector=end-start
-        c=self.calc_shift(start, vector, bbox)
-        if c>0 and c<1:
-            start=start+c*vector
-            return start
-
-
-    def calc_shift(self, point, vector, bbox):
-        c=sys.float_info.max
-        for l,m in enumerate(bbox):
-            a=(float(m)-point[l%2])/vector[l%2]
-            if  a>0 and  not self.check_outside(point+a*vector, bbox):
-                if abs(a)<abs(c):
-                    c=a
-        return c if c<sys.float_info.max else None
-
-
-    def voronoi2(self, P, bbox=None):
-        if not isinstance(P, np.ndarray):
-            P=np.array(P)
-        if not bbox:
-            xmin=P[:,0].min()
-            xmax=P[:,0].max()
-            ymin=P[:,1].min()
-            ymax=P[:,1].max()
-            xrange=(xmax-xmin) * 0.3333333
-            yrange=(ymax-ymin) * 0.3333333
-            bbox=(xmin-xrange, ymin-yrange, xmax+xrange, ymax+yrange)
-        bbox=np.round(bbox,4)
-
-        D = matplotlib.tri.Triangulation(P[:,0],P[:,1])
-
-        T = D.triangles
-        n = T.shape[0]
-        C = self.circumcircle2(P[T])
-
-        segments = []
-        for i in range(n):
-            for j in range(3):
-                k = D.neighbors[i][j]
-                if k != -1:
-                    #cut segment to part in bbox
-                    start,end=C[i], C[k]
-                    if self.check_outside(start, bbox):
-                        start=self.move_point(start,end, bbox)
-                        if  start is None:
-                            continue
-                    if self.check_outside(end, bbox):
-                        end=self.move_point(end,start, bbox)
-                        if  end is None:
-                            continue
-                    segments.append( [start, end] )
-                else:
-                    #ignore center outside of bbox
-                    if self.check_outside(C[i], bbox) :
-                        continue
-                    first, second, third=P[T[i,j]], P[T[i,(j+1)%3]], P[T[i,(j+2)%3]]
-                    edge=np.array([first, second])
-                    vector=np.array([[0,1], [-1,0]]).dot(edge[1]-edge[0])
-                    line=lambda p: (p[0]-first[0])*(second[1]-first[1])/(second[0]-first[0])  -p[1] + first[1]
-                    orientation=np.sign(line(third))*np.sign( line(first+vector))
-                    if orientation>0:
-                        vector=-orientation*vector
-                    c=self.calc_shift(C[i], vector, bbox)
-                    if c is not None:
-                        segments.append([C[i],C[i]+c*vector])
-        return segments
-
-
-    def draw(self, visual_players):
-
-        def getPositions(visual_players):
-            q = []
-            for visual_player in visual_players:
-                x, y = visual_player.get_position()
-                q.append(np.array([x,y]))
-            return np.array(q)
-
-        # # print positions
-        # lines=self.voronoi2(getPositions(visual_players), (FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MIN_Y,
-        #                                                    FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MAX_Y))
-        #
-        # # for line in lines:
-        # #     self.ax.fill(*zip(*line), alpha=0.4, color="red")
-        #
-        #
-        # # self.ax.scatter(points[:,0], points[:,1], color="blue")
-        # print lines
-        # print "----------"
-        # for line in lines:
-        #     print line
-        # print "----------"
-        # lines = matplotlib.collections.LineCollection(lines, color='red')
-        # self.ax.add_collection(lines)
-        # # self.ax.axis((-20,120, -20,120))
-        # # self.ax.show()
-        # self.voronoi_lines = lines
-        #
-        # print lines
-
-
-
-
+    def computePolygons(self, players, draw=False):
         # compute Voronoi tesselation
-        vor = spatial.Voronoi(getPositions(visual_players))
+        vor = spatial.Voronoi(Voronoi.getPositions(players))
 
         # plot
-        regions, vertices = self.voronoi_finite_polygons_2d(vor)
-        # print "--"
-        # print regions
-        # print "--"
-        # print vertices
+        regions, vertices = Voronoi.voronoi_finite_polygons_2d(vor)
 
-        # colorize
+        polygons = []
         for index, region in enumerate(regions):
             polygon = vertices[region]
-            visual_player = visual_players[index]
-            print visual_player.player.jersey_number
-            polygon = self.normalize(polygon)
-            poly_patch = Polygon(polygon,
-                                 alpha=0.4,
-                                 color=visual_player.getObjectColor())  # fc and ec
-            self.ax.add_patch(poly_patch)
-            self.voronoi_regions.append(poly_patch)
-            # voronoi_region = self.ax.fill(*zip(*polygon), alpha=0.4, color=visual_player.getObjectColor())
+            polygon = Voronoi.normalize(polygon)
+            polygons.append(polygon)
+
+            if draw:
+                player = players[index]
+                poly_patch = Polygon(polygon,
+                                     alpha=0.4,
+                                     color=player.getObjectColor())  # fc and ec
+                self.ax.add_patch(poly_patch)
+                self.voronoi_regions.append(poly_patch)
+                # voronoi_region = self.ax.fill(*zip(*polygon), alpha=0.4, color=visual_player.getObjectColor())
+
+        return polygons
 
 
-    def isOutlier(self, point):
+    @staticmethod
+    def isOutlier(point):
         x, y = point
         return not (FOOTBALL_FIELD_MIN_X <= x <= FOOTBALL_FIELD_MAX_X and
                 FOOTBALL_FIELD_MIN_Y <= y <= FOOTBALL_FIELD_MAX_Y)
 
 
-    def removeOutliers(self, points):
+    @staticmethod
+    def removeOutliers(points):
         for point in points[:]:  ## [:] is crucial for removing purposes
-            if self.isOutlier(point):
+            if Voronoi.isOutlier(point):
                 points.remove(point)
-                print "--->", point
-        print "removed", points
         return points
 
 
-    def computeIntersectionsWithField(self, polygon):
+    @staticmethod
+    def computeIntersectionsWithField(polygon):
         field_lines = [
             [(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MAX_Y)],
             [(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MAX_X,FOOTBALL_FIELD_MIN_Y)],
@@ -205,7 +91,20 @@ class Voronoi:
         return intersection_lines
 
 
-    def orderByCentroid(self, points):
+    @staticmethod
+    def calculateArea(polygon):
+        from shapely import geometry
+        shapely_poly = geometry.Polygon(polygon)
+        return shapely_poly.area
+
+
+    def calculateTotalAreaOfField(self):
+        return (FOOTBALL_FIELD_MAX_X - FOOTBALL_FIELD_MIN_X) * \
+               (FOOTBALL_FIELD_MAX_Y - FOOTBALL_FIELD_MIN_Y)
+
+
+    @staticmethod
+    def orderByCentroid(points):
         # compute centroid
         cent=(sum([p[0] for p in points])/len(points),sum([p[1] for p in points])/len(points))
         # sort by polar angle
@@ -213,34 +112,32 @@ class Voronoi:
         return points
 
 
-    def normalize(self, polygon):
+    @staticmethod
+    def normalize(polygon):
         polygon = polygon.tolist()
 
-        intersection_points = self.computeIntersectionsWithField(polygon)
-        polygon = self.removeOutliers(polygon)
+        intersection_points = Voronoi.computeIntersectionsWithField(polygon)
+        polygon = Voronoi.removeOutliers(polygon)
         polygon.extend(intersection_points)
-        polygon = self.orderByCentroid(polygon)
+        polygon = Voronoi.orderByCentroid(polygon)
 
         return np.array(polygon)
 
 
     def remove(self):
-        if self.voronoi_lines:
-            self.voronoi_lines.remove()
-            self.voronoi_lines = None
-
         if self.voronoi_regions:
             for voronoi_region in self.voronoi_regions:
                 voronoi_region.remove()
             self.voronoi_regions = []
 
 
-    def update(self, visual_idToPlayers):
+    def update(self, visual_idToPlayers, draw=True):
         self.remove()
-        self.draw(visual_idToPlayers.values())
+        self.computePolygons(visual_idToPlayers.values(), draw)
 
 
-    def voronoi_finite_polygons_2d(self, vor, radius=None):
+    @staticmethod
+    def voronoi_finite_polygons_2d(vor, radius=None):
         """
         Reconstruct infinite voronoi regions in a 2D diagram to finite
         regions.

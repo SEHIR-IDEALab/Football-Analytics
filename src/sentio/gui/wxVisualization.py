@@ -4,6 +4,7 @@
 import wx
 import matplotlib
 from src.sentio.file_io.reader.ReaderBase import ReaderBase
+from src.sentio.gui.DominantRegion import DominantRegion
 from src.sentio.gui.EventAnnotationManager import EventAnnotationManager
 from src.sentio.gui.Voronoi import Voronoi
 
@@ -67,6 +68,7 @@ class wxVisualization(wx.Frame):
         self.setPositions(game_instance.players)
 
         self.voronoi = Voronoi(self.layouts.ax)
+        # self.voronoi = DominantRegion(self.layouts.ax)
 
         self.draw_figure()
 

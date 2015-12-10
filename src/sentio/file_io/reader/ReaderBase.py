@@ -79,6 +79,23 @@ class ReaderBase:
 
 
     @staticmethod
+    def idPlayersToTeamPlayers(idPlayers):
+        home_team_players, away_team_players, referees, unknowns = \
+            OrderedDict(), OrderedDict(), OrderedDict(), OrderedDict()
+
+        for id in idPlayers:
+            player = idPlayers[id]
+            if player.isHomeTeamPlayer(): home_team_players[player.jersey_number] = player
+            elif player.isAwayTeamPlayer(): away_team_players[player.jersey_number] = player
+            elif player.isReferee(): referees[player.jersey_number] = player
+            else: unknowns[player.jersey_number] = player
+
+        return Teams(Team("home", home_team_players), Team("away", away_team_players),
+                     Team("referee", referees), Team("unknown", unknowns))
+
+
+
+    @staticmethod
     def getPlayerIn(p_player, teams):
         own_team = None
         if p_player.isHomeTeamPlayer(): own_team = teams.home_team

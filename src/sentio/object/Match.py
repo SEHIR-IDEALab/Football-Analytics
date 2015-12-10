@@ -2,6 +2,7 @@ import wx
 from src.sentio import Parameters
 from src.sentio.file_io.reader import tree
 from src.sentio.file_io.reader.ReaderBase import ReaderBase
+from src.sentio.gui.Voronoi import Voronoi
 from src.sentio.gui.wxVisualization import wxVisualization
 from src.sentio.object.Player import Player
 from src.sentio.object.Team import Team
@@ -33,6 +34,33 @@ class Match(object):
     def getUnknownObjects(self):
         return self.teams.unknowns
 
+
+    def computeDominantRegions(self):
+        game_stop_time_intervals = self.getGameStopTimeIntervals()
+
+        voronoi = Voronoi()
+        q = {}
+        for game_instance in self.sentio.game_instances.getAllInstances():
+            try:
+                polygons = voronoi.computePolygons(game_instance.players)
+                for index, player in enumerate(game_instance.players):
+                    area_of_polygon = Voronoi.calculateArea(polygons[index])
+                    if player.object_id in q:
+                        temp_player = q[player.object_id]
+                        temp_player.dominant_region += area_of_polygon
+                        temp_player.total_number_of_instances += 1
+                    else:
+                        q[player.object_id] = Player(game_instance.time, player.raw_data)
+                        q[player.object_id].set_gameStopTimeInterval(game_stop_time_intervals)
+                        q[player.object_id].dominant_region = area_of_polygon
+                        q[player.object_id].total_number_of_instances = 1
+                        q[player.object_id].total_area_for_dominant_regions = voronoi.calculateTotalAreaOfField()
+            except:
+                print "game instance is missing", game_instance
+
+        self.teams = ReaderBase.idPlayersToTeamPlayers(q)
+        return self.teams
+                        
 
     def buildMatchObjects(self):
         game_stop_time_intervals = self.getGameStopTimeIntervals()

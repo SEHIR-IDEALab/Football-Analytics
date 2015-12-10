@@ -21,6 +21,18 @@ class Player(PlayerBase):
         self.ball_pass = 0
         self.ball_ownership_time = 0
 
+        self.dominant_region = 0
+        self.total_area_for_dominant_regions = 0
+        self.total_number_of_instances = 0
+
+
+    def calculateAverageDRPerInstance(self):
+        return self.dominant_region / float(self.total_number_of_instances)
+
+
+    def calculateDRPercentageInTotal(self):
+        return self.calculateAverageDRPerInstance() / float(self.total_area_for_dominant_regions)
+
 
     def printStats(self):
         return "ball_steal: %s\nball_lose: %s\nball_pass: %s\nball_ownership_time: %s" \
