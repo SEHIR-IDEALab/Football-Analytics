@@ -1,3 +1,4 @@
+import math
 from matplotlib.patches import Polygon
 from src.sentio.Parameters import FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X, \
                                   FOOTBALL_FIELD_MAX_Y, FOOTBALL_FIELD_MIN_Y
@@ -8,8 +9,6 @@ import numpy as np
 import matplotlib.tri
 from scipy import spatial
 import matplotlib.path
-from shapely.geometry import LineString
-
 
 
 
@@ -74,6 +73,7 @@ class Voronoi:
         bbox=np.round(bbox,4)
 
         D = matplotlib.tri.Triangulation(P[:,0],P[:,1])
+
         T = D.triangles
         n = T.shape[0]
         C = self.circumcircle2(P[T])
@@ -120,18 +120,9 @@ class Voronoi:
                 q.append(np.array([x,y]))
             return np.array(q)
 
-        # def getPositions(visual_players):
-        #     q = []
-        #     for visual_player in visual_players:
-        #         if visual_player.player.isPlayer():
-        #             x, y = visual_player.get_position()
-        #             q.append(np.array([x,y]))
-        #     return np.array(q)
-
-
         # # print positions
-        # lines=self.voronoi2(positions, (FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MIN_Y,
-        #                              FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MAX_Y))
+        # lines=self.voronoi2(getPositions(visual_players), (FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MIN_Y,
+        #                                                    FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MAX_Y))
         #
         # # for line in lines:
         # #     self.ax.fill(*zip(*line), alpha=0.4, color="red")
@@ -139,12 +130,17 @@ class Voronoi:
         #
         # # self.ax.scatter(points[:,0], points[:,1], color="blue")
         # print lines
+        # print "----------"
+        # for line in lines:
+        #     print line
+        # print "----------"
         # lines = matplotlib.collections.LineCollection(lines, color='red')
         # self.ax.add_collection(lines)
         # # self.ax.axis((-20,120, -20,120))
         # # self.ax.show()
         # self.voronoi_lines = lines
-
+        #
+        # print lines
 
 
 
@@ -163,7 +159,8 @@ class Voronoi:
         for index, region in enumerate(regions):
             polygon = vertices[region]
             visual_player = visual_players[index]
-            # polygon = self.normalize_polygon(polygon)
+            print visual_player.player.jersey_number
+            polygon = self.normalize(polygon)
             poly_patch = Polygon(polygon,
                                  alpha=0.4,
                                  color=visual_player.getObjectColor())  # fc and ec
@@ -172,76 +169,58 @@ class Voronoi:
             # voronoi_region = self.ax.fill(*zip(*polygon), alpha=0.4, color=visual_player.getObjectColor())
 
 
-    def normalize_polygon(self, polygon):
+    def isOutlier(self, point):
+        x, y = point
+        return not (FOOTBALL_FIELD_MIN_X <= x <= FOOTBALL_FIELD_MAX_X and
+                FOOTBALL_FIELD_MIN_Y <= y <= FOOTBALL_FIELD_MAX_Y)
+
+
+    def removeOutliers(self, points):
+        for point in points[:]:  ## [:] is crucial for removing purposes
+            if self.isOutlier(point):
+                points.remove(point)
+                print "--->", point
+        print "removed", points
+        return points
+
+
+    def computeIntersectionsWithField(self, polygon):
+        field_lines = [
+            [(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MAX_Y)],
+            [(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MAX_X,FOOTBALL_FIELD_MIN_Y)],
+            [(FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MAX_Y),(FOOTBALL_FIELD_MAX_X,FOOTBALL_FIELD_MIN_Y)],
+            [(FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MAX_Y),(FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MAX_Y)]
+        ]
+
+        from shapely import geometry
+        shapely_poly = geometry.Polygon(polygon)
+
+        intersection_lines = []
+        for field_line in field_lines:
+            shapely_line = geometry.LineString(field_line)
+            intersection_line = shapely_poly.intersection(shapely_line)
+            if intersection_line:
+                intersection_line = list(intersection_line.coords)
+                intersection_lines.extend(intersection_line)
+        return intersection_lines
+
+
+    def orderByCentroid(self, points):
+        # compute centroid
+        cent=(sum([p[0] for p in points])/len(points),sum([p[1] for p in points])/len(points))
+        # sort by polar angle
+        points.sort(key=lambda p: math.atan2(p[1]-cent[1],p[0]-cent[0]))
+        return points
+
+
+    def normalize(self, polygon):
         polygon = polygon.tolist()
-        try:
-            for index in range(len(polygon)):
-                position = polygon[index]
-                x, y = position
-                if not (FOOTBALL_FIELD_MIN_X <= x <= FOOTBALL_FIELD_MAX_X and
-                                    FOOTBALL_FIELD_MIN_Y <= y <= FOOTBALL_FIELD_MAX_Y):
 
-                    pre_position = polygon[index-1]
-                    if not FOOTBALL_FIELD_MIN_Y <= y <= FOOTBALL_FIELD_MAX_Y:
-                        if y > FOOTBALL_FIELD_MAX_Y:
-                            y_threshold = FOOTBALL_FIELD_MAX_Y
-                        else:
-                            y_threshold = FOOTBALL_FIELD_MIN_Y
-                        line2 = LineString([(FOOTBALL_FIELD_MIN_X,y_threshold),
-                                            (FOOTBALL_FIELD_MAX_X,y_threshold)])
-                    else:
-                        if x > FOOTBALL_FIELD_MAX_X:
-                            x_threshold = FOOTBALL_FIELD_MAX_X
-                        else:
-                            x_threshold = FOOTBALL_FIELD_MIN_X
-                        line2 = LineString([(x_threshold,FOOTBALL_FIELD_MIN_Y),
-                                            (x_threshold,FOOTBALL_FIELD_MAX_Y)])
+        intersection_points = self.computeIntersectionsWithField(polygon)
+        polygon = self.removeOutliers(polygon)
+        polygon.extend(intersection_points)
+        polygon = self.orderByCentroid(polygon)
 
-                    line1 = LineString([pre_position, position])
-
-                    additional_point1 = line1.intersection(line2)
-                    polygon[index] = [additional_point1.x, additional_point1.y]
-
-
-                    next_position = polygon[index+1]
-                    next_x, next_y = next_position
-                    if not (FOOTBALL_FIELD_MIN_X <= next_x <= FOOTBALL_FIELD_MAX_X and
-                                    FOOTBALL_FIELD_MIN_Y <= next_y <= FOOTBALL_FIELD_MAX_Y):
-                        if not FOOTBALL_FIELD_MIN_Y <= next_y <= FOOTBALL_FIELD_MAX_Y:
-                            if next_y > FOOTBALL_FIELD_MAX_Y:
-                                y_threshold = FOOTBALL_FIELD_MAX_Y
-                            else:
-                                y_threshold = FOOTBALL_FIELD_MIN_Y
-                            line2 = LineString([(FOOTBALL_FIELD_MIN_X,y_threshold),
-                                                (FOOTBALL_FIELD_MAX_X,y_threshold)])
-                        else:
-                            if next_x > FOOTBALL_FIELD_MAX_X:
-                                x_threshold = FOOTBALL_FIELD_MAX_X
-                            else:
-                                x_threshold = FOOTBALL_FIELD_MIN_X
-                            line2 = LineString([(x_threshold,FOOTBALL_FIELD_MIN_Y),
-                                                (x_threshold,FOOTBALL_FIELD_MAX_Y)])
-                        line1 = LineString([polygon[index+2], next_position])
-                        additional_point2 = line1.intersection(line2)
-                        polygon[index+1] = [additional_point2.x, additional_point2.y]
-                    else:
-                        line1 = LineString([next_position, position])
-                        additional_point2 = line1.intersection(line2)
-                        polygon.insert(index+1, [additional_point2.x, additional_point2.y])
-
-
-                # if x < FOOTBALL_FIELD_MIN_X:
-                #     x = FOOTBALL_FIELD_MIN_X
-                # elif x > FOOTBALL_FIELD_MAX_X:
-                #     x = FOOTBALL_FIELD_MAX_X
-                #
-                # if y < FOOTBALL_FIELD_MIN_Y:
-                #     y = FOOTBALL_FIELD_MIN_Y
-                # elif y > FOOTBALL_FIELD_MAX_Y:
-                #     y = FOOTBALL_FIELD_MAX_Y
-                # polygon[index] = np.array([x,y])
-        except:
-            print polygon
         return np.array(polygon)
 
 
