@@ -35,12 +35,18 @@ class Match(object):
         return self.teams.unknowns
 
 
-    def computeDominantRegions(self):
+    def computeDominantRegions(self, interval_min=0, interval_max=90):
         game_stop_time_intervals = self.getGameStopTimeIntervals()
 
         voronoi = Voronoi()
         q = {}
-        for game_instance in self.sentio.game_instances.getAllInstances():
+
+        if interval_min != 0 or interval_max != 90:
+            game_instances = self.sentio.game_instances.getInstancesByInterval(interval_min, interval_max)
+        else:
+            game_instances = self.sentio.game_instances.getAllInstances()
+
+        for game_instance in game_instances:
             try:
                 polygons = voronoi.computePolygons(game_instance.players)
                 for index, player in enumerate(game_instance.players):
@@ -62,10 +68,16 @@ class Match(object):
         return self.teams
                         
 
-    def buildMatchObjects(self):
+    def buildMatchObjects(self, interval_min=0, interval_max=90):
         game_stop_time_intervals = self.getGameStopTimeIntervals()
         q = {}, {}, {}, {}  ## home_team, away_team, referees, unknowns
-        for game_instance in self.sentio.game_instances.getAllInstances():
+
+        if interval_min != 0 or interval_max != 90:
+            game_instances = self.sentio.game_instances.getInstancesByInterval(interval_min, interval_max)
+        else:
+            game_instances = self.sentio.game_instances.getAllInstances()
+
+        for game_instance in game_instances:
             try:
                 teams = ReaderBase.divideIntoTeams(game_instance.players)
                 for team_index, team in enumerate(teams.getTeams()):
@@ -88,9 +100,15 @@ class Match(object):
         )
 
 
-    def computeEventStats(self):
+    def computeEventStats(self, interval_min=0, interval_max=90):
         pre_game_instance = None
-        for game_instance in self.sentio.game_instances.getAllInstances():
+
+        if interval_min != 0 or interval_max != 90:
+            game_instances = self.sentio.game_instances.getInstancesByInterval(interval_min, interval_max)
+        else:
+            game_instances = self.sentio.game_instances.getAllInstances()
+
+        for game_instance in game_instances:
             try:
                 if game_instance.event and pre_game_instance:
                     event = game_instance.event

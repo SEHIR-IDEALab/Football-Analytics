@@ -15,13 +15,16 @@ class BallOwnershipAnalysisNotebook(wx.Panel):
         self.canvas = canvas
         self.ax = ax
 
+        time_interval_box = wx.StaticBox(self, wx.ID_ANY, "Time Interval", style=wx.ALIGN_CENTER)
+        self.interval_min = wx.TextCtrl(self, -1, "0", size=(50,-1))
+        interval_text = wx.StaticText(self, label=" &&& ")
+        self.interval_max = wx.TextCtrl(self, -1, "90", size=(50,-1))
 
         self.build_dataset_button = wx.Button(self, -1, "BUILD DATASET")
 
         team_choice_text = wx.StaticText(self, label="Team Choice")
         team_choices = ["All Teams", "Home Team", "Away Team"]
         self.team_choice = wx.ComboBox(self, size=(80,-1), choices=team_choices, style=wx.CB_READONLY)
-
 
         self.run_button = wx.Button(self, -1, "RUN")
 
@@ -32,9 +35,18 @@ class BallOwnershipAnalysisNotebook(wx.Panel):
         #########################
 
         vbox = wx.BoxSizer(wx.VERTICAL)
+
+        time_interval_box_sizer = wx.StaticBoxSizer(time_interval_box, wx.HORIZONTAL)
+        time_interval_box_sizer.Add(self.interval_min, 1, wx.EXPAND)
+        time_interval_box_sizer.Add(interval_text, 0, wx.EXPAND)
+        time_interval_box_sizer.Add(self.interval_max, 1, wx.EXPAND)
+
+        vbox.Add(time_interval_box_sizer, 1, wx.EXPAND|wx.ALIGN_CENTER)
         vbox.Add(self.build_dataset_button, 1, wx.EXPAND)
+
         vbox.Add(team_choice_text, 0, wx.EXPAND)
         vbox.Add(self.team_choice, 0, wx.EXPAND)
+
         vbox.Add(self.run_button, 1, wx.EXPAND)
 
         self.SetSizer(vbox)
@@ -54,8 +66,8 @@ class BallOwnershipAnalysisNotebook(wx.Panel):
 
 
     def OnBuild(self, event):
-        self.match.buildMatchObjects()
-        self.match.computeEventStats()
+        self.match.buildMatchObjects(int(self.interval_min.GetValue()), int(self.interval_max.GetValue()))
+        self.match.computeEventStats(int(self.interval_min.GetValue()), int(self.interval_max.GetValue()))
         print "data is built"
 
 

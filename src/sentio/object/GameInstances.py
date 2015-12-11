@@ -34,6 +34,10 @@ class GameInstances:
             return None
 
 
+    def getInstancesByInterval(self, interval_min, interval_max):
+        return self.getAllInstances()[5*60*interval_min:5*60*interval_max]
+
+
     def getAllInstances(self):
         q = []
         for half in self.game_instances:

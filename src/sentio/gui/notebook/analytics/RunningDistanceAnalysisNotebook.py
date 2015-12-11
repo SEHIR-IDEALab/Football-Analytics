@@ -15,6 +15,10 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
         self.canvas = canvas
         self.ax = ax
 
+        time_interval_box = wx.StaticBox(self, wx.ID_ANY, "Time Interval", style=wx.ALIGN_CENTER)
+        self.interval_min = wx.TextCtrl(self, -1, "0", size=(50,-1))
+        interval_text = wx.StaticText(self, label=" &&& ")
+        self.interval_max = wx.TextCtrl(self, -1, "90", size=(50,-1))
 
         self.build_dataset_button = wx.Button(self, -1, "BUILD DATASET", size=(10,10))
 
@@ -35,6 +39,13 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
         #########################
 
         vbox = wx.BoxSizer(wx.VERTICAL)
+
+        time_interval_box_sizer = wx.StaticBoxSizer(time_interval_box, wx.HORIZONTAL)
+        time_interval_box_sizer.Add(self.interval_min, 1, wx.EXPAND)
+        time_interval_box_sizer.Add(interval_text, 0, wx.EXPAND)
+        time_interval_box_sizer.Add(self.interval_max, 1, wx.EXPAND)
+
+        vbox.Add(time_interval_box_sizer, 0, wx.EXPAND)
         vbox.Add(self.build_dataset_button, 1, wx.EXPAND)
 
         vbox.Add(team_choice_text, 0, wx.EXPAND)
@@ -64,7 +75,7 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
 
 
     def OnBuild(self, event):
-        self.match.buildMatchObjects()
+        self.match.buildMatchObjects(int(self.interval_min.GetValue()), int(self.interval_max.GetValue()))
         print "data is built"
 
 
@@ -83,24 +94,21 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
 
     def OnCompute(self, event):
         results = []
-        for team in [self.match.getHomeTeam(), self.match.getAwayTeam()]:
-            # if not results == "":
-            #     results += "\n\n"
+        for team in self.getChosenTeams():
             temp_results = []
             temp_results.append((team.team_name, "Running Distance"))
             for player in team.getTeamPlayers():
+
+                ## filtering
                 if self.game_stop_filter.GetValue() and self.speed_filter.GetValue():
-                    # print "with game_stop and speed filter: ", team_player.computeRunningDistanceWithGameStopAndSpeedFilter()
                     result = player.computeRunningDistanceWithGameStopAndSpeedFilter()
                 elif self.game_stop_filter.GetValue():
-                    # print "with game_stop filter: ", team_player.computeRunningDistanceWithGameStopFilter()
                     result = player.computeRunningDistanceWithGameStopFilter()
                 elif self.speed_filter.GetValue():
-                    # print "with speed filter: ", team_player.computeRunningDistanceWithSpeedFilter()
                     result = player.computeRunningDistanceWithSpeedFilter()
                 else:
-                    # print "without filter: ", team_player.computeRunningDistance()
                     result = player.computeRunningDistance()
+
                 temp_results.append((player.jersey_number, result))
             results.append(temp_results)
         results = self.formatInfoToDisplay(results)
@@ -110,12 +118,19 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
     def formatInfoToDisplay(self, results):
         print results
         q = ""
-        for (home_js, home_result), (away_js, away_result) in itertools.izip(results[0], results[1]):
-            try:
-                q += "%s %s | %s %s\n" %(("%.2f"%home_result).ljust(30), str(home_js).center(10),
-                                         str(away_js).center(10), ("%.2f"%away_result).rjust(30))
-            except:
-                q += "%s %s | %s %s\n" %(str(home_result).ljust(30), str(home_js).center(10),
-                                         str(away_js).center(10), str(away_result).rjust(30))
+        if self.team_choice.GetValue() == "All Teams":
+            for (home_js, home_result), (away_js, away_result) in itertools.izip(results[0], results[1]):
+                try:
+                    q += "%s %s | %s %s\n" %(("%.2f"%home_result).ljust(30), str(home_js).center(10),
+                                             str(away_js).center(10), ("%.2f"%away_result).rjust(30))
+                except:
+                    q += "%s %s | %s %s\n" %(str(home_result).ljust(30), str(home_js).center(10),
+                                             str(away_js).center(10), str(away_result).rjust(30))
+        else:
+            for js, result, in results[0]:
+                try:
+                    q += "%s %s\n" %(str(js).center(10), str("%.2f"%result).rjust(30))
+                except:
+                    q += "%s %s\n" %(str(js).center(10), str(result).rjust(30))
         return q
 

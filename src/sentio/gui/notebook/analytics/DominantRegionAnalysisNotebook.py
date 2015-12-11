@@ -13,6 +13,11 @@ class DominantRegionAnalysisNotebook(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
 
+        time_interval_box = wx.StaticBox(self, wx.ID_ANY, "Time Interval", style=wx.ALIGN_CENTER)
+        self.interval_min = wx.TextCtrl(self, -1, "0", size=(50,-1))
+        interval_text = wx.StaticText(self, label=" &&& ")
+        self.interval_max = wx.TextCtrl(self, -1, "90", size=(50,-1))
+
         self.build_dataset_button = wx.Button(self, -1, "BUILD DATASET", size=(10,10))
 
         team_choice_text = wx.StaticText(self, label="Team Choice")
@@ -36,6 +41,13 @@ class DominantRegionAnalysisNotebook(wx.Panel):
         #########################
 
         vbox = wx.BoxSizer(wx.VERTICAL)
+
+        time_interval_box_sizer = wx.StaticBoxSizer(time_interval_box, wx.HORIZONTAL)
+        time_interval_box_sizer.Add(self.interval_min, 1, wx.EXPAND)
+        time_interval_box_sizer.Add(interval_text, 0, wx.EXPAND)
+        time_interval_box_sizer.Add(self.interval_max, 1, wx.EXPAND)
+
+        vbox.Add(time_interval_box_sizer, 1, wx.EXPAND|wx.ALIGN_CENTER)
         vbox.Add(self.build_dataset_button, 1, wx.EXPAND)
 
         vbox.Add(team_choice_text, 0, wx.EXPAND)
@@ -66,7 +78,7 @@ class DominantRegionAnalysisNotebook(wx.Panel):
 
 
     def OnBuild(self, event):
-        self.match.computeDominantRegions()
+        self.match.computeDominantRegions(int(self.interval_min.GetValue()), int(self.interval_max.GetValue()))
         print "data is built"
 
 
