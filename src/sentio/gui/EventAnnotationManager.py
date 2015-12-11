@@ -31,6 +31,25 @@ class EventAnnotationManager:
             self.pass_event_annotations = temp_pass_event_annotations
 
 
+    @staticmethod
+    def annotateAnalysisResults(canvas, ax, results):
+        result_annotation = ax.annotate(results,
+                                        xy=(52.5,32.5),
+                                        xycoords='data',
+                                        va="center",
+                                        ha="center",
+                                        xytext=(0, 0),
+                                        textcoords='offset points',
+                                        size=13,
+                                        bbox=dict(
+                                            boxstyle="round",
+                                            fc=(1.0, 0.7, 0.7),
+                                            ec=(1., .5, .5),
+                                            alpha=0.5))
+        canvas.draw()
+        return result_annotation
+
+
     def annotateEventTitle(self, current_event):
         self.event_title_annotation = self.ax.annotate(current_event.event_name,
                                                        xy=(52.5,32.5),

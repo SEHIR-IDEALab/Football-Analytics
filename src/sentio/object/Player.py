@@ -39,6 +39,10 @@ class Player(PlayerBase):
                 %(self.ball_steal, self.ball_lose, self.ball_pass, Time.milliseconds_to_time(self.ball_ownership_time))
 
 
+    def getStats(self):
+        return (self.ball_steal, self.ball_lose, self.ball_pass, Time.milliseconds_to_time(self.ball_ownership_time))
+
+
     def appendNewCoordInfo(self, time, coord_info):
         self.coord_info[time.half][time.milliseconds] = coord_info
 

@@ -1,7 +1,10 @@
-from analytics.BestShootPositionAnalysisNotebook import BestShootPositionAnalysisNotebook
+from wx.lib.agw import aui
+from analytics.OptimalShootingPointPredictionNotebook import OptimalShootingPointPredictionNotebook
 from analytics.BallOwnershipAnalysisNotebook import BallOwnershipAnalysisNotebook
 from analytics.RunningDistanceAnalysisNotebook import RunningDistanceAnalysisNotebook
+from src.sentio.gui.notebook.analytics.BallOwnershipPredictionNotebook import BallOwnershipPredictionNotebook
 from src.sentio.gui.notebook.analytics.DominantRegionAnalysisNotebook import DominantRegionAnalysisNotebook
+from src.sentio.gui.notebook.analytics.PassSuccessPredictionNotebook import PassSuccessPredictionNotebook
 
 __author__ = 'emrullah'
 
@@ -9,29 +12,42 @@ __author__ = 'emrullah'
 import wx
 
 
+
 class AnalyticsNotebook(wx.Panel):
 
-    def __init__(self, parent):
+    def __init__(self, parent, canvas, ax):
         wx.Panel.__init__(self, parent)
 
-        nb = wx.Notebook(self)
+        style = aui.AUI_NB_DEFAULT_STYLE
+        style &= ~(aui.AUI_NB_CLOSE_ON_ACTIVE_TAB)
+
+        nb = aui.AuiNotebook(self, agwStyle=style)
 
         # # create the page windows as children of the notebook
-        self.best_shoot_position_analysis_page = BestShootPositionAnalysisNotebook(nb)
-        self.ball_ownership_analysis_page = BallOwnershipAnalysisNotebook(nb)
-        self.running_distance_analysis_page = RunningDistanceAnalysisNotebook(nb)
+        self.ball_ownership_analysis_page = BallOwnershipAnalysisNotebook(nb, canvas, ax)
+        self.running_distance_analysis_page = RunningDistanceAnalysisNotebook(nb, canvas, ax)
         self.dominant_region_analysis_page = DominantRegionAnalysisNotebook(nb)
+        self.optimal_shooting_point_prediction_page = OptimalShootingPointPredictionNotebook(nb)
+        self.pass_success_prediction_page = PassSuccessPredictionNotebook(nb, canvas, ax)
+        self.ball_ownership_prediction_page = BallOwnershipPredictionNotebook(nb)
+
 
 
         # add the pages to the notebook with the label to show on the tab
-        nb.AddPage(self.best_shoot_position_analysis_page, "BSPA")
-        nb.AddPage(self.ball_ownership_analysis_page, "BOA")
-        nb.AddPage(self.running_distance_analysis_page, "RDA")
-        nb.AddPage(self.dominant_region_analysis_page, "DRA")
+        nb.AddPage(self.ball_ownership_analysis_page, "Ball Ownership A.")
+        nb.AddPage(self.running_distance_analysis_page, "Running Distance A.")
+        nb.AddPage(self.dominant_region_analysis_page, "Dominant Region A.")
+        nb.AddPage(self.optimal_shooting_point_prediction_page, "Optimal Shooting Point P.")
+        nb.AddPage(self.pass_success_prediction_page, "Pass Success P.")
+        nb.AddPage(self.ball_ownership_prediction_page, "Ball Ownership P.")
+
 
         sizer = wx.BoxSizer()
         sizer.Add(nb, 1, wx.EXPAND)
         self.SetSizer(sizer)
+
+
+
 
 
     def setMatch(self, match):

@@ -1,3 +1,6 @@
+import itertools
+from src.sentio.gui.EventAnnotationManager import EventAnnotationManager
+
 __author__ = 'emrullah'
 
 
@@ -6,15 +9,24 @@ import wx
 
 class RunningDistanceAnalysisNotebook(wx.Panel):
 
-    def __init__(self, parent):
+    def __init__(self, parent, canvas, ax):
         wx.Panel.__init__(self, parent)
 
-        self.build_dataset_button = wx.Button(self, -1, "build dataset", size=(10,10))
+        self.canvas = canvas
+        self.ax = ax
 
+
+        self.build_dataset_button = wx.Button(self, -1, "BUILD DATASET", size=(10,10))
+
+        team_choice_text = wx.StaticText(self, label="Team Choice")
+        team_choices = ["All Teams", "Home Team", "Away Team"]
+        self.team_choice = wx.ComboBox(self, size=(80,-1), choices=team_choices, style=wx.CB_READONLY)
+
+        filters_box = wx.StaticBox(self, wx.ID_ANY, "FILTERS")
         self.game_stop_filter = wx.CheckBox(self, -1, 'game stop')
         self.speed_filter = wx.CheckBox(self, -1, 'speed')
 
-        self.running_distance_compute_button = wx.Button(self, -1, "calculate", size=(80,40))
+        self.run_button = wx.Button(self, -1, "RUN", size=(80,40))
 
 
 
@@ -23,15 +35,17 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
         #########################
 
         vbox = wx.BoxSizer(wx.VERTICAL)
-        vbox.Add(self.build_dataset_button, 1, wx.ALIGN_TOP|wx.EXPAND)
+        vbox.Add(self.build_dataset_button, 1, wx.EXPAND)
 
-        filters_box = wx.StaticBox(self, wx.ID_ANY, "FILTERS")
+        vbox.Add(team_choice_text, 0, wx.EXPAND)
+        vbox.Add(self.team_choice, 0, wx.EXPAND)
+
         filters_box_sizer = wx.StaticBoxSizer(filters_box, wx.VERTICAL)
         filters_box_sizer.Add(self.game_stop_filter, 0, wx.EXPAND)
         filters_box_sizer.Add(self.speed_filter, 0, wx.EXPAND)
 
-        vbox.Add(filters_box_sizer, 0, wx.EXPAND|wx.ALIGN_TOP)
-        vbox.Add(self.running_distance_compute_button, 1, wx.ALIGN_CENTER|wx.EXPAND)
+        vbox.Add(filters_box_sizer, 1, wx.EXPAND)
+        vbox.Add(self.run_button, 1, wx.EXPAND)
 
         self.SetSizer(vbox)
         # vbox.Fit(self)
@@ -41,8 +55,8 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
         ##### Binds #########
         #####################
 
-        self.running_distance_compute_button.Bind(wx.EVT_BUTTON, self.OnBuild)
-        self.running_distance_compute_button.Bind(wx.EVT_BUTTON, self.OnCompute)
+        self.build_dataset_button.Bind(wx.EVT_BUTTON, self.OnBuild)
+        self.run_button.Bind(wx.EVT_BUTTON, self.OnCompute)
 
 
     def setMatch(self, match):
@@ -51,19 +65,57 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
 
     def OnBuild(self, event):
         self.match.buildMatchObjects()
+        print "data is built"
+
+
+    def getChosenTeams(self):
+        teams = None
+        if self.team_choice.GetValue() == "All Teams":
+            teams = [self.match.getHomeTeam(), self.match.getAwayTeam()]
+        elif self.team_choice.GetValue() == "Home Team":
+            teams = [self.match.getHomeTeam()]
+        elif self.team_choice.GetValue() == "Away Team":
+            teams = [self.match.getAwayTeam()]
+        else:
+            print "chosen team is missing!!!"
+        return teams
 
 
     def OnCompute(self, event):
-        self.match.buildMatchObjects()
-        print "data is built"
-        team_players = self.match.getHomeTeam().getTeamPlayers() + self.match.getAwayTeam().getTeamPlayers()
+        results = []
+        for team in [self.match.getHomeTeam(), self.match.getAwayTeam()]:
+            # if not results == "":
+            #     results += "\n\n"
+            temp_results = []
+            temp_results.append((team.team_name, "Running Distance"))
+            for player in team.getTeamPlayers():
+                if self.game_stop_filter.GetValue() and self.speed_filter.GetValue():
+                    # print "with game_stop and speed filter: ", team_player.computeRunningDistanceWithGameStopAndSpeedFilter()
+                    result = player.computeRunningDistanceWithGameStopAndSpeedFilter()
+                elif self.game_stop_filter.GetValue():
+                    # print "with game_stop filter: ", team_player.computeRunningDistanceWithGameStopFilter()
+                    result = player.computeRunningDistanceWithGameStopFilter()
+                elif self.speed_filter.GetValue():
+                    # print "with speed filter: ", team_player.computeRunningDistanceWithSpeedFilter()
+                    result = player.computeRunningDistanceWithSpeedFilter()
+                else:
+                    # print "without filter: ", team_player.computeRunningDistance()
+                    result = player.computeRunningDistance()
+                temp_results.append((player.jersey_number, result))
+            results.append(temp_results)
+        results = self.formatInfoToDisplay(results)
+        EventAnnotationManager.annotateAnalysisResults(self.canvas, self.ax, results)
 
-        for team_player in team_players:
-            if self.game_stop_filter.GetValue() and self.speed_filter.GetValue():
-                print "with game_stop and speed filter: ", team_player.computeRunningDistanceWithGameStopAndSpeedFilter()
-            elif self.game_stop_filter.GetValue():
-                print "with game_stop filter: ", team_player.computeRunningDistanceWithGameStopFilter()
-            elif self.speed_filter.GetValue():
-                print "with speed filter: ", team_player.computeRunningDistanceWithSpeedFilter()
-            else:
-                print "without filter: ", team_player.computeRunningDistance()
+
+    def formatInfoToDisplay(self, results):
+        print results
+        q = ""
+        for (home_js, home_result), (away_js, away_result) in itertools.izip(results[0], results[1]):
+            try:
+                q += "%s %s | %s %s\n" %(("%.2f"%home_result).ljust(30), str(home_js).center(10),
+                                         str(away_js).center(10), ("%.2f"%away_result).rjust(30))
+            except:
+                q += "%s %s | %s %s\n" %(str(home_result).ljust(30), str(home_js).center(10),
+                                         str(away_js).center(10), str(away_result).rjust(30))
+        return q
+
