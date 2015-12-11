@@ -85,7 +85,6 @@ class WhoHasBall():
             own=0
         return own
 
-
     #@profile(immediate=True) # 5.73 sec
     def getCorrelatedPlayer_byTime(self,half,minute,second,mili_second):
         fbDict,gsDict,fbDict1,gsDict1={},{},{},{}
@@ -181,7 +180,6 @@ class WhoHasBall():
                     corXGS+=math.fabs((ply[0]-ply[4]))
                 averageSpeed=[]
         return [corFB,corGS,corXFB,corXGS]
-
 
 
 

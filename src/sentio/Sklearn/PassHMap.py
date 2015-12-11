@@ -63,38 +63,13 @@ class HeatMapForPass():
 
 
 
-
     def getPasses(self,PassStartingPoint,radius,filename):
 
-        # reader = XMLreader(os.path.join(DATA_BASE_DIR, 'output/sentio_data.xml'))
-        # game_instances, slider_mapping = reader.parse()
-        #
-        #
-        # homeTeamPoints,awayTeamPoints,homeTeamStatus,awayTeamStatus=[],[],[],[]
-        #
-        # for game_instance in game_instances.getFirstHalfInstances():
-        #     if game_instance.event and game_instance.event.isPassEvent():
-        #         pass_event = game_instance.event.pass_event
-        #         x1s,y1s = pass_event.pass_source.get_position()
-        #         x2s,y2s = pass_event.pass_target.get_position()
-        #         status = pass_event.isSuccessful()
-        #         if pass_event.pass_source.isHomeTeamPlayer():
-        #             homeTeamPoints.append([x1s,y1s,x2s,y2s])
-        #
-        #             if status == True: homeTeamStatus.append("T")
-        #             else: homeTeamStatus.append("F")
-        #         else:
-        #             awayTeamPoints.append([x1s,y1s,x2s,y2s])
-        #
-        #             if status == True: awayTeamStatus.append("T")
-        #             else: awayTeamStatus.append("F")
-        #
-        #
-        # points,statuses=homeTeamPoints,homeTeamStatus
-        # # points,statuses=awayTeamPoints,awayTeamStatus
+
         F_point,T_point,F_status,T_status=[],[],[],[]
         points,statuses=self.readFile(filename)
         for index in range(len(statuses)):
+            # print points[0:2][index]
             if statuses[index]=="T":
                 T_point.append(points[index])
                 T_status.append(statuses[index])
@@ -103,12 +78,7 @@ class HeatMapForPass():
                 T_status.append(statuses[index])
         points=T_point[0:35]+ F_point[0:35]
         statuses=T_status[0:35]+ F_status[0:35]
-
-
-
-
-
-
+        print points
         s_x,s_y = PassStartingPoint
 
         clf=svm.SVC(C=3, cache_size=300, class_weight=None, coef0=0.0, degree=3,
@@ -149,7 +119,7 @@ class HeatMapForPass():
 
         plt.matplotlib.pyplot.scatter(scat_xf,scat_yf,s=30,c='blue',label = "Unsuccessful Pass")
         plt.matplotlib.pyplot.scatter(scat_xt,scat_yt,s=30,c='red',label = "Successful Pass")
-        im2=plt.imread('/Users/aliuzun/PycharmProjects/futbol-data-analysis/src/sentio/Sklearn/srcc/background.png',0)
+        im2 = plt.imread('/Users/aliuzun/PycharmProjects/futbol-data-analysis/src/sentio/Sklearn/srcc/background.png',0)
 
 
         hm = plt.imshow(im2, extent=[-2.0, 107.0, 72.0, 0.0], aspect="auto")
@@ -162,7 +132,6 @@ class HeatMapForPass():
         plt.colorbar()
         plt.legend(ncol=3,fontsize=9,bbox_to_anchor=(0.51,0.051))
         plt.show()
-
 
 
 
@@ -205,7 +174,7 @@ class HeatMapForPass():
 
 
 if __name__ == "__main__":
-    tp=(35.0,20.1)
+    tp=(52.0,35.1)
     w=HeatMapForPass()
     print w.getPasses(tp,15.0,"awayTeamAll.csv") #"homeTeamFirstHalfPass.csv"
     # print w.showAllPass("awayTeamAll.csv")
