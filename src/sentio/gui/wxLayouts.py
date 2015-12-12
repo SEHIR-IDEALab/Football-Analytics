@@ -109,7 +109,7 @@ class wxLayouts:
         self.pass_info_page = LoggerNotebook(nb)
         self.heatmap_setup_page = HeatMapNotebook(nb)
         self.team_config_page = TeamConfigTableNotebook(nb, self.canvas)
-        self.analytics_page = AnalyticsNotebook(nb, self.canvas, self.ax)
+        self.analytics_page = AnalyticsNotebook(nb, self.canvas, self.ax, self.fig)
 
         # add the pages to the notebook with the label to show on the tab
         nb.AddPage(self.pass_info_page, "Log")

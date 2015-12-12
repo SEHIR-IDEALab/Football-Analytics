@@ -15,7 +15,7 @@ import wx
 
 class AnalyticsNotebook(wx.Panel):
 
-    def __init__(self, parent, canvas, ax):
+    def __init__(self, parent, canvas, ax, fig):
         wx.Panel.__init__(self, parent)
 
         style = aui.AUI_NB_DEFAULT_STYLE
@@ -28,7 +28,7 @@ class AnalyticsNotebook(wx.Panel):
         self.running_distance_analysis_page = RunningDistanceAnalysisNotebook(nb, canvas, ax)
         self.dominant_region_analysis_page = DominantRegionAnalysisNotebook(nb, canvas, ax)
         self.optimal_shooting_point_prediction_page = OptimalShootingPointPredictionNotebook(nb)
-        self.pass_success_prediction_page = PassSuccessPredictionNotebook(nb, canvas, ax)
+        self.pass_success_prediction_page = PassSuccessPredictionNotebook(nb, canvas, ax, fig)
         self.ball_ownership_prediction_page = BallOwnershipPredictionNotebook(nb)
 
 

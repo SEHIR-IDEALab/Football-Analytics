@@ -46,6 +46,7 @@ class wxVisualization(wx.Frame):
         self.layouts = wxLayouts(self)
         self.layouts.layout_controls()
         self.layouts.analytics_page.setMatch(match)
+        self.layouts.analytics_page.pass_success_prediction_page.setWxGui(self)
 
         self.listeners.layouts = self.layouts
         self.listeners.activate()
@@ -123,6 +124,12 @@ class wxVisualization(wx.Frame):
         team_players = teams.home_team.team_players
         team_players.update(teams.away_team.team_players)
         return team_players
+
+
+    def removeVisualPlayers(self):
+        for visual_player in self.visual_idToPlayers.values():
+            visual_player.remove()
+            del self.visual_idToPlayers[visual_player.player.object_id]
 
 
     def updatePositions(self, time):
