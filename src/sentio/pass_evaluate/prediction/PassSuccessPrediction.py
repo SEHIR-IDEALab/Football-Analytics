@@ -69,7 +69,11 @@ class HeatMapForPass():
 
 
 
-    def getPasses(self,PassStartingPoint,radius,filename):
+    def getPasses(self,PassStartingPoint,radius,filename,
+                  C, kernel, degree, gamma, coef, probability, shrinking,
+                  tol, verbose, max_iter):
+        for i in [C, kernel, degree, gamma, coef, probability, shrinking, tol, verbose, max_iter]:
+            print type(i)
         F_point,T_point,F_status,T_status=[],[],[],[]
         points,statuses=self.readFile(filename)
         for index in range(len(statuses)):
@@ -85,9 +89,9 @@ class HeatMapForPass():
 
         s_x,s_y = PassStartingPoint
 
-        clf=svm.SVC(C=3, cache_size=300, class_weight=None, coef0=0.0, degree=3,
-            gamma=0.0005, kernel='rbf', max_iter=-1, probability=True, random_state=None,
-            shrinking=True, tol=0.001, verbose=False)
+        clf=svm.SVC(C=C, coef0=coef, degree=degree,
+            gamma=gamma, kernel=kernel, max_iter=max_iter, probability=probability,
+            shrinking=shrinking, tol=tol, verbose=verbose)
 
         clf.fit(points,statuses)
 

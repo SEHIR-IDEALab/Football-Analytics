@@ -37,11 +37,11 @@ class BallOwnershipAnalysisNotebook(wx.Panel):
         vbox = wx.BoxSizer(wx.VERTICAL)
 
         time_interval_box_sizer = wx.StaticBoxSizer(time_interval_box, wx.HORIZONTAL)
-        time_interval_box_sizer.Add(self.interval_min, 1, wx.EXPAND)
+        time_interval_box_sizer.Add(self.interval_min, 0, wx.EXPAND)
         time_interval_box_sizer.Add(interval_text, 0, wx.EXPAND)
-        time_interval_box_sizer.Add(self.interval_max, 1, wx.EXPAND)
+        time_interval_box_sizer.Add(self.interval_max, 0, wx.EXPAND)
 
-        vbox.Add(time_interval_box_sizer, 1, wx.EXPAND|wx.ALIGN_CENTER)
+        vbox.Add(time_interval_box_sizer, 0, wx.EXPAND)
         vbox.Add(self.build_dataset_button, 1, wx.EXPAND)
 
         vbox.Add(team_choice_text, 0, wx.EXPAND)
