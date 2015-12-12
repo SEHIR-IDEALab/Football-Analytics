@@ -73,7 +73,8 @@ average_speed_player = 2.86
 max_speed_player=10.0
 
 #coefficient for goalchace,gain,pass advantages
-weight_coefficient=[489,1, 975, 572]
+W1, W2, W3, W4 = 489.0, 1.0, 975.0, 572.0
+
 #max values of gain,pass advantage,goal chance,
 max_gain,max_goalChance,max_passAdvantage,max_risk=10.0,100.0,2.0,12620.0
 

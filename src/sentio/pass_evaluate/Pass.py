@@ -3,7 +3,6 @@ from src.sentio import Parameters
 from src.sentio.Parameters import *
 from src.sentio.gui.RiskRange import RiskRange
 from src.sentio.object.PlayerBase import PlayerBase
-import matplotlib.pyplot as plt
 
 
 
@@ -21,9 +20,12 @@ class Pass:
 
         logger.WriteText("\n(%.1f, %.1f)\n" %coordinates)
         logger.WriteText("overall_risk = %.2f\n" %overall_risk)
-        logger.WriteText("gain = %.2f\n" %gain)
-        logger.WriteText("pass_advantage = %.2f\n" %pass_advantage)
-        logger.WriteText("goal_chance = %.2f\n" %goal_chance)
+        if gain:
+            logger.WriteText("gain = %.2f\n" %gain)
+        if pass_advantage:
+            logger.WriteText("pass_advantage = %.2f\n" %pass_advantage)
+        if goal_chance:
+            logger.WriteText("goal_chance = %.2f\n" %goal_chance)
         logger.WriteText("effectiveness = %.2f\n" %effectiveness)
 
         logger.SetInsertionPoint(0)
@@ -44,9 +46,12 @@ class Pass:
             pass_logger.WriteText("\n")
         pass_logger.WriteText("%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
         pass_logger.WriteText("overall_risk = %.2f\n" %overallRisk)
-        pass_logger.WriteText("gain = %.2f\n" %gain)
-        pass_logger.WriteText("pass_advantage = %.2f (%s)\n" %(passAdvantage, pa_player))
-        pass_logger.WriteText("goal_chance = %.2f\n" %goalChance)
+        if gain:
+            pass_logger.WriteText("gain = %.2f\n" %gain)
+        if passAdvantage:
+            pass_logger.WriteText("pass_advantage = %.2f (%s)\n" %(passAdvantage, pa_player))
+        if goalChance:
+            pass_logger.WriteText("goal_chance = %.2f\n" %goalChance)
         pass_logger.WriteText("effectiveness = %.2f\n" %effectiveness)
 
         pass_logger.SetInsertionPoint(0)
@@ -459,12 +464,34 @@ class Pass:
 
 
     def effectiveness_withComponents(self, p1, p2):
-        w1, w2, w3, w4 = weight_coefficient
-        gain = (w1/max_gain) * self.gain(p1, p2)
+        print Parameters.W1, Parameters.W2, Parameters.W3, Parameters.W4
+        gain = (Parameters.W1/max_gain) * self.gain(p1, p2)
         passAdvantage, pa_player = self.passAdvantage(p2)
-        goalChance = (w4/max_goalChance) * self.goalChance(p2)
+        passAdvantage = (Parameters.W3/max_passAdvantage)*passAdvantage
+        goalChance = (Parameters.W4/max_goalChance) * self.goalChance(p2)
         overallRisk = self.overallRisk(p1, p2)
-        effectiveness = gain + (w3/max_passAdvantage)*passAdvantage + goalChance
+
+        effectiveness = 0
+        comp_list = [overallRisk]
+        if self.gain_listener.GetValue():
+            effectiveness += gain
+            comp_list.append(gain)
+        else:
+            comp_list.append(None)
+        if self.effectiveness_listener.GetValue():
+            pass
+        if self.pass_advantage_listener.GetValue():
+            effectiveness += passAdvantage
+            comp_list.append(passAdvantage)
+            comp_list.append(pa_player)
+        else:
+            comp_list.append(None)
+            comp_list.append(None)
+        if self.goal_chance_listener.GetValue():
+            effectiveness += goalChance
+            comp_list.append(goalChance)
+        else:
+            comp_list.append(None)
 
         if not self.isSuccessfulPass(p1, p2):
             if effectiveness < 0:
@@ -472,7 +499,16 @@ class Pass:
             else:
                 effectiveness = -effectiveness * 10
 
-        return (overallRisk, gain, passAdvantage, pa_player, goalChance, effectiveness)
+        comp_list.append(effectiveness)
+        return comp_list
+
+
+    def setEffectivenessCompListeners(self, gain_listener, effectiveness_listener,
+                                      pass_advantage_listener, goal_chance_listener):
+        self.gain_listener = gain_listener
+        self.effectiveness_listener = effectiveness_listener
+        self.pass_advantage_listener = pass_advantage_listener
+        self.goal_chance_listener = goal_chance_listener
 
 
     def __str__(self):

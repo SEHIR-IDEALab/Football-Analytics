@@ -103,6 +103,12 @@ class wxVisualization(wx.Frame):
             self.visual_idToPlayers[player.object_id] = visual_player
 
         self.pass_manager = DraggablePass(self.layouts.ax, self.visual_idToPlayers, self.layouts.fig)
+
+        self.pass_manager.setEffectivenessCompListeners(self.layouts.pass_info_page.gain_comp,
+                                                        self.layouts.pass_info_page.effectiveness_comp,
+                                                        self.layouts.pass_info_page.pass_advantage_comp,
+                                                        self.layouts.pass_info_page.goal_chance_comp)
+
         self.pass_manager.set_defined_passes(self.defined_passes)
         self.pass_manager.set_passDisplayer(self.layouts.pass_info_page.logger)
         self.pass_manager.set_variables(self.layouts.heatmap_setup_page.heat_map,
