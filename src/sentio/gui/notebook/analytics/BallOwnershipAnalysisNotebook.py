@@ -117,6 +117,6 @@ class BallOwnershipAnalysisNotebook(wx.Panel):
             for js, stats in results[0]:
                 ball_steal, ball_lose, ball_pass, ball_ownership_time = stats
                 q += "%s (%s %s %s %s)\n" %\
-                     (str(js).center(10), str(ball_steal).center(15), str(ball_lose).center(15),
-                      str(ball_pass).center(15), str(ball_ownership_time).center(30))
+                     (str(js).center(10), str(ball_steal).rjust(15), str(ball_lose).rjust(15),
+                      str(ball_pass).rjust(15), str(ball_ownership_time).rjust(30))
         return q

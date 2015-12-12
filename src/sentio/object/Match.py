@@ -35,7 +35,7 @@ class Match(object):
         return self.teams.unknowns
 
 
-    def computeDominantRegions(self, interval_min=0, interval_max=90):
+    def computeDominantRegions(self, interval_min=0, interval_max=90, field="Whole Field"):
         game_stop_time_intervals = self.getGameStopTimeIntervals()
 
         voronoi = Voronoi()
@@ -50,7 +50,10 @@ class Match(object):
             try:
                 polygons = voronoi.computePolygons(game_instance.players)
                 for index, player in enumerate(game_instance.players):
-                    area_of_polygon = Voronoi.calculateArea(polygons[index])
+                    polygon = polygons[index]
+                    # area_of_polygon = Voronoi.calculateArea(polygon)
+                    area_of_polygon = Voronoi.calculateAreaByField(polygon, field,
+                                                                   game_instance.isHomeGoalKeeperLocationLeft())
                     if player.object_id in q:
                         temp_player = q[player.object_id]
                         temp_player.dominant_region += area_of_polygon

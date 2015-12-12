@@ -1,3 +1,5 @@
+from src.sentio.file_io.reader.ReaderBase import ReaderBase
+
 __author__ = 'emrullah'
 
 
@@ -14,6 +16,11 @@ class GameInstance:
             if player.object_id == player_id:
                 return player
         return None
+
+
+    def isHomeGoalKeeperLocationLeft(self):
+        teams = ReaderBase.divideIntoTeams(self.players)
+        return teams.home_team.getGoalKeeper().getX() < teams.away_team.getGoalKeeper().getX()
 
 
     def setPlayers(self, players):

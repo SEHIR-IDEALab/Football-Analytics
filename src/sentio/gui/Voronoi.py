@@ -1,7 +1,7 @@
 import math
 from matplotlib.patches import Polygon
 from src.sentio.Parameters import FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MAX_X, \
-                                  FOOTBALL_FIELD_MAX_Y, FOOTBALL_FIELD_MIN_Y
+                                  FOOTBALL_FIELD_MAX_Y, FOOTBALL_FIELD_MIN_Y, FOOTBALL_FIELD_MID_X
 
 import numpy as np
 from scipy import spatial
@@ -13,6 +13,43 @@ __author__ = 'emrullah'
 
 
 class Voronoi:
+
+    field_lines = [
+            [(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MAX_Y)],
+            [(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MAX_X,FOOTBALL_FIELD_MIN_Y)],
+            [(FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MAX_Y),(FOOTBALL_FIELD_MAX_X,FOOTBALL_FIELD_MIN_Y)],
+            [(FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MAX_Y),(FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MAX_Y)]
+        ]
+
+    left_field_lines = [
+        [(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MAX_Y)],
+        [(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MID_X,FOOTBALL_FIELD_MIN_Y)],
+        [(FOOTBALL_FIELD_MID_X, FOOTBALL_FIELD_MAX_Y),(FOOTBALL_FIELD_MID_X,FOOTBALL_FIELD_MIN_Y)],
+        [(FOOTBALL_FIELD_MID_X, FOOTBALL_FIELD_MAX_Y),(FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MAX_Y)]
+    ]
+
+    right_field_lines = [
+        [(FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MAX_X,FOOTBALL_FIELD_MAX_Y)],
+        [(FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MID_X,FOOTBALL_FIELD_MIN_Y)],
+        [(FOOTBALL_FIELD_MID_X, FOOTBALL_FIELD_MAX_Y),(FOOTBALL_FIELD_MID_X,FOOTBALL_FIELD_MIN_Y)],
+        [(FOOTBALL_FIELD_MID_X, FOOTBALL_FIELD_MAX_Y),(FOOTBALL_FIELD_MAX_X,FOOTBALL_FIELD_MAX_Y)]
+    ]
+
+    left_field_points = [
+        (FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),
+        (FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MAX_Y),
+        (FOOTBALL_FIELD_MID_X, FOOTBALL_FIELD_MAX_Y),
+        (FOOTBALL_FIELD_MID_X,FOOTBALL_FIELD_MIN_Y)
+    ]
+
+    right_field_points = [
+        (FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MIN_Y),
+        (FOOTBALL_FIELD_MAX_X,FOOTBALL_FIELD_MAX_Y),
+        (FOOTBALL_FIELD_MID_X, FOOTBALL_FIELD_MAX_Y),
+        (FOOTBALL_FIELD_MID_X,FOOTBALL_FIELD_MIN_Y)
+    ]
+
+
 
     def __init__(self, ax=None):
         self.ax = ax
@@ -71,18 +108,12 @@ class Voronoi:
 
     @staticmethod
     def computeIntersectionsWithField(polygon):
-        field_lines = [
-            [(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MAX_Y)],
-            [(FOOTBALL_FIELD_MIN_X, FOOTBALL_FIELD_MIN_Y),(FOOTBALL_FIELD_MAX_X,FOOTBALL_FIELD_MIN_Y)],
-            [(FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MAX_Y),(FOOTBALL_FIELD_MAX_X,FOOTBALL_FIELD_MIN_Y)],
-            [(FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MAX_Y),(FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MAX_Y)]
-        ]
 
         from shapely import geometry
         shapely_poly = geometry.Polygon(polygon)
 
         intersection_lines = []
-        for field_line in field_lines:
+        for field_line in Voronoi.field_lines:
             shapely_line = geometry.LineString(field_line)
             intersection_line = shapely_poly.intersection(shapely_line)
             if intersection_line:
@@ -96,6 +127,33 @@ class Voronoi:
         from shapely import geometry
         shapely_poly = geometry.Polygon(polygon)
         return shapely_poly.area
+
+
+    @staticmethod
+    def calculateAreaByField(polygon, field="whole", isHomeGoalKeeperLocationLeft=True):
+        from shapely import geometry
+
+        if field == "Whole Field":
+            return Voronoi.calculateArea(polygon)
+        else:
+            shapely_poly = geometry.Polygon(polygon)
+            field_poly = None
+
+            if field == "HomeTeam Field":
+                if isHomeGoalKeeperLocationLeft:
+                    field_poly = geometry.Polygon(np.array(Voronoi.left_field_points))
+                else:
+                    field_poly = geometry.Polygon(np.array(Voronoi.right_field_points))
+            elif field == "AwayTeam Field":
+                if isHomeGoalKeeperLocationLeft:
+                    field_poly = geometry.Polygon(np.array(Voronoi.right_field_points))
+                else:
+                    field_poly = geometry.Polygon(np.array(Voronoi.left_field_points))
+            else:
+                print "field name does not match !!!"
+
+            intersection_poly = shapely_poly.intersection(field_poly)
+            return intersection_poly.area
 
 
     def calculateTotalAreaOfField(self):

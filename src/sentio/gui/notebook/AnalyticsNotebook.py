@@ -26,7 +26,7 @@ class AnalyticsNotebook(wx.Panel):
         # # create the page windows as children of the notebook
         self.ball_ownership_analysis_page = BallOwnershipAnalysisNotebook(nb, canvas, ax)
         self.running_distance_analysis_page = RunningDistanceAnalysisNotebook(nb, canvas, ax)
-        self.dominant_region_analysis_page = DominantRegionAnalysisNotebook(nb)
+        self.dominant_region_analysis_page = DominantRegionAnalysisNotebook(nb, canvas, ax)
         self.optimal_shooting_point_prediction_page = OptimalShootingPointPredictionNotebook(nb)
         self.pass_success_prediction_page = PassSuccessPredictionNotebook(nb, canvas, ax)
         self.ball_ownership_prediction_page = BallOwnershipPredictionNotebook(nb)
