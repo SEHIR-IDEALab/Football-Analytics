@@ -290,7 +290,7 @@ class Pass:
             # q = (1 if q == 0 else q)
             d1 = (0.1 if d1 == 0 else d1)
 
-            goalChances.append((GOALPOST_LENGTH / d1) * (min(angle, (180 - angle)) / 90.) * (1. / (1 + q)) * GOAL_COEFFICIENT)
+            goalChances.append((GOALPOST_LENGTH / d1) * (min(angle, (180 - angle)) / 90.) * (1. / (1 + q)))
             self.getFutureCoordinates(p1,player_list,(goal_keeper_x,goal_keeper_y))
 
         p1.set_position(initilaInfo[p1])

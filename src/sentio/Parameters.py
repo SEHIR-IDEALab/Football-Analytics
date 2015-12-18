@@ -41,8 +41,7 @@ GOALPOST_LENGTH = 10.0
 # arrow (direction and speed)
 INITIAL_ARROW_SIZE = 2
 
-# pass
-GOAL_COEFFICIENT = 1
+
 
 # debug mode
 IS_DEBUG_MODE_ON = False
@@ -68,7 +67,7 @@ COEFFICIENTS = {3.5: 0.6600497742899443, 4.5: 0.2888679982197517, 3.0: 1.0, 4.3:
 average_speed_ball = 33.5
 # average distance covered by a player in 1 sec
 average_distance_per_frame= 2.86/5.0 # meters 5 frames in 1 sec
-average_speed_player = 2.86
+average_speed_player = 2.86 #m/s
 #maximum speed of players
 max_speed_player=10.0
 
