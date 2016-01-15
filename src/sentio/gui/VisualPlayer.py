@@ -83,17 +83,16 @@ class VisualPlayer(PlayerBase):
         def point_pos(x0,y0,d,theta):
             Q1 = math.radians(theta)
             signs = [1.0, -1.0]
-
-            if 0 < Q1 <= 90:
+            if 0 < theta <= 90:
                 x_sign, y_sign = signs[0], signs[1]
-            elif 90 < Q1 <= 180:
+            elif 90 < theta <= 180:
                 x_sign, y_sign = signs[1], signs[1]
-            elif 180 < Q1 <= 270:
+            elif 180 < theta <= 270:
                 x_sign, y_sign = signs[1], signs[0]
             else:
                 x_sign, y_sign = signs[0], signs[0]
 
-            return x0 + x_sign*(d)*round(math.cos(Q1),2), y0 + y_sign*(d)*round(math.sin(Q1),2)
+            return x0 + x_sign*(d)*math.fabs(round(math.cos(Q1),2)), y0 + y_sign*(d)*math.fabs(round(math.sin(Q1),2))
 
         x, y = self.draggable.point.get_position()
         self.direction_annotation = self.ax.annotate('',
