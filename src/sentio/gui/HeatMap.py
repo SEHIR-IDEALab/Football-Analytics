@@ -122,8 +122,8 @@ class HeatMap:
 
     def adjust_heatMap(self, data):
         mean, standard_deviation = HeatMap.compute_standard_deviation(data)
-        self.v_min = mean - 2*standard_deviation
-        self.v_max = mean + 2*standard_deviation
+        self.v_min = mean - 3*standard_deviation
+        self.v_max = mean + 3*standard_deviation
         print self.v_min, self.v_max
         if self.hm is not None:
             self.hm.set_data(data)
