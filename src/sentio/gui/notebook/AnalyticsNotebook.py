@@ -54,3 +54,5 @@ class AnalyticsNotebook(wx.Panel):
         self.ball_ownership_analysis_page.setMatch(match)
         self.running_distance_analysis_page.setMatch(match)
         self.dominant_region_analysis_page.setMatch(match)
+        ########
+        self.pass_success_prediction_page.setMatch(match)

@@ -38,6 +38,13 @@ class PlayerBase:
         else: return "unknown"
 
 
+    def getTeamSide(self):
+        if self.object_type in [0,3]: return "Home Team"
+        elif self.object_type in [1,4]: return "Away Team"
+        elif self.object_type in [2,6,7,8,9]: return "Referee"
+        else: return "Unknown"
+
+
     def isPlayer(self):
         return self.object_type in [0,1,3,4]
 
@@ -157,15 +164,10 @@ class PlayerBase:
 
         x1, y1 = positions[0]
         x2, y2 = positions[1]
-        if y2 > y1: sign = 1
-        else: sign = -1
-        try:
-            Q = math.degrees(math.atan((y2-y1)/(x2-x1)))
-        except ZeroDivisionError:
-            if sign > 0: Q = 90.0
-            else: Q = 270.0
+        dx=((x2-x1) if (x2-x1) != 0.0 else 0.01)
+
+        Q = math.degrees(math.atan((y2-y1)/dx))
         if Q < 0: Q = Q + 360.0
-        if Q==0.0: Q = 0.0
         return float("{0:.2f}".format(Q))
 
 

@@ -186,7 +186,8 @@ class PassSuccessPredictionNotebook(wx.Panel):
     def setMatch(self, match):
         self.match = match
 
-
+        self.pass_success_prediction = HeatMapForPass(self.canvas, self.ax, self.fig)
+        self.pass_success_prediction.setMatch(self.match)
 
 
     def OnMark(self, event):
@@ -216,8 +217,8 @@ class PassSuccessPredictionNotebook(wx.Panel):
     def OnCompute(self, event):
         self.wx_gui.removeAllAnnotations()
         self.wx_gui.removeVisualPlayers()
-        w=HeatMapForPass(self.canvas, self.ax, self.fig)
-        w.getPasses(self.position, float(self.range_choice.GetValue()), self.getAppropriateFile(),
+
+        self.pass_success_prediction.getPasses(self.position, float(self.range_choice.GetValue()), self.team_choice.GetValue(),
                     float(self.c.GetValue()),
                     str(self.kernel_choice.GetValue()),
                     int(self.degree.GetValue()),
