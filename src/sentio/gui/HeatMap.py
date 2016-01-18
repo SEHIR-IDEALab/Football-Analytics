@@ -178,7 +178,7 @@ class HeatMap:
             self.effectivenessByComponent["goalChance"].append(temp_goalChange)
             self.effectivenessByComponent["effectiveness"].append(temp_effect)
 
-        self.draw(self.effectivenessByComponent["effectiveness"])
+        self.draw(self.effectivenessByComponent["overallRisk"])
 
 
     def draw_defencePositionTaking(self, definedPass, chosen_js, number_of_points=(105, 65)):

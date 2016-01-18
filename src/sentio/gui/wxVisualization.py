@@ -7,6 +7,7 @@ from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.gui.DominantRegion import DominantRegion
 from src.sentio.gui.EventAnnotationManager import EventAnnotationManager
 from src.sentio.gui.Voronoi import Voronoi
+from src.sentio.object.PassLogger import PassLogger
 
 matplotlib.use('WXAgg')   # The recommended way to use wx with mpl is with the WXAgg backend.
 
@@ -57,6 +58,7 @@ class wxVisualization(wx.Frame):
         self.event_annotation_manager = EventAnnotationManager(self.layouts.ax)
 
         self.pass_manager = None
+        self.pass_logger = PassLogger(self.layouts.pass_info_page.logger)
         self.defined_passes = list()
 
         self.ball_holder = None
@@ -81,7 +83,7 @@ class wxVisualization(wx.Frame):
     def drawAndDisplayPassStats(self, pass_events):
         for pass_event in pass_events:
             self.event_annotation_manager.annotatePassEvent(pass_event)
-            effectiveness = self.pass_manager.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
+            effectiveness = self.pass_logger.displayDefinedPass(pass_event)
         self.pass_manager.passes_defined = pass_events
 
 
@@ -104,13 +106,13 @@ class wxVisualization(wx.Frame):
 
         self.pass_manager = DraggablePass(self.layouts.ax, self.visual_idToPlayers, self.layouts.fig)
 
-        self.pass_manager.setEffectivenessCompListeners(self.layouts.pass_info_page.gain_comp,
+        self.pass_logger.setEffectivenessCompListeners(self.layouts.pass_info_page.gain_comp,
                                                         self.layouts.pass_info_page.effectiveness_comp,
                                                         self.layouts.pass_info_page.pass_advantage_comp,
                                                         self.layouts.pass_info_page.goal_chance_comp)
 
         self.pass_manager.set_defined_passes(self.defined_passes)
-        self.pass_manager.set_passDisplayer(self.layouts.pass_info_page.logger)
+        self.pass_manager.setPassLogger(self.pass_logger)
         self.pass_manager.set_variables(self.layouts.heatmap_setup_page.heat_map,
                                          self.layouts.heatmap_setup_page.resolution,
                                         self.layouts.heatmap_setup_page.effectiveness)
@@ -118,7 +120,7 @@ class wxVisualization(wx.Frame):
                                                 self.layouts.heatmap_setup_page.colorbar_canvas)
         self.pass_manager.heatMap.set_color_bar_listeners(self.layouts.heatmap_setup_page.get_colorbar_listeners())
         for visual_player in self.visual_idToPlayers.values():
-            visual_player.draggable.setPassLogger(self.layouts.pass_info_page.logger)
+            visual_player.draggable.setPassLogger(self.pass_logger)
             visual_player.draggable.setDefinedPasses(self.pass_manager.passes_defined)
             visual_player.draggable.setVisualPlayers(self.visual_idToPlayers)
 
@@ -190,7 +192,7 @@ class wxVisualization(wx.Frame):
                     self.pass_manager.passes_defined.append(pass_event)
 
                     self.event_annotation_manager.annotatePassEvent(pass_event)
-                    effectiveness = self.pass_manager.displayDefinedPass(pass_event, self.layouts.pass_info_page.logger)
+                    effectiveness = self.pass_logger.displayDefinedPass(pass_event)
                     self.event_annotation_manager.updatePassEventAnnotations()
 
                     if Parameters.IS_DEBUG_MODE_ON:

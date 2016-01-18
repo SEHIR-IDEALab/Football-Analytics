@@ -10,16 +10,14 @@ from src.sentio.gui import Dialogs
 from src.sentio.gui.HeatMap import HeatMap
 from src.sentio.gui.RiskRange import RiskRange
 from src.sentio.object.PassEvent import PassEvent
-from src.sentio.pass_evaluate.Pass import Pass
 
 
 __author__ = 'emrullah'
 
 
-class DraggablePass(Pass):
+class DraggablePass:
 
     def __init__(self, ax, visual_idToPlayers, figure=None):
-        Pass.__init__(self)
         if figure is None: figure = p.gcf()
         self.pass_source = None
         self.pass_target = None
@@ -46,8 +44,8 @@ class DraggablePass(Pass):
         self.cidrelease = self.figure.canvas.mpl_connect('button_release_event', self.on_release_event)
 
 
-    def set_passDisplayer(self, logger):
-        self.logger = logger
+    def setPassLogger(self, pass_logger):
+        self.pass_logger = pass_logger
 
 
     def set_variables(self, heatMap, resolution, components):
@@ -91,7 +89,7 @@ class DraggablePass(Pass):
 
     def drawHeatMapFor(self, pass_event):
         chosen_heat_map = self.chosenHeatMap.GetSelection()
-        self.chosenComponent.SetSelection(4)
+        self.chosenComponent.SetSelection(0)
 
         self.heatMap.totalEffectiveness_withComponents_byCoordinates = {}
         if chosen_heat_map == 1:
@@ -134,7 +132,7 @@ class DraggablePass(Pass):
                                                        visual=True))
                     if Parameters.IS_DEBUG_MODE_ON:
                         self.risk_range.drawRangeFor(current_pass_event)
-                    self.displayDefinedPass(current_pass_event, self.logger)
+                    self.pass_logger.displayDefinedPass(current_pass_event)
                     if self.isHeatMapChosen():
                         self.drawHeatMapFor(current_pass_event)
                     self.passes_defined.append(current_pass_event)
@@ -172,7 +170,7 @@ class DraggablePass(Pass):
                 coord_x = min(x_coords, key=lambda x:abs(x-givenCoordinate_x))
                 coord_y = min(y_coords, key=lambda y:abs(y-givenCoordinate_y))
                 components = self.heatMap.effectivenessByPosition(coord_x, coord_y)
-                Pass.display_effectiveness((coord_x, coord_y), components, self.logger)
+                self.pass_logger.display_effectiveness((coord_x, coord_y), components)
 
 
     def on_release_event(self, event):

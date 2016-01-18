@@ -14,50 +14,6 @@ class Pass:
     def __init__(self):
         self.teams = None
 
-    @staticmethod
-    def display_effectiveness(coordinates, components, logger):
-        overall_risk, gain, pass_advantage, goal_chance, effectiveness = components
-
-        logger.WriteText("\n(%.1f, %.1f)\n" %coordinates)
-        logger.WriteText("overall_risk = %.2f\n" %overall_risk)
-        if gain:
-            logger.WriteText("gain = %.2f\n" %gain)
-        if pass_advantage:
-            logger.WriteText("pass_advantage = %.2f\n" %pass_advantage)
-        if goal_chance:
-            logger.WriteText("goal_chance = %.2f\n" %goal_chance)
-        logger.WriteText("effectiveness = %.2f\n" %effectiveness)
-
-        logger.SetInsertionPoint(0)
-
-
-    def displayDefinedPass(self, defined_pass, pass_logger):
-        p1 = defined_pass.pass_source
-        p2 = defined_pass.pass_target
-
-        self.teams = defined_pass.teams
-
-        (overallRisk, gain, passAdvantage, pa_player, goalChance, effectiveness) = self.effectiveness_withComponents(p1, p2)
-
-        if Parameters.IS_DEBUG_MODE_ON:
-            (x1,y1) = p1.get_position(); (x2,y2) = p2.get_position()
-            pass_logger.WriteText("\n(%.1f, %.1f) --> (%.1f, %.1f)\n" %(x1,y1,x2,y2))
-        else:
-            pass_logger.WriteText("\n")
-        pass_logger.WriteText("%s --> %s\n" %(p1.getJerseyNumber(), p2.getJerseyNumber()))
-        pass_logger.WriteText("overall_risk = %.2f\n" %overallRisk)
-        if gain:
-            pass_logger.WriteText("gain = %.2f\n" %gain)
-        if passAdvantage:
-            pass_logger.WriteText("pass_advantage = %.2f (%s)\n" %(passAdvantage, pa_player))
-        if goalChance:
-            pass_logger.WriteText("goal_chance = %.2f\n" %goalChance)
-        pass_logger.WriteText("effectiveness = %.2f\n" %effectiveness)
-
-        pass_logger.SetInsertionPoint(0)
-
-        return effectiveness
-
 
     def get_Point_Area(self,new_coords,p1,p2,p3):
         areas=[]
@@ -463,7 +419,9 @@ class Pass:
     #     return effectiveness
 
 
-    def effectiveness_withComponents(self, p1, p2):
+    def effectiveness_withComponents(self, p1, p2,
+                                     (gain_listener, effectiveness_listener,
+                                        pass_advantage_listener, goal_chance_listener)):
         print Parameters.W1, Parameters.W2, Parameters.W3, Parameters.W4
         gain = (Parameters.W1/max_gain) * self.gain(p1, p2)
         passAdvantage, pa_player = self.passAdvantage(p2)
@@ -473,21 +431,21 @@ class Pass:
 
         effectiveness = 0
         comp_list = [overallRisk]
-        if self.gain_listener.GetValue():
+        if gain_listener:
             effectiveness += gain
             comp_list.append(gain)
         else:
             comp_list.append(None)
-        if self.effectiveness_listener.GetValue():
+        if effectiveness_listener:
             pass
-        if self.pass_advantage_listener.GetValue():
+        if pass_advantage_listener:
             effectiveness += passAdvantage
             comp_list.append(passAdvantage)
             comp_list.append(pa_player)
         else:
             comp_list.append(None)
             comp_list.append(None)
-        if self.goal_chance_listener.GetValue():
+        if goal_chance_listener:
             effectiveness += goalChance
             comp_list.append(goalChance)
         else:
@@ -501,14 +459,6 @@ class Pass:
 
         comp_list.append(effectiveness)
         return comp_list
-
-
-    def setEffectivenessCompListeners(self, gain_listener, effectiveness_listener,
-                                      pass_advantage_listener, goal_chance_listener):
-        self.gain_listener = gain_listener
-        self.effectiveness_listener = effectiveness_listener
-        self.pass_advantage_listener = pass_advantage_listener
-        self.goal_chance_listener = goal_chance_listener
 
 
     def __str__(self):
