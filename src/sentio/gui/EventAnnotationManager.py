@@ -41,6 +41,7 @@ class EventAnnotationManager:
                                         xytext=(0, 0),
                                         textcoords='offset points',
                                         size=13,
+                                        family='monospace',  ## needed to adjust the output
                                         bbox=dict(
                                             boxstyle="round",
                                             fc=(1.0, 0.7, 0.7),

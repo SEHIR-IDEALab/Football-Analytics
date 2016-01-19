@@ -105,18 +105,17 @@ class BallOwnershipAnalysisNotebook(wx.Panel):
                 ball_steal, ball_lose, ball_pass, ball_ownership_time = home_stats
                 ball_steal2, ball_lose2, ball_pass2, ball_ownership_time2 = away_stats
                 try:
-                    q += "(%s %s %s %s) %s | %s (%s %s %s %s)\n" %\
-                         (str(ball_ownership_time).ljust(30), str(ball_pass).ljust(10),str(ball_lose).ljust(10),
-                          str(ball_steal).ljust(10), str(home_js).center(10),
-                          str(away_js).center(10), str(ball_steal2).rjust(10), str(ball_lose2).rjust(10),
-                          str(ball_pass2).rjust(10), str(ball_ownership_time2).rjust(30))
+                    q += "%s %s %s %s %s | %s %s %s %s %s\n" %\
+                         (str(ball_ownership_time).ljust(21), str(ball_pass).ljust(11),str(ball_lose).ljust(11),
+                          str(ball_steal).ljust(12), str(home_js).center(9),
+                          str(away_js).center(10), str(ball_steal2).rjust(11), str(ball_lose2).rjust(11),
+                          str(ball_pass2).rjust(11), str(ball_ownership_time2).rjust(21))
                 except:
-                    q += "%s %s | %s %s\n" %(str(home_stats[::-1]).ljust(30), str(home_js).center(10),
-                                             str(away_js).center(10), str(away_stats).rjust(30))
+                    q += "%s %s | %s %s\n" %(str(home_stats[::-1]).ljust(21), str(home_js).center(10),
+                                             str(away_js).center(10), str(away_stats).rjust(21))
         else:
             for js, stats in results[0]:
                 ball_steal, ball_lose, ball_pass, ball_ownership_time = stats
-                q += "%s (%s %s %s %s)\n" %\
-                     (str(js).center(10), str(ball_steal).rjust(15), str(ball_lose).rjust(15),
-                      str(ball_pass).rjust(15), str(ball_ownership_time).rjust(30))
+                q += "%s %s %s %s %s\n" %(str(js).center(10), str(ball_steal).rjust(11), str(ball_lose).rjust(11),
+                                  str(ball_pass).rjust(11), str(ball_ownership_time).rjust(21))
         return q

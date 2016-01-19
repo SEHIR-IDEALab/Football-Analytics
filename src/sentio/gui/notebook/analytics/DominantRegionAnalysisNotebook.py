@@ -108,7 +108,7 @@ class DominantRegionAnalysisNotebook(wx.Panel):
         results = []
         for team in self.getChosenTeams():
             temp_results = []
-            temp_results.append((team.team_name, ("Total Coverage", "Average Coverage", "Coverage Percentage")))
+            temp_results.append((team.team_name, ("Total Coverage", "Avg Coverage", "Coverage %")))
             for player in team.getTeamPlayers():
                 temp_results.append((player.jersey_number, (player.dominant_region,
                                                             player.calculateAverageDRPerInstance(),
@@ -128,22 +128,24 @@ class DominantRegionAnalysisNotebook(wx.Panel):
                 total_coverage2, average_coverage2, coverage_percentage2 = away_stats
                 try:
                     q += "%s %s %s %s | %s %s %s %s\n" %\
-                         (("%.2f"%coverage_percentage).ljust(30), ("%.2f"%average_coverage).ljust(10),
-                          ("%.2f"%total_coverage).ljust(10), str(home_js).center(10),
-                          str(away_js).center(10), ("%.2f"%total_coverage2).rjust(10),
-                          ("%.2f"%average_coverage2).rjust(10), ("%.2f"%coverage_percentage2).rjust(10))
+                         (("%.2f"%coverage_percentage).ljust(13), ("%.2f"%average_coverage).ljust(14),
+                          ("%.2f"%total_coverage).ljust(15), str(home_js).center(5),
+                          str(away_js).center(4), ("%.2f"%total_coverage2).rjust(16),
+                          ("%.2f"%average_coverage2).rjust(14), ("%.2f"%coverage_percentage2).rjust(12))
                 except:
-                    q += "%s %s |%s %s\n" %(str(home_stats[::-1]).ljust(30), str(home_js).center(10),
-                                             str(away_js).center(10), str(away_stats).rjust(30))
+                    q += "%s %s %s %s | %s %s %s %s\n" %\
+                           (str(coverage_percentage).ljust(13), str(average_coverage).ljust(14),
+                        str(total_coverage).ljust(15), str(home_js).center(5), str(away_js).center(4),
+                        str(total_coverage2).rjust(16), str(average_coverage2).rjust(14),str(coverage_percentage2).rjust(12))
         else:
             for js, stats in results[0]:
                 total_coverage, average_coverage, coverage_percentage = stats
                 try:
-                    q += "%s (%s %s %s)\n" %\
-                         (str(js).center(10), ("%.2f"%total_coverage).rjust(15),
-                          ("%.2f"%average_coverage).rjust(15), ("%.2f"%coverage_percentage).rjust(15))
+                    q += "%s %s %s %s\n" %\
+                         (str(js).center(10), ("%.2f"%total_coverage).rjust(12),
+                          ("%.2f"%average_coverage).rjust(13), ("%.2f"%coverage_percentage).rjust(12))
                 except:
-                    q += "%s (%s %s %s)\n" %\
-                         (str(js).center(10), str(total_coverage).rjust(15),
-                          str(average_coverage).rjust(15), str(coverage_percentage).rjust(15))
+                    q += "%s %s %s %s\n" %\
+                         (str(js).center(10), str(total_coverage).rjust(12),
+                          str(average_coverage).rjust(13), str(coverage_percentage).rjust(12))
         return q
