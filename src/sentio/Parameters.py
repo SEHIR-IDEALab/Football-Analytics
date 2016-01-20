@@ -1,7 +1,5 @@
 # coding=utf-8
 import os
-from src.sentio.pass_evaluate import get_coefficient
-
 
 __author__ = 'emrullah'
 

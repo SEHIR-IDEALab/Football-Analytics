@@ -18,6 +18,48 @@ class RiskRange():
 
 
     @staticmethod
+    def get_Point_Area(new_coords, p1, p2, p3):
+        areas=[]
+        xT1,yT1,xT2,yT2 = new_coords[1] # coordinates on the target circle
+        xS1,yS1,xS2,yS2 = new_coords[0] ## coordinates on the source circle
+        (x1,y1),(x2,y2),(x,y) = p1, p2, p3
+        pointsList = [[(x,y,xS1,yS1,x1,y1),(x,y,xT1,yT1,x2,y2),(x,y,xS1,yS1,xT1,yT1),(x,y,x1,y1,x2,y2)],
+                     [(x,y,xS2,yS2,x1,y1),(x,y,xT2,yT2,x2,y2),(x,y,xS2,yS2,xT2,yT2),(x,y,x1,y1,x2,y2)]]
+
+        for index in [0,1]:
+            sum_Area = 0
+            for point in pointsList[index]:
+                x1,y1,x2,y2,x3,y3=point
+                sum_Area+=math.fabs((x1*(y2 - y3) + x2*(y3 - y1) + x3*(y1-y2))/2.0)
+            areas.append(sum_Area)
+        return areas
+
+
+    @staticmethod
+    def isInRange(p1, p3, p2):
+
+        new_coords,radius_source,radius_target = RiskRange.get_Coordinates_on_Circle(p1,p2)
+
+        xT1,yT1,xT2,yT2=new_coords[1] # coordinates on the target circle
+        xS1,yS1,xS2,yS2=new_coords[0] ## coordinates on the source circle
+
+        (x_Sou_orijine,y_Sou_orijine),(x_Tar_orijine,y_Tar_orijine),(x,y)=p1,p2,p3
+
+        radiusTarToP3 = math.sqrt(math.pow(x_Tar_orijine - x, 2) + math.pow(y_Tar_orijine - y, 2))
+        radiusSouToP3 = math.sqrt(math.pow(x_Sou_orijine - x, 2) + math.pow(y_Sou_orijine - y, 2))
+
+        cal_area1,cal_area2 = RiskRange.get_Point_Area(new_coords,p1,p2,p3)
+        Area1=math.fabs((xS1*(yT1 - y_Sou_orijine) + xT1*(y_Sou_orijine - yS1) + x_Sou_orijine*(yS1-yT1))/2.0) +\
+              math.fabs((x_Tar_orijine*(yT1 - y_Sou_orijine) + xT1*(y_Sou_orijine - y_Tar_orijine) + x_Sou_orijine*(y_Tar_orijine-yT1))/2.0)
+
+        Area2=math.fabs((xS2*(yT2 - y_Sou_orijine) + xT2*(y_Sou_orijine - yS2) + x_Sou_orijine*(yS2-yT2))/2.0) +\
+              math.fabs((x_Tar_orijine*(yT2 - y_Sou_orijine) + xT2*(y_Sou_orijine - y_Tar_orijine) + x_Sou_orijine*(y_Tar_orijine-yT2))/2.0)
+        if (int(cal_area1) in [int(Area1) ,int(Area2)]) or (int(cal_area2) in [int(Area1) ,int(Area2)]) or (radiusSouToP3 <= radius_source) or (radiusTarToP3 <= radius_target):
+            return True
+        return False
+
+
+    @staticmethod
     def get_Coordinates_on_Circle(p1,p2):
         index=None
         (x1,y1),(x2,y2)=p1,p2

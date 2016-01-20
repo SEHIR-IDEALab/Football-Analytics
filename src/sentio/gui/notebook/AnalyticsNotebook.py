@@ -27,11 +27,9 @@ class AnalyticsNotebook(wx.Panel):
         self.ball_ownership_analysis_page = BallOwnershipAnalysisNotebook(nb, canvas, ax)
         self.running_distance_analysis_page = RunningDistanceAnalysisNotebook(nb, canvas, ax)
         self.dominant_region_analysis_page = DominantRegionAnalysisNotebook(nb, canvas, ax)
-        self.optimal_shooting_point_prediction_page = OptimalShootingPointPredictionNotebook(nb)
+        self.optimal_shooting_point_prediction_page = OptimalShootingPointPredictionNotebook(nb, canvas, ax, fig)
         self.pass_success_prediction_page = PassSuccessPredictionNotebook(nb, canvas, ax, fig)
         self.ball_ownership_prediction_page = BallOwnershipPredictionNotebook(nb)
-
-
 
         # add the pages to the notebook with the label to show on the tab
         nb.AddPage(self.ball_ownership_analysis_page, "Ball Ownership A.")
@@ -41,13 +39,9 @@ class AnalyticsNotebook(wx.Panel):
         nb.AddPage(self.pass_success_prediction_page, "Pass Success P.")
         nb.AddPage(self.ball_ownership_prediction_page, "Ball Ownership P.")
 
-
         sizer = wx.BoxSizer()
         sizer.Add(nb, 1, wx.EXPAND)
         self.SetSizer(sizer)
-
-
-
 
 
     def setMatch(self, match):

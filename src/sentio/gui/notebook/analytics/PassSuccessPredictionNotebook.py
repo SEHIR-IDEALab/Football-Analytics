@@ -1,6 +1,4 @@
-import os
-from src.sentio.Parameters import BASE_DIR
-from src.sentio.pass_evaluate.prediction.PassSuccessPrediction import HeatMapForPass
+from src.sentio.analytics.prediction.PassSuccessPrediction import PassSuccessPrediction
 
 __author__ = 'emrullah'
 
@@ -183,10 +181,12 @@ class PassSuccessPredictionNotebook(wx.Panel):
         self.run_button.Bind(wx.EVT_BUTTON, self.OnCompute)
 
 
+
+
     def setMatch(self, match):
         self.match = match
 
-        self.pass_success_prediction = HeatMapForPass(self.canvas, self.ax, self.fig)
+        self.pass_success_prediction = PassSuccessPrediction(self.canvas, self.ax, self.fig)
         self.pass_success_prediction.setMatch(self.match)
 
 
@@ -199,15 +199,6 @@ class PassSuccessPredictionNotebook(wx.Panel):
         self.ax.plot([event.xdata], [event.ydata], 'x', mew=5, ms=15, color="black")
         self.canvas.draw()
         self.fig.canvas.mpl_disconnect(self.cid)
-
-
-
-
-    def getAppropriateFile(self):
-        if self.team_choice.GetValue() == "Home Team":
-            return os.path.join(BASE_DIR, 'sentio/Sklearn/csv_files/homeTeamAll.csv')
-        elif self.team_choice.GetValue() == "Away Team":
-            return os.path.join(BASE_DIR, 'sentio/Sklearn/csv_files/awayTeamAll.csv')
 
 
     def setWxGui(self, wx_gui):

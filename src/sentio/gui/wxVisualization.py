@@ -3,22 +3,21 @@
 
 import wx
 import matplotlib
-from src.sentio.file_io.reader.ReaderBase import ReaderBase
-from src.sentio.gui.DominantRegion import DominantRegion
-from src.sentio.gui.EventAnnotationManager import EventAnnotationManager
-from src.sentio.gui.Voronoi import Voronoi
-from src.sentio.object.PassLogger import PassLogger
-
 matplotlib.use('WXAgg')   # The recommended way to use wx with mpl is with the WXAgg backend.
 
-from src.sentio.gui.RiskRange import RiskRange
+from src.sentio.file_io.reader.ReaderBase import ReaderBase
+from src.sentio.object.PassLogger import PassLogger
 
+from src.sentio.gui.RiskRange import RiskRange
+from src.sentio.gui.Voronoi import Voronoi
 from src.sentio.gui.VisualPlayer import VisualPlayer
 from src.sentio.gui.wxListeners import wxListeners
 from src.sentio.gui.wxLayouts import wxLayouts
+from src.sentio.gui.EventAnnotationManager import EventAnnotationManager
+from src.sentio.gui.DominantRegion import DominantRegion
+from src.sentio.gui.DraggablePass import DraggablePass
 
 from src.sentio import Parameters
-from src.sentio.gui.DraggablePass import DraggablePass
 from src.sentio.Time import Time
 
 
@@ -48,6 +47,7 @@ class wxVisualization(wx.Frame):
         self.layouts.layout_controls()
         self.layouts.analytics_page.setMatch(match)
         self.layouts.analytics_page.pass_success_prediction_page.setWxGui(self)
+        self.layouts.analytics_page.optimal_shooting_point_prediction_page.setWxGui(self)
 
         self.listeners.layouts = self.layouts
         self.listeners.activate()

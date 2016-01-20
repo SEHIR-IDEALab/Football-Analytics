@@ -1,5 +1,5 @@
 from src.sentio import Parameters
-from src.sentio.pass_evaluate.Pass import Pass
+from src.sentio.algorithms.Pass import Pass
 
 __author__ = 'emrullah'
 

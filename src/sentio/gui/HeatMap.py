@@ -5,7 +5,7 @@ import wx
 
 from src.sentio.Parameters import *
 from src.sentio.file_io.reader.ReaderBase import ReaderBase
-from src.sentio.pass_evaluate.Pass import Pass
+from src.sentio.algorithms.Pass import Pass
 
 
 __author__ = 'emrullah'

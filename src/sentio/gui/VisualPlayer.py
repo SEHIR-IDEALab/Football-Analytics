@@ -32,6 +32,8 @@ class VisualPlayer(PlayerBase):
             )
         ))
         self.draggable.point.object_id = self.player.object_id
+        self.draggable.point.team_color = self.getObjectColor()
+        self.draggable.point.player_color = self.getObjectTypeColor()
 
         self.direction_annotation = None
         self.trail_annotation = None

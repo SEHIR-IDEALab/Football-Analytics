@@ -72,6 +72,9 @@ def main():
         # break
 
 
+
+
+    # match.buildMatchObjects()
     match.visualizeMatch()
 
 

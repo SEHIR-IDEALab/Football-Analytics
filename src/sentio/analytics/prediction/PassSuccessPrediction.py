@@ -9,7 +9,7 @@ from src.sentio.Parameters import \
 
 
 
-class HeatMapForPass():
+class PassSuccessPrediction:
     def __init__(self, canvas, ax, fig):
         self.canvas = canvas
         self.ax = ax
