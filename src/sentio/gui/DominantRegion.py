@@ -6,6 +6,7 @@ import sys
 import numpy as np
 import matplotlib.tri
 import matplotlib.path
+from src.sentio.algorithms.ThreePoints import ThreePoints
 from src.sentio.gui.Voronoi import Voronoi
 
 
@@ -19,6 +20,14 @@ class DominantRegion:
         self.ax = ax
 
         self.voronoi_lines = None
+
+
+    @staticmethod
+    def getPlayersByPositions(visual_players):
+        q = {}
+        for visual_player in visual_players:
+            q[visual_player.get_position()] = visual_player
+        return q
 
 
     def circumcircle2(self, T):
@@ -54,7 +63,8 @@ class DominantRegion:
         return c if c<sys.float_info.max else None
 
 
-    def voronoi2(self, P, bbox=None):
+    def voronoi2(self, visual_players, bbox=None):
+        P = Voronoi.getPositions(visual_players)
         if not isinstance(P, np.ndarray):
             P=np.array(P)
         if not bbox:
@@ -71,7 +81,32 @@ class DominantRegion:
 
         T = D.triangles
         n = T.shape[0]
-        C = self.circumcircle2(P[T])
+
+        # print T
+        # print P
+
+        # print P[T]
+        threePoints = ThreePoints()
+        new_triangles = []
+        players_by_positions = DominantRegion.getPlayersByPositions(visual_players)
+        for temp_points in P[T]:
+            p1, p2, p3 = [tuple(position.tolist()) for position in temp_points]
+
+            print p1, p2, p3
+            print players_by_positions[p1].speed, players_by_positions[p2].speed, players_by_positions[p3].speed
+            print players_by_positions[p1].direction, players_by_positions[p2].direction, players_by_positions[p3].direction
+
+            temp_triangle = threePoints.Do(p1, p2, p3,
+                players_by_positions[p1].speed, players_by_positions[p2].speed, players_by_positions[p3].speed,
+                players_by_positions[p1].direction, players_by_positions[p2].direction, players_by_positions[p3].direction)
+            # temp_triangle = Voronoi.orderByCentroid(temp_triangle)
+            new_triangles.append(temp_triangle)
+            print "*************"
+        C = self.circumcircle2(np.array(new_triangles))
+
+
+        # C = self.circumcircle2(P[T])
+
 
         segments = []
         for i in range(n):
@@ -107,7 +142,7 @@ class DominantRegion:
 
 
     def draw(self, visual_players):
-        lines=self.voronoi2(Voronoi.getPositions(visual_players),
+        lines=self.voronoi2(visual_players,
                             (FOOTBALL_FIELD_MIN_X,FOOTBALL_FIELD_MIN_Y,
                              FOOTBALL_FIELD_MAX_X, FOOTBALL_FIELD_MAX_Y))
 
