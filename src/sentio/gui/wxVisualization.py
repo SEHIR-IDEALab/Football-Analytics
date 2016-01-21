@@ -71,7 +71,7 @@ class wxVisualization(wx.Frame):
         self.setPositions(game_instance.players)
 
         self.voronoi = Voronoi(self.layouts.ax)
-        # self.voronoi = DominantRegion(self.layouts.ax)
+        self.dominant_region = DominantRegion(self.layouts.ax)
 
         self.draw_figure()
 
@@ -215,6 +215,9 @@ class wxVisualization(wx.Frame):
 
         if Parameters.IS_VORONOI_DIAGRAM_ON:
             self.voronoi.update(self.filterTeamPlayers(self.visual_idToPlayers))
+
+        if Parameters.IS_DOMINANT_REGION_ON:
+            self.dominant_region.update(self.filterTeamPlayers(self.visual_idToPlayers))
 
 
     def drawDirectionsWithSpeed(self):
