@@ -187,15 +187,15 @@ class Pass:
     #     return effectiveness
 
 
-    def effectiveness_withComponents(self, p1, p2,
-                                     (gain_listener, effectiveness_listener,
-                                        pass_advantage_listener, goal_chance_listener)):
-        print Parameters.W1, Parameters.W2, Parameters.W3, Parameters.W4
+    def effectiveness_withComponents(self, p1, p2, listeners=(True,True,True,True)):
+        # print Parameters.W1, Parameters.W2, Parameters.W3, Parameters.W4
         gain = (Parameters.W1/max_gain) * self.gain(p1, p2)
         passAdvantage, pa_player = self.passAdvantage(p2)
         passAdvantage = (Parameters.W3/max_passAdvantage)*passAdvantage
-        goalChance = (Parameters.W4/max_goalChance) * self.goalChanceWithOSPP(p2)
+        goalChance = (Parameters.W4/max_goalChance) * self.goalChance(p2) ########### goalChanceWithOSPP
         overallRisk = self.overallRisk(p1, p2)
+
+        (gain_listener, effectiveness_listener, pass_advantage_listener, goal_chance_listener) = listeners
 
         effectiveness = 0
         comp_list = [overallRisk]

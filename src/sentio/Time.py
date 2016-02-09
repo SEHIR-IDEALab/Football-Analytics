@@ -37,6 +37,7 @@ class Time(object):
     def convertToTime(self):
         self.converted_to_time = True
         self.minute, self.second, self.millisecond = Time.milliseconds_to_time(self.milliseconds)
+        return self
 
 
     @staticmethod

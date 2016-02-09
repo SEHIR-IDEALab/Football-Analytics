@@ -5,6 +5,7 @@ from analytics.RunningDistanceAnalysisNotebook import RunningDistanceAnalysisNot
 from src.sentio.gui.notebook.analytics.BallOwnershipPredictionNotebook import BallOwnershipPredictionNotebook
 from src.sentio.gui.notebook.analytics.DominantRegionAnalysisNotebook import DominantRegionAnalysisNotebook
 from src.sentio.gui.notebook.analytics.PassSuccessPredictionNotebook import PassSuccessPredictionNotebook
+from src.sentio.gui.notebook.analytics.PlayerEffectivenessAnalysisNotebook import PlayerEffectivenessAnalysisNotebook
 
 __author__ = 'emrullah'
 
@@ -27,6 +28,7 @@ class AnalyticsNotebook(wx.Panel):
         self.ball_ownership_analysis_page = BallOwnershipAnalysisNotebook(nb, canvas, ax)
         self.running_distance_analysis_page = RunningDistanceAnalysisNotebook(nb, canvas, ax)
         self.dominant_region_analysis_page = DominantRegionAnalysisNotebook(nb, canvas, ax)
+        self.player_effectiveness_analysis_page = PlayerEffectivenessAnalysisNotebook(nb, canvas, ax)
         self.optimal_shooting_point_prediction_page = OptimalShootingPointPredictionNotebook(nb, canvas, ax, fig)
         self.pass_success_prediction_page = PassSuccessPredictionNotebook(nb, canvas, ax, fig)
         self.ball_ownership_prediction_page = BallOwnershipPredictionNotebook(nb)
@@ -35,6 +37,7 @@ class AnalyticsNotebook(wx.Panel):
         nb.AddPage(self.ball_ownership_analysis_page, "Ball Ownership A.")
         nb.AddPage(self.running_distance_analysis_page, "Running Distance A.")
         nb.AddPage(self.dominant_region_analysis_page, "Dominant Region A.")
+        nb.AddPage(self.player_effectiveness_analysis_page, "Player Effectiveness A.")
         nb.AddPage(self.optimal_shooting_point_prediction_page, "Optimal Shooting Point P.")
         nb.AddPage(self.pass_success_prediction_page, "Pass Success P.")
         nb.AddPage(self.ball_ownership_prediction_page, "Ball Ownership P.")
@@ -48,5 +51,6 @@ class AnalyticsNotebook(wx.Panel):
         self.ball_ownership_analysis_page.setMatch(match)
         self.running_distance_analysis_page.setMatch(match)
         self.dominant_region_analysis_page.setMatch(match)
+        self.player_effectiveness_analysis_page.setMatch(match)
         ########
         self.pass_success_prediction_page.setMatch(match)
