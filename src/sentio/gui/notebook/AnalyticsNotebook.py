@@ -23,6 +23,8 @@ class AnalyticsNotebook(wx.Panel):
         style &= ~(aui.AUI_NB_CLOSE_ON_ACTIVE_TAB)
 
         nb = aui.AuiNotebook(self, agwStyle=style)
+        self.clear_button = wx.Button(self, -1, "CLEAR")
+
 
         # # create the page windows as children of the notebook
         self.ball_ownership_analysis_page = BallOwnershipAnalysisNotebook(nb, canvas, ax)
@@ -42,9 +44,11 @@ class AnalyticsNotebook(wx.Panel):
         nb.AddPage(self.pass_success_prediction_page, "Pass Success P.")
         nb.AddPage(self.ball_ownership_prediction_page, "Ball Ownership P.")
 
-        sizer = wx.BoxSizer()
+        sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(nb, 1, wx.EXPAND)
+        sizer.Add(self.clear_button, 0, wx.ALIGN_CENTER)
         self.SetSizer(sizer)
+        sizer.Fit(self)
 
 
     def setMatch(self, match):
