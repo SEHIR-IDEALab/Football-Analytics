@@ -12,11 +12,12 @@ import wx
 
 class PlayerEffectivenessAnalysisNotebook(wx.Panel):
 
-    def __init__(self, parent, canvas, ax):
+    def __init__(self, parent, canvas, ax, analytics):
         wx.Panel.__init__(self, parent)
 
         self.canvas = canvas
         self.ax = ax
+        self.analytics = analytics
 
         time_interval_box = wx.StaticBox(self, wx.ID_ANY, "Time Interval", style=wx.ALIGN_CENTER)
         self.interval_min = wx.TextCtrl(self, -1, "0", size=(50,-1))
@@ -77,6 +78,8 @@ class PlayerEffectivenessAnalysisNotebook(wx.Panel):
 
 
     def OnCompute(self, event):
+        self.analytics.clear()
+
         q = {}
         evaluate = Pass()
         for game_instance in self.match.sentio.game_instances.getAllInstances():
@@ -103,7 +106,7 @@ class PlayerEffectivenessAnalysisNotebook(wx.Panel):
                 temp_results.append((player.jersey_number, (numpy.mean(player.effectiveness_scores))))
             results.append(temp_results)
         results = self.formatInfoToDisplay(results)
-        EventAnnotationManager.annotateAnalysisResults(self.canvas, self.ax, results)
+        self.analytics.results = EventAnnotationManager.annotateAnalysisResults(self.canvas, self.ax, results)
 
 
     def formatInfoToDisplay(self, results):
