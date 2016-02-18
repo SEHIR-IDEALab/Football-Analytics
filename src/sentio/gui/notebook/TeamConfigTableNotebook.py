@@ -22,17 +22,17 @@ class TeamConfigTableNotebook(wx.Panel):
         self.grid.SetColLabelValue(0, "ID")
         self.grid.SetColLabelValue(1, "js")
         self.grid.SetColLabelValue(2, "speed")
-        self.grid.SetColLabelValue(3, "direction")
-        self.grid.SetColLabelValue(4, "acceleration")
+        self.grid.SetColLabelValue(3, "direc.")
+        self.grid.SetColLabelValue(4, "acc.")
 
         # self.grid.SetDefaultColSize(60)
         self.grid.SetRowLabelSize(30)
 
         self.grid.SetColSize(0, 0)
         self.grid.SetColSize(1, 25)
-        self.grid.SetColSize(2, 55)
-        self.grid.SetColSize(3, 70)
-        self.grid.SetColSize(4, 75)
+        self.grid.SetColSize(2, 50)
+        self.grid.SetColSize(3, 60)
+        self.grid.SetColSize(4, 45)
 
         self.grid.EnableDragGridSize(False)
         self.grid.DisableDragColSize()
@@ -124,8 +124,8 @@ class TeamConfigTableNotebook(wx.Panel):
                 if self.global_acceleration.GetValue():
                     visual_player.acceleration = float(self.acceleration_entry.GetValue())
 
-                self.grid.SetCellValue(i, 2, str(visual_player.speed))
-                self.grid.SetCellValue(i, 4, str(visual_player.acceleration))
+                self.grid.SetCellValue(i, 2, self.displayMode(visual_player.speed))
+                self.grid.SetCellValue(i, 4, self.displayMode(visual_player.acceleration))
 
                 if Parameters.IS_SHOW_DIRECTIONS_ON:
                     visual_player.drawDirectionWithSpeed()
@@ -177,11 +177,12 @@ class TeamConfigTableNotebook(wx.Panel):
 
             self.grid.SetCellValue(i, 0, str(visual_player.player.object_id))
             self.grid.SetCellValue(i, 1, str(visual_player.player.jersey_number))
-            self.grid.SetCellValue(i, 2, str(visual_player.speed))
-            self.grid.SetCellValue(i, 3, str(visual_player.direction))
-            self.grid.SetCellValue(i, 4, str(visual_player.acceleration))
+            self.grid.SetCellValue(i, 2, self.displayMode(visual_player.speed))
+            self.grid.SetCellValue(i, 3, self.displayMode(visual_player.direction))
+            self.grid.SetCellValue(i, 4, self.displayMode(visual_player.acceleration))
 
             self.grid.SetCellBackgroundColour(i, 1, visual_player.getObjectColor())
+            self.grid.SetCellTextColour(i, 1, "white")
             self.grid.SetReadOnly(i, 1, True)
 
 
@@ -217,3 +218,8 @@ class TeamConfigTableNotebook(wx.Panel):
         if Parameters.IS_SHOW_DIRECTIONS_ON:
             visual_player.drawDirectionWithSpeed()
             self.canvas.draw()
+
+
+    def displayMode(self, value):
+        return "{0:.1f}".format(value)
+
