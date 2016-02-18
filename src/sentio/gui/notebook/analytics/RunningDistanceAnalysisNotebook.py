@@ -16,23 +16,17 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
         self.ax = ax
         self.analytics = analytics
 
-        time_interval_box = wx.StaticBox(self, wx.ID_ANY, "Time Interval", style=wx.ALIGN_CENTER)
         self.interval_min = wx.TextCtrl(self, -1, "0", size=(50,-1))
-        interval_text = wx.StaticText(self, label=" &&& ")
         self.interval_max = wx.TextCtrl(self, -1, "90", size=(50,-1))
 
         self.build_dataset_button = wx.Button(self, -1, "BUILD DATASET", size=(10,10))
-
-        team_choice_text = wx.StaticText(self, label="Team Choice")
-        team_choices = ["All Teams", "Home Team", "Away Team"]
-        self.team_choice = wx.ComboBox(self, size=(80,-1), choices=team_choices, style=wx.CB_READONLY)
-
-        filters_box = wx.StaticBox(self, wx.ID_ANY, "FILTERS")
-        self.game_stop_filter = wx.CheckBox(self, -1, 'game stop')
-        self.speed_filter = wx.CheckBox(self, -1, 'speed')
-
         self.run_button = wx.Button(self, -1, "RUN", size=(80,40))
 
+        self.team_choice = wx.ComboBox(self, size=(80,-1), style=wx.CB_READONLY,
+                                       choices=["All Teams", "Home Team", "Away Team"])
+
+        self.game_stop_filter = wx.CheckBox(self, -1, 'game stop')
+        self.speed_filter = wx.CheckBox(self, -1, 'speed')
 
 
         #########################
@@ -41,18 +35,18 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
 
         vbox = wx.BoxSizer(wx.VERTICAL)
 
-        time_interval_box_sizer = wx.StaticBoxSizer(time_interval_box, wx.HORIZONTAL)
+        time_interval_box_sizer = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, "Time Interval", style=wx.ALIGN_CENTER), wx.HORIZONTAL)
         time_interval_box_sizer.Add(self.interval_min, 0, wx.EXPAND)
-        time_interval_box_sizer.Add(interval_text, 0, wx.EXPAND)
+        time_interval_box_sizer.Add(wx.StaticText(self, label=" &&& "), 0, wx.EXPAND)
         time_interval_box_sizer.Add(self.interval_max, 0, wx.EXPAND)
 
         vbox.Add(time_interval_box_sizer, 0, wx.EXPAND)
         vbox.Add(self.build_dataset_button, 1, wx.EXPAND)
 
-        vbox.Add(team_choice_text, 0, wx.EXPAND)
+        vbox.Add(wx.StaticText(self, label="Team Choice"), 0, wx.EXPAND)
         vbox.Add(self.team_choice, 0, wx.EXPAND)
 
-        filters_box_sizer = wx.StaticBoxSizer(filters_box, wx.VERTICAL)
+        filters_box_sizer = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, "FILTERS"), wx.VERTICAL)
         filters_box_sizer.Add(self.game_stop_filter, 0, wx.EXPAND)
         filters_box_sizer.Add(self.speed_filter, 0, wx.EXPAND)
 

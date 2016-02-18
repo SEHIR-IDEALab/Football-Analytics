@@ -1,4 +1,5 @@
 from matplotlib.text import Text
+from src.sentio.Parameters import PASS_SOURCE_RADIUS, PASS_TARGET_RADIUS_COEFFICIENT
 from src.sentio.file_io.reader.ReaderBase import ReaderBase
 from src.sentio.analytics.prediction.OptimalShootingPointPrediction import OptimalShootingPointPrediction
 
@@ -24,13 +25,38 @@ class OptimalShootingPointPredictionNotebook(wx.Panel):
         self.markPlayer_button = wx.Button(self, -1, "click and mark a player!", size=(10,10))
         self.run_button = wx.Button(self, -1, "RUN", size=(80,40))
 
+        self.iteration_choice = wx.ComboBox(self, size=(80,-1), style=wx.CB_READONLY,
+                                            choices=["0", "5", "10", "15", "20", "25", "30", "35"])
+        self.step_size_choice = wx.ComboBox(self, size=(80,-1), style=wx.CB_READONLY,
+                                            choices=["1", "2", "3", "4", "5"])
+
 
         #########################
         ######## Layout #########
         #########################
 
         vbox = wx.BoxSizer(wx.VERTICAL)
+
         vbox.Add(self.markPlayer_button, 1, wx.EXPAND)
+        vbox.Add(wx.StaticText(self, label="Number of Iterations"), 0, wx.EXPAND)
+        vbox.Add(self.iteration_choice, 0, wx.EXPAND)
+        vbox.Add(wx.StaticText(self, label="Step Size"), 0, wx.EXPAND)
+        vbox.Add(self.step_size_choice, 0, wx.EXPAND)
+
+        risk_parameters_box = wx.StaticBox(self, wx.ID_ANY, "Risk Parameters", style=wx.ALIGN_CENTER)
+        self.risk_parameter1 = wx.TextCtrl(self, -1, str(PASS_SOURCE_RADIUS), size=(50,-1))
+        self.risk_parameter2 = wx.TextCtrl(self, -1, str(PASS_TARGET_RADIUS_COEFFICIENT), size=(50,-1))
+        self.risk_parameter3 = wx.TextCtrl(self, -1, "---", size=(50,-1))
+
+        risk_parameters_box_sizer = wx.StaticBoxSizer(risk_parameters_box, wx.VERTICAL)
+        risk_parameters_box_sizer.Add(wx.StaticText(self, label="Pass source radius"), 0, wx.EXPAND)
+        risk_parameters_box_sizer.Add(self.risk_parameter1, 0, wx.EXPAND)
+        risk_parameters_box_sizer.Add(wx.StaticText(self, label="Pass target radius coefficient"), 0, wx.EXPAND)
+        risk_parameters_box_sizer.Add(self.risk_parameter2, 0, wx.EXPAND)
+        risk_parameters_box_sizer.Add(wx.StaticText(self, label="Shoot radius"), 0, wx.EXPAND)
+        risk_parameters_box_sizer.Add(self.risk_parameter3, 0, wx.EXPAND)
+
+        vbox.Add(risk_parameters_box_sizer, 0, wx.EXPAND)
         vbox.Add(self.run_button, 1, wx.EXPAND)
 
         self.SetSizer(vbox)
