@@ -93,7 +93,7 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
         results = []
         for team in self.getChosenTeams():
             temp_results = []
-            temp_results.append((team.team_name, "Running Distance"))
+            temp_results.append((team.team_name.upper(), "Running Distance"))
             for player in team.getTeamPlayers():
 
                 ## filtering
@@ -117,17 +117,19 @@ class RunningDistanceAnalysisNotebook(wx.Panel):
         q = ""
         if self.team_choice.GetValue() == "All Teams":
             for (home_js, home_result), (away_js, away_result) in itertools.izip(results[0], results[1]):
-                try:
-                    q += "%s %s | %s %s\n" %(("%.2f"%home_result).ljust(30), str(home_js).center(10),
-                                             str(away_js).center(10), ("%.2f"%away_result).rjust(30))
-                except:
-                    q += "%s %s | %s %s\n" %(str(home_result).ljust(30), str(home_js).center(10),
-                                             str(away_js).center(10), str(away_result).rjust(30))
+                if home_js != -1:
+                    try:
+                        q += "%s %s | %s %s\n" %(("%.2f"%home_result).ljust(30), str(home_js).center(10),
+                                                 str(away_js).center(10), ("%.2f"%away_result).rjust(30))
+                    except:
+                        q += "%s %s | %s %s\n" %(str(home_result).ljust(30), str(home_js).center(10),
+                                                 str(away_js).center(10), str(away_result).rjust(30))
         else:
             for js, result, in results[0]:
-                try:
-                    q += "%s %s\n" %(str(js).center(10), str("%.2f"%result).rjust(30))
-                except:
-                    q += "%s %s\n" %(str(js).center(10), str(result).rjust(30))
-        return q
+                if js != -1:
+                    try:
+                        q += "%s %s\n" %(str(js).center(10), str("%.2f"%result).rjust(30))
+                    except:
+                        q += "%s %s\n" %(str(js).center(10), str(result).rjust(30))
+        return q[:-1]
 

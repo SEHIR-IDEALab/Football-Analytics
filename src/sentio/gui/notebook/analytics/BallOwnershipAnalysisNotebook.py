@@ -86,7 +86,7 @@ class BallOwnershipAnalysisNotebook(wx.Panel):
         results = []
         for team in self.getChosenTeams():
             temp_results = []
-            temp_results.append((team.team_name, ("Ball Steal", "Ball Lose", "Ball Pass", "Ball Ownership Time")))
+            temp_results.append((team.team_name.upper()[:4], ("Ball Steal", "Ball Lose", "Ball Pass", "Ball Ownership Time")))
             for player in team.getTeamPlayers():
                 temp_results.append((player.jersey_number, player.getStats()))
             results.append(temp_results)
@@ -95,25 +95,36 @@ class BallOwnershipAnalysisNotebook(wx.Panel):
 
 
     def formatInfoToDisplay(self, results):
-        print results
+        # print results
         q = ""
 
         if self.team_choice.GetValue() == "All Teams":
             for (home_js, home_stats), (away_js, away_stats) in itertools.izip(results[0], results[1]):
-                ball_steal, ball_lose, ball_pass, ball_ownership_time = home_stats
-                ball_steal2, ball_lose2, ball_pass2, ball_ownership_time2 = away_stats
-                try:
-                    q += "%s %s %s %s %s | %s %s %s %s %s\n" %\
-                         (str(ball_ownership_time).ljust(21), str(ball_pass).ljust(11),str(ball_lose).ljust(11),
-                          str(ball_steal).ljust(12), str(home_js).center(9),
-                          str(away_js).center(10), str(ball_steal2).rjust(11), str(ball_lose2).rjust(11),
-                          str(ball_pass2).rjust(11), str(ball_ownership_time2).rjust(21))
-                except:
-                    q += "%s %s | %s %s\n" %(str(home_stats[::-1]).ljust(21), str(home_js).center(10),
-                                             str(away_js).center(10), str(away_stats).rjust(21))
+                if home_js != -1:
+                    ball_steal, ball_lose, ball_pass, ball_ownership_time = home_stats
+                    ball_steal2, ball_lose2, ball_pass2, ball_ownership_time2 = away_stats
+
+                    ball_ownership_time = "%smin %ssec"%(ball_ownership_time[0], ball_ownership_time[1])
+                    ball_ownership_time2 = "%smin %ssec"%(ball_ownership_time2[0], ball_ownership_time2[1])
+
+                    print ball_ownership_time
+                    print ball_ownership_time2
+
+                    try:
+                        q += "%s %s %s %s %s | %s %s %s %s %s\n" %\
+                             (str(ball_ownership_time).ljust(21), str(ball_pass).ljust(11),str(ball_lose).ljust(11),
+                              str(ball_steal).ljust(12), str(home_js).center(9),
+                              str(away_js).center(10), str(ball_steal2).rjust(11), str(ball_lose2).rjust(11),
+                              str(ball_pass2).rjust(11), str(ball_ownership_time2).rjust(21))
+                    except:
+                        q += "%s %s | %s %s\n" %(str(home_stats[::-1]).ljust(21), str(home_js).center(10),
+                                                 str(away_js).center(10), str(away_stats).rjust(21))
         else:
             for js, stats in results[0]:
-                ball_steal, ball_lose, ball_pass, ball_ownership_time = stats
-                q += "%s %s %s %s %s\n" %(str(js).center(10), str(ball_steal).rjust(11), str(ball_lose).rjust(11),
-                                  str(ball_pass).rjust(11), str(ball_ownership_time).rjust(21))
-        return q
+                if js != -1:
+                    ball_steal, ball_lose, ball_pass, ball_ownership_time = stats
+                    if isinstance(js, int):
+                        ball_ownership_time = "%sm %ss"%(ball_ownership_time[0], ball_ownership_time[1])
+                    q += "%s %s %s %s %s\n" %(str(js).center(10), str(ball_steal).rjust(11), str(ball_lose).rjust(11),
+                                      str(ball_pass).rjust(11), str(ball_ownership_time).rjust(21))
+        return q[:-1]

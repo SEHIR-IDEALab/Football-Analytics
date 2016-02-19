@@ -1,4 +1,5 @@
 import math
+import operator
 from src.sentio.Parameters import average_speed_player, average_distance_per_frame, GOALPOST_LENGTH
 from src.sentio.analytics.Analyze import Analyze
 
@@ -141,7 +142,7 @@ class OptimalShootingPointPrediction:
         return ([x1_p,y1_p],cords)
 
 
-    def predict(self, p1, goalChance, iterate=15):
+    def predict(self, p1, goalChance, iterate=15, stepSize=1):
 
         player_list, initialInfo,g = self.get_players_in_gcr(p1)
 
@@ -155,10 +156,10 @@ class OptimalShootingPointPrediction:
         if Q1 <0: Q1+=360 # convert positive angle
 
         # print Q1,"Q1"
-        goalChances=[]
+        goalChances={}
         for i in range(iterate+1):
-            goalChances.append(goalChance(p1))
-            bp, ot = self.getFutureCoordinates(p1, player_list,i, g,Q1)
+            goalChances[goalChance(p1)] = p1.get_position()
+            bp, ot = self.getFutureCoordinates(p1, player_list,i*stepSize, g,Q1)
             s1x.append(bp[0])
             s1y.append(bp[1])
 
@@ -169,7 +170,8 @@ class OptimalShootingPointPrediction:
         for p2 in player_list:
             p2.set_position(initialInfo[p2])
 
-        return max(goalChances), scat_xr,scat_yr, s1x,s1y
+        best_goal_position = max(goalChances.iteritems(), key=operator.itemgetter(0))[1]
+        return best_goal_position, scat_xr,scat_yr, s1x,s1y
 
 
     def __str__(self):
