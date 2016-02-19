@@ -7,8 +7,9 @@ q=ScoreCal()
 class Optimization():
 
     def __init__(self):
-        self.domain=[(0,1000),(0,1000),(0,1000)] # [w1,w2,w3]
-        # self.domain=[(1,10),(2,20)]
+        self.domain=[(2,10),(1,5),(1,20),(0,1000),(0,1000),(0,1000),(0,1000)] # [r1,r2,rgw1,w2,w3]
+        # self.domain=[(1,20),(2,30)]
+        # self.domain=[(1,50)] # possible goal distance
 
     def hillclimb(self):
 
@@ -81,13 +82,13 @@ class Optimization():
         return (vec,eb)
 
 
-    def geneticoptimize(self,popsize=50,mutprob=0.2,step=1,elite=0.2,maxiter=100):
+    def geneticoptimize(self,pair,popsize=50,mutprob=0.2,step=1,elite=0.2,maxiter=100):
 
         domain = self.domain
         # Mutation Operation
 
         def mutate(vec):
-            i=random.randint(0,len(domain)-1)
+            i=random.randint(0,len(domain)-2) # -2
             if random.random()<0.5 and vec[i]>domain[i][0]:
               return vec[0:i]+[vec[i]-step]+vec[i+1:]
             elif vec[i]<domain[i][1]:
@@ -95,7 +96,7 @@ class Optimization():
 
         # Crossover Operation
         def crossover(r1,r2):
-            i=random.randint(1,len(domain)-2)
+            i=random.randint(1,len(domain)-2)# -2
             return r1[0:i]+r2[i:]
 
         # Build the initial population
@@ -111,30 +112,34 @@ class Optimization():
         # Main loop
 
         for i in range(maxiter):
-            print pop[i]
-            scores=[(q.CostScore2(v),v) for v in pop]
-            scores.sort(reverse=True)
-            ranked=[v for (s,v) in scores]
+            try:
+                print pop[i]
+                scores=[(q.CostScore2(v,pair),v) for v in pop]
+                scores.sort(reverse=True)
+                ranked=[v for (s,v) in scores]
 
-            # Start with the pure winners
-            pop=ranked[0:topelite]
+                # Start with the pure winners
+                pop=ranked[0:topelite]
 
-            # Add mutated and bred forms of the winners
-            while len(pop)<popsize:
-                if random.random() < mutprob:
+                # Add mutated and bred forms of the winners
+                while len(pop)<popsize:
+                    if random.random() < mutprob:
 
-                    # Mutation
-                    c=random.randint(0,topelite)
-                    pop.append(mutate(ranked[c]))
-                else:
+                        # Mutation
+                        c=random.randint(0,topelite)
+                        pop.append(mutate(ranked[c]))
+                    else:
 
-                    # Crossover
-                    c1=random.randint(0,topelite)
-                    c2=random.randint(0,topelite)
-                    pop.append(crossover(ranked[c1],ranked[c2]))
+                        # Crossover
+                        c1=random.randint(0,topelite)
+                        c2=random.randint(0,topelite)
+                        pop.append(crossover(ranked[c1],ranked[c2]))
 
-            # Print current best score
-            print scores[0][0]
+                # Print current best score
+                print scores[0][0]
+            except IndexError:
+                print "www"
+
 
         return scores[0][1]
 
@@ -145,6 +150,42 @@ if __name__ == "__main__":
     # for i in range(50):
     #     print w.hillclimb()
     # print "----"
-    # print w.annealingoptimize()
+    # for i in range(30):
+    #     print w.annealingoptimize()
+
+    # print w.geneticoptimize()
+
+
+
+
+
+    Qs=[0,1,2,3,4,5,6,7,8,9,10,11]
+    for i in Qs:
+
+        print "Q:",i+1,"-------"
+        print w.geneticoptimize(i)
+
     # print "----"
-    print w.geneticoptimize()
+    # Qs=[0,1,2,3,4,5,6,7,8,9,10,11]
+    # for i in range(6):
+    #     a,b=random.sample(Qs,2)
+    #     Qs.remove(a)
+    #     Qs.remove(b)
+    #     print "Pair:",(a,b)
+    #     print "Q:",i+1,"-------"
+    #     print w.geneticoptimize((a,b))
+
+
+
+
+
+#         ([33.0, 915.0, 547.0], 30)
+# ([244.0, 135.0, 583.0], 30)
+# ([169.0, 939.0, 37.0], 30)
+# ([117.0, 137.0, 244.0], 30)
+# ([563.0, 356.0, 119.0], 30)
+# ([402.0, 283.0, 272.0], 30)
+# ([619.0, 21.0, 223.0], 30)
+# ([811.0, 499.0, 662.0], 30)
+# ([165.0, 214.0, 233.0], 30)
+# ([670.0, 433.0, 967.0], 30)

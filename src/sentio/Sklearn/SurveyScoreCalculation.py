@@ -1,7 +1,7 @@
 import csv
 import math
 from src.sentio.Sklearn.Survey_Read import Survey
-from SurveyAnalysis.analyse2 import SurveyAnalyse
+from SurveyAnalysis.analyse2 import *
 
 
 __author__ = 'aliuzun'
@@ -17,7 +17,8 @@ class ScoreCal():
         # a.Write_to_csv()
         # a.sortPossitions()
         # self.our_answer=a.get_result_list()
-        self.survey_answer=[['P3', 'P2', 'P1'],['P2', 'P3', 'P1'],['P2', 'P1', 'P3'], ['P3', 'P2', 'P1'], ['P2', 'P1', 'P3'], ['P1', 'P2', 'P3'], ['P2', 'P1', 'P3'], ['P2', 'P1', 'P3'], ['P2', 'P3', 'P1'], ['P2', 'P3', 'P1'], ['P2', 'P3', 'P1'], ['P3', 'P1', 'P2']]
+        self.survey_answer=[['P3', 'P2', 'P1'],['P2', 'P3', 'P1'],['P2', 'P1', 'P3'], ['P3', 'P2', 'P1'], ['P2', 'P1', 'P3'], (['P1', 'P2', 'P3'],['P3', 'P2', 'P1']), ['P2', 'P1', 'P3'], ['P2', 'P1', 'P3'], ['P2', 'P3', 'P1'], ['P2', 'P3', 'P1'], ['P2', 'P3', 'P1'], (['P3', 'P1', 'P2'],['P1', 'P3', 'P2'])]
+        # self.survey_answer=[['P3', 'P2', 'P1'],['P2', 'P3', 'P1'],['P2', 'P1', 'P3'], ['P3', 'P2', 'P1'], ['P2', 'P1', 'P3'], ['P1', 'P2', 'P3'], ['P2', 'P1', 'P3'], ['P2', 'P1', 'P3'], ['P2', 'P3', 'P1'], ['P2', 'P3', 'P1'], ['P2', 'P3', 'P1'], ['P3', 'P1', 'P2']]
         # self.our_answer=None
 
 
@@ -74,36 +75,49 @@ class ScoreCal():
             k+=1
         return tmp_list
 
-    def CostScore2(self,solution):
+    def getScore(self,survey_answer,our_answer):
+        survey_pair=[(survey_answer[0],survey_answer[1]),(survey_answer[0],survey_answer[2]),(survey_answer[1],survey_answer[2])]
+        tool_pair=[(our_answer[0],our_answer[1]),(our_answer[0],our_answer[2]),(our_answer[1],our_answer[2])]
+        score=0
+        # print survey_pair,"s"
+        # print tool_pair,"t"
+        for pair in tool_pair:
+            if pair in survey_pair:
+                score=score+1
 
+        return score
+
+    def CostScore2(self,solution,pair):
+        i=pair
         a=SurveyAnalyse(solution)
         a.Write_to_csv()
         a.sortPossitions()
         self.our_answer = a.get_result_list()
         k=0
         tmp_list=[]
-
+        # try:
         while k < 12:
-            # score=0
-            poss_pair=[(self.our_answer[k][0],self.our_answer[k][1]),(self.our_answer[k][0],self.our_answer[k][2]),(self.our_answer[k][1],self.our_answer[k][2])]
-            score=0
+            if (k==i):
+                pass
+            else:
+                if k==5 or k==11:
+                    sa1,sa2=self.survey_answer[k][0],self.survey_answer[k][1]
+                    score1=self.getScore(sa1,self.our_answer[k])
+                    score2=self.getScore(sa2,self.our_answer[k])
+                    tmp_list.append(max(score1,score2))
+                else:
+                    score=self.getScore(self.survey_answer[k],self.our_answer[k])
+                    tmp_list.append(score)
 
-            if (self.survey_answer[k][0],self.survey_answer[k][1]) in poss_pair:
-                score+=1
-            else:
-                score-=0
-            if (self.survey_answer[k][0],self.survey_answer[k][2]) in poss_pair:
-                score+=1
-            else:
-                score-=0
-            if (self.survey_answer[k][1],self.survey_answer[k][2]) in poss_pair:
-                score+=1
-            else:
-                score-=0
-            # score = "%.2f" % score
-            tmp_list.append(score)
             k+=1
+        # print tmp_list
+
         return sum(tmp_list)
+        # except TypeError:
+        #     pass
+
+
+
 
     def CostScore3(self,solution):
         a=SurveyAnalyse(solution)
@@ -165,5 +179,28 @@ if __name__ == "__main__":
     # print a.CostScore3()
     # for i in range(len(common_c)):
     #     print i+1,"-",our_c[i],"----",self.survey_answer[i],"-->",a.NewDisstanceCal()[i],"--",a.CostScore2()[i],"--",a.CostScore3()[i]
+
+
+
+
+
+
+
+# Q1 :::: ['P3', 'P2', 'P1'] ['P3', 'P2', 'P1'] ++++++
+# Q2 :::: ['P2', 'P3', 'P1'] ['P2', 'P3', 'P1']
+# Q3 :::: ['P2', 'P1', 'P3'] ['P2', 'P1', 'P3']
+# Q4 :::: ['P3', 'P2', 'P1'] ['P3', 'P2', 'P1']
+# Q5 :::: ['P2', 'P1', 'P3'] ['P2', 'P1', 'P3']
+# Q6 :::: ['P1', 'P2', 'P3'] (['P1', 'P2', 'P3'], ['P3', 'P2', 'P1']) *
+# Q7 :::: ['P2', 'P1', 'P3'] ['P2', 'P1', 'P3']
+# Q8 :::: ['P1', 'P2', 'P3'] ['P2', 'P1', 'P3'] *
+# Q9 :::: ['P3', 'P1', 'P2'] ['P2', 'P3', 'P1'] *
+# Q10 :::: ['P2', 'P3', 'P1'] ['P2', 'P3', 'P1']
+# Q11 :::: ['P2', 'P1', 'P3'] ['P2', 'P3', 'P1'] *
+# Q12 :::: ['P3', 'P2', 'P1'] (['P3', 'P1', 'P2'], ['P1', 'P3', 'P2']) *
+
+
+
+
 
 

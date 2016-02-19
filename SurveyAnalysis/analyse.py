@@ -1,5 +1,5 @@
 from src.sentio.gui.SnapShotCSV import SnapShot
-from src.sentio.pass_evaluate.Pass import Pass
+from src.sentio.algorithms.Pass import Pass
 # from src.sentio.pass_evaluate.Pass2 import Pass
 import csv
 import glob

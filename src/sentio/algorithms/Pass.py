@@ -22,27 +22,29 @@ class Pass:
         x1, y1 = p1.get_position()
         x2, y2 = p2.get_position()
         x3, y3 = p3.get_position()
-
-        if not RiskRange.isInRange((x1,y1), (x3,y3), (x2,y2)):
+        con=RiskRange.isInRange((x1,y1), (x3,y3), (x2,y2))
+        if not con:
             return risk
-        try: slope = (y2 - y1) / (x2 - x1) # zero devision error gives
-        except (ZeroDivisionError):  slope=100
 
+        dx = (0.01 if (x2-x1) == 0 else (x2-x1))
+        slope = (y2 - y1) / dx
         a,b,c = slope,-1,( ( slope * (-x1) ) + y1 )
-
 
         cond1,cond2 = min(x1,x2) <= x3 <= max(x1,x2) , min(y1,y2) <= y3 <= max(y1,y2)
 
         d1=math.sqrt(math.pow((x2-x1),2) + math.pow((y2-y1),2))
         hypotenuse_1to3 = math.sqrt(math.pow(x3 - x1, 2) + math.pow(y3 - y1, 2))
-        try:
-            sp1,sp2=((y3 - y1) / (x3 - x1)),((y3 - y2) / (x3 - x2))
-            tmp_slope = min(sp1,sp2)
-        except: (ZeroDivisionError)
+        dx1 = (0.01 if (x3-x1) == 0 else (x3-x1))
+        dx2 = (0.01 if (x3-x2) == 0 else (x3-x2))
+        sp1,sp2=((y3 - y1) / dx1),((y3 - y2) / dx2)
+        tmp_slope = min(sp1,sp2)
+
 
         if x3==x1 or x3==x2:
             d1,d2= math.fabs((y3-y1)),0.1
-            V2 = d2/(d1/average_speed_ball)
+            if d1/average_speed_ball==0:   V2=10
+            else:     V2 = d2/(d1/average_speed_ball)
+
             d_tmp_t = float("{0:.1f}".format(V2))
             if d_tmp_t < 3.0:    tt=1.0
             elif d_tmp_t > 10.0: tt=0.0
@@ -85,13 +87,11 @@ class Pass:
                 if d2 == d2_a:
                     d1 = math.sqrt(math.pow(hypotenuse_1to3, 2) - math.pow(d2, 2))
 
-
+        d2=d2-1.5
         d2 = (0.1 if d2 <= 0.1 else d2)
 
         t1 = d1/average_speed_ball
-        try:
-            # V2 = d2/t1
-            V2=d2/t1
+        try:   V2=d2/t1
         except ZeroDivisionError: V2=10.0
 
         d_tmp_t = float("{0:.1f}".format(V2))
@@ -102,43 +102,111 @@ class Pass:
         else:
             tt=COEFFICIENTS[d_tmp_t]  # d1 is distance to point that p3 cross the line1to2 right angle
 
-
         risk=(d1/d2)*tt
-
         return risk
+
 
 
     def overallRisk(self, p1, p2, goal_keeper=True):
         overallRisk = 0.0
+        try:
+            if p1.isHomeTeamPlayer() == p2.isHomeTeamPlayer():
+                if p1.isHomeTeamPlayer(): opponent_team = self.teams.away_team
+                else: opponent_team = self.teams.home_team
+            else:
+                if p2.isHomeTeamPlayer(): opponent_team = self.teams.away_team
+                else: opponent_team = self.teams.home_team
 
-        if p1.isHomeTeamPlayer(): opponent_team = self.teams.away_team
-        else: opponent_team = self.teams.home_team
+            if goal_keeper:
+                for p3 in opponent_team.getTeamPlayers():
 
-        if goal_keeper:
-            for p3 in opponent_team.getTeamPlayers():
-                overallRisk += self.risk(p1, p3, p2)
+                    if p3==p2:  overallRisk+=0
+                    else:       overallRisk += self.risk(p1, p3, p2)
+            else:
+                for p3 in opponent_team.getTeamPlayers():
+                    if not p3.isGoalKeeper():
+                        overallRisk += self.risk(p1, p3, p2)
+
+            return overallRisk
+        except AttributeError:
+            return overallRisk
+
+
+
+    # def gain(self, p1, p2):
+    #     if p2.isHomeTeamPlayer(): opponent_team = self.teams.away_team
+    #     else: opponent_team = self.teams.home_team
+    #
+    #     gain = 0
+    #     for p3 in opponent_team.getTeamPlayers():
+    #         if Analyze.isBetween(p1, p3, p2):
+    #             gain += 1
+    #     if Analyze.isOpponentGoalKeeperLocationLeft(p2, self.teams):
+    #         if p1.getX() < p2.getX(): return -gain
+    #         else: return gain
+    #     else:
+    #         if p1.getX() < p2.getX(): return gain
+    #         else: return -gain
+
+    def getShootPoint(self,p1,G):
+        x1,y1=p1.get_position()#p1.getX(),p1.getY()
+        x2,y2=G
+        dx,dy=(x1-x2),(y1-y2)
+        dx=(0.01 if dx==0 else dx)
+        distance=math.sqrt(math.pow(dx,2)+math.pow(dy,2))
+
+        if distance > shooting_radius:
+            distance-=shooting_radius
+
+        alpha=math.degrees(math.atan(dy/dx))
+
+        if y1 > y2: # above the line
+            if x1>x2:
+                xp,yp  = x1 - distance*round(math.cos(math.radians(alpha)),2),\
+                               y1 - math.fabs(distance*round(math.sin(math.radians(alpha)),2))
+            else:
+                xp,yp  = x1 + distance*round(math.cos(math.radians(alpha)),2) ,\
+                               y1 - math.fabs(distance*round(math.sin(math.radians(alpha)),2))
         else:
-            for p3 in opponent_team.getTeamPlayers():
-                if not p3.isGoalKeeper():
-                    overallRisk += self.risk(p1, p3, p2)
+            if x1>x2:
+                xp,yp  = x1 - distance*round(math.cos(math.radians(alpha)),2),\
+                           y1 + math.fabs(distance*round(math.sin(math.radians(alpha)),2))
+            else:
+                xp,yp  = x1 + distance*round(math.cos(math.radians(alpha)),2) ,\
+                               y1 + math.fabs(distance*round(math.sin(math.radians(alpha)),2))
+        return (xp,yp)
 
-        return overallRisk
 
-
-    def gain(self, p1, p2):
-        if p2.isHomeTeamPlayer(): opponent_team = self.teams.away_team
+    def get_gain(self,p,pG):
+        gain=0
+        dx,dy=(p.getX()-pG[0]),(p.getY()-pG[1])
+        d1=math.sqrt(math.pow(dx,2)+math.pow(dy,2)) # distance of p to sh
+        if p.isHomeTeamPlayer(): opponent_team = self.teams.away_team
         else: opponent_team = self.teams.home_team
-
-        gain = 0
+        border=[p.getX(),pG[0]]
+        border.sort()
         for p3 in opponent_team.getTeamPlayers():
-            if Analyze.isBetween(p1, p3, p2):
+            dx,dy=(p3.getX()-pG[0]),(p3.getY()-pG[1])
+            d3=math.sqrt(math.pow(dx,2)+math.pow(dy,2)) # distance of p3 to sh
+            if d3 <=d1 and not p3.isGoalKeeper():
                 gain += 1
-        if Analyze.isOpponentGoalKeeperLocationLeft(p2, self.teams):
-            if p1.getX() < p2.getX(): return -gain
-            else: return gain
+        return gain
+
+
+
+    def gain(self,p1,p2):
+        target_loc={0:(0,35.0),1:(105.0,35.0)}
+        if Analyze.isOpponentGoalKeeperLocationLeft(p1,self.teams):
+            tp=target_loc[0]
         else:
-            if p1.getX() < p2.getX(): return gain
-            else: return -gain
+            tp=target_loc[1]
+
+        sx1,sy1=self.getShootPoint(p1,tp)
+        sx2,sy2=self.getShootPoint(p2,tp)
+        g1 = self.get_gain(p1,(sx1,sy1))
+        g2 = self.get_gain(p2,(sx2,sy2))
+
+        return g1-g2
 
 
     def passAdvantage(self, p1):
@@ -155,6 +223,25 @@ class Pass:
 
         max_pass = max(passAdvantages.keys())
         return max_pass, passAdvantages[max_pass]
+
+    def desicionTime(self,p1,p2):
+        x1,y1=p2.get_position()
+        team_p1 = ("home" if p1.isHomeTeamPlayer()==True else "away")
+        team_p1 = (self.teams.away_team if team_p1=="home" else self.teams.home_team)
+        team_p2 = ("home" if p1.isHomeTeamPlayer()==True else "away")
+        team_p2 = (self.teams.away_team if team_p2=="home" else self.teams.home_team)
+        d_min=126.0 # meters
+        if team_p1==team_p2:
+            player_list=team_p2.getTeamPlayers()
+            for p in player_list:
+                x2,y2=p.get_position()
+                d = math.sqrt(math.pow((x1 - x2), 2) + math.pow((y1 - y2), 2))
+                if d < d_min:
+                    d_min = d
+            t = d_min/10.0
+        else:
+            pass # will be added
+        return t
 
 
     def goalChance(self, p1):
@@ -188,8 +275,11 @@ class Pass:
 
 
     def effectiveness_withComponents(self, p1, p2, listeners=(True,True,True,True)):
-        # print Parameters.W1, Parameters.W2, Parameters.W3, Parameters.W4
-        gain = (Parameters.W1/max_gain) * self.gain(p1, p2)
+        desicionTime = (Parameters.W5/max_desicionTime)*self.desicionTime(p1,p2)
+        gain = (W1/max_gain) * self.gain(p1, p2)
+        if gain <0:  gain = gain/(desicionTime+0.001)
+        else:        gain = gain*desicionTime
+
         passAdvantage, pa_player = self.passAdvantage(p2)
         passAdvantage = (Parameters.W3/max_passAdvantage)*passAdvantage
         goalChance = (Parameters.W4/max_goalChance) * self.goalChance(p2) ########### goalChanceWithOSPP

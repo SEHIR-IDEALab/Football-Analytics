@@ -49,10 +49,10 @@ IS_DOMINANT_REGION_ON = False
 
 
 # radius of pass_source
-PASS_SOURCE_RADIUS = 1.0
-
-# radius coefficient of pass target
-PASS_TARGET_RADIUS_COEFFICIENT = 6.0
+PASS_SOURCE_RADIUS = 20.0#2.0 #3.1 #1.0
+#
+# # radius coefficient of pass target
+PASS_TARGET_RADIUS_COEFFICIENT = 2.0#6.0 #7.2 #6.0
 # radius of back risk area
 SOURCE_ANGLE = 60.0
 
@@ -70,12 +70,17 @@ average_distance_per_frame= 2.86/5.0 # meters 5 frames in 1 sec
 average_speed_player = 2.86 #m/s
 #maximum speed of players
 max_speed_player=10.0
+shooting_radius=3.0
+# [20, 2, 3, 765, 666, 292]
+W1, W2, W3, W4,W5 =765.0,1.0,666.0,292.0,0.0
 
 #coefficient for goalchace,gain,pass advantages
-W1, W2, W3, W4 = 489.0, 1.0, 975.0, 572.0
+# W1, W2, W3, W4 = 489.0, 1.0, 975.0, 572.0
+# W1, W2, W3, W4 = [847,1.0, 919, 105] # for Q4
+# W1, W2, W3, W4 = [464, 1.0,859, 123] # Q9 is 1 point
 
 #max values of gain,pass advantage,goal chance,
-max_gain,max_goalChance,max_passAdvantage,max_risk=10.0,100.0,2.0,12620.0
+max_gain,max_goalChance,max_passAdvantage,max_risk,max_desicionTime=10.0,100.0,2.0,12620.0,44.12
 
 # wxGUI
 GUI_FILE_DIALOG_DIRECTORY=''

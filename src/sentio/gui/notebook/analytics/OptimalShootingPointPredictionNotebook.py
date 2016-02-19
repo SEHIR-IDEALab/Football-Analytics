@@ -120,7 +120,7 @@ class OptimalShootingPointPredictionNotebook(wx.Panel):
         best_goal_chance, scat_xr,scat_yr, s1x,s1y = optimalShootingPointPrediction.predict(
                                                             self.convertVisualPlayerToPlayer(self.temp_ball_holder),
                                                             self.wx_gui.pass_logger.pass_evaluate.goalChance,
-                                                            iterate=30)
+                                                            iterate=15)
 
         self.ax.scatter(scat_xr,scat_yr,s=30,c='red',label = "Opponent Players")
         self.ax.scatter(s1x,s1y,s=30,c='blue',label = "ball owner")

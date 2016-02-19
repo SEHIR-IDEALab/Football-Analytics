@@ -1,6 +1,6 @@
 import math
 import matplotlib.pyplot as plt
-from src.sentio.Parameters import PASS_SOURCE_RADIUS, PASS_TARGET_RADIUS_COEFFICIENT,SOURCE_ANGLE
+from src.sentio.Parameters import SOURCE_ANGLE,PASS_SOURCE_RADIUS,PASS_TARGET_RADIUS_COEFFICIENT
 
 
 __author__ = 'emrullah'
@@ -79,10 +79,9 @@ class RiskRange():
 
         # distance=radius_target*PASS_TARGET_RADIUS_COEFFICIENT
         #get the point on small circle
-        try:
-            slope=math.degrees(math.atan((y2-y1)/(x2-x1)))
-        except ZeroDivisionError:
-            slope=100
+        dx = (0.01 if (x2-x1) == 0 else (x2-x1))
+        slope=math.degrees(math.atan((y2-y1)/dx))
+
 
         tmp_angle, s_angle1, s_angle2, t_angle1, t_angle2 = 0,0,0,0,0
         if x2 > x1:
